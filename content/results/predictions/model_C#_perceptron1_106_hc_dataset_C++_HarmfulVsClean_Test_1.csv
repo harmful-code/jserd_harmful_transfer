@@ -1,0 +1,1698 @@
+,id,language,text,smell,tokens,predict_value,predict_class
+0,100268,C++,"class VSITarEntryFileOffset final : public VSIArchiveEntryFileOffset
+{
+public:
+        GUIntBig m_nOffset = 0;
+#ifdef HAVE_FUZZER_FRIENDLY_ARCHIVE
+        GUIntBig m_nFileSize = 0;
+        CPLString m_osFileName{};
+#endif
+
+        explicit VSITarEntryFileOffset(GUIntBig nOffset): m_nOffset(nOffset)
+        {
+        }
+
+#ifdef HAVE_FUZZER_FRIENDLY_ARCHIVE
+        VSITarEntryFileOffset(GUIntBig nOffset, GUIntBig nFileSize, const CPLString& osFileName) :
+            m_nOffset(nOffset),
+            m_nFileSize(nFileSize),
+            m_osFileName(osFileName)
+        {
+        }
+#endif
+};",0,"[334, 2000, 381, 58, 439, 2001, 123, 439, 58, 2002, 2003, 61, 1500, 59, 35, 393, 2004, 2002, 2005, 61, 1500, 59, 2006, 2007, 123, 125, 59, 35, 366, 376, 2000, 40, 2002, 2008, 41, 58, 2003, 40, 2008, 41, 123, 125, 35, 393, 2004, 2000, 40, 2002, 2008, 44, 2002, 2009, 44, 341, 2006, 38, 2010, 41, 58, 2003, 40, 2008, 41, 44, 2005, 40, 2009, 41, 44, 2007, 40, 2010, 41, 123, 125, 35, 366, 125, 59]",0.0013026355,0
+1,99514,C++,"    class MDIAsAttribute: public GDALAttribute
+    {
+        std::vector<std::shared_ptr<GDALDimension>> m_dims{};
+        const GDALExtendedDataType m_dt = GDALExtendedDataType::CreateString();
+        std::string m_osValue;
+
+    public:
+        MDIAsAttribute(const std::string& name, const std::string& value):
+            GDALAbstractMDArray(std::string(), name),
+            GDALAttribute(std::string(), name),
+            m_osValue(value)
+        {
+        }
+
+        const std::vector<std::shared_ptr<GDALDimension>>& GetDimensions() const override { return m_dims; }
+
+        const GDALExtendedDataType &GetDataType() const override { return m_dt; }
+
+        bool IRead(const GUInt64*, const size_t*,
+                   const GInt64*, const GPtrDiff_t*,
+                   const GDALExtendedDataType& bufferDataType,
+                   void* pDstBuffer) const override
+        {
+            const char* pszStr = m_osValue.c_str();
+            GDALExtendedDataType::CopyValue(&pszStr, m_dt,
+                                            pDstBuffer, bufferDataType);
+            return true;
+        }
+    };",0,"[334, 2000, 58, 439, 2001, 123, 2002, 646, 2003, 60, 2002, 646, 2004, 60, 2005, 640, 2006, 123, 125, 59, 341, 2007, 2008, 61, 2007, 646, 2009, 40, 41, 59, 2002, 646, 461, 2010, 59, 439, 58, 2000, 40, 341, 2002, 646, 461, 38, 2011, 44, 341, 2002, 646, 461, 38, 2012, 41, 58, 2013, 40, 2002, 646, 461, 40, 41, 44, 2011, 41, 44, 2001, 40, 2002, 646, 461, 40, 41, 44, 2011, 41, 44, 2010, 40, 2012, 41, 123, 125, 341, 2002, 646, 2003, 60, 2002, 646, 2004, 60, 2005, 640, 38, 2014, 40, 41, 341, 431, 123, 450, 2006, 59, 125, 341, 2007, 38, 2015, 40, 41, 341, 431, 123, 450, 2008, 59, 125, 323, 2016, 40, 341, 2017, 42, 44, 341, 2018, 42, 44, 341, 2019, 42, 44, 341, 2020, 42, 44, 341, 2007, 38, 2021, 44, 492, 42, 2022, 41, 341, 431, 123, 341, 330, 42, 2023, 61, 2010, 46, 2024, 40, 41, 59, 2007, 646, 2025, 40, 38, 2023, 44, 2008, 44, 2022, 44, 2021, 41, 59, 450, 473, 59, 125, 125, 59]",0.008109613,0
+2,99421,C++,"class TABMAPObjRectEllipse final : public TABMAPObjHdr
+{
+  public:
+    GInt32      m_nCornerWidth;   /* For rounded rect only */
+    GInt32      m_nCornerHeight;
+    GByte       m_nPenId;
+    GByte       m_nBrushId;
+
+    TABMAPObjRectEllipse():
+        m_nCornerWidth(0),
+        m_nCornerHeight(0),
+        m_nPenId(0),
+        m_nBrushId(0)
+        {}
+    virtual ~TABMAPObjRectEllipse() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override;
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override;
+};",0,"[334, 2000, 381, 58, 439, 2001, 123, 439, 58, 2002, 2003, 59, 2002, 2004, 59, 2005, 2006, 59, 2005, 2007, 59, 2000, 40, 41, 58, 2003, 40, 1500, 41, 44, 2004, 40, 1500, 41, 44, 2006, 40, 1500, 41, 44, 2007, 40, 1500, 41, 123, 125, 491, 126, 2000, 40, 41, 123, 125, 491, 404, 2008, 40, 2009, 42, 41, 431, 59, 491, 404, 2010, 40, 2009, 42, 41, 431, 59, 125, 59]",0.0012025968,0
+3,99470,C++,"class TABMAPObjHdrWithCoord : public TABMAPObjHdr
+{
+  public:
+    GInt32      m_nCoordBlockPtr = 0;
+    GInt32      m_nCoordDataSize = 0;
+
+    /* Eventually this class may have methods to help maintaining refs to
+     * coord. blocks when splitting object blocks.
+     */
+};",0,"[334, 2000, 58, 439, 2001, 123, 439, 58, 2002, 2003, 61, 1500, 59, 2002, 2004, 61, 1500, 59, 125, 59]",0.0006384782,0
+4,99414,C++,"class TABMAPObjCustomPoint final : public TABMAPObjPoint
+{
+  public:
+    GByte m_nUnknown_;
+    GByte m_nCustomStyle;
+    GByte m_nFontId;
+
+    TABMAPObjCustomPoint():
+        m_nUnknown_(0),
+        m_nCustomStyle(0),
+        m_nFontId(0)
+        {}
+    virtual ~TABMAPObjCustomPoint() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override;
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override;
+};",0,"[334, 2000, 381, 58, 439, 2001, 123, 439, 58, 2002, 2003, 59, 2002, 2004, 59, 2002, 2005, 59, 2000, 40, 41, 58, 2003, 40, 1500, 41, 44, 2004, 40, 1500, 41, 44, 2005, 40, 1500, 41, 123, 125, 491, 126, 2000, 40, 41, 123, 125, 491, 404, 2006, 40, 2007, 42, 41, 431, 59, 491, 404, 2008, 40, 2007, 42, 41, 431, 59, 125, 59]",0.00083704846,0
+5,98810,C++,"class PDSWrapperRasterBand final: public GDALProxyRasterBand
+{
+  GDALRasterBand* poBaseBand;
+
+  protected:
+    virtual GDALRasterBand* RefUnderlyingRasterBand() override { return poBaseBand; }
+
+  public:
+    explicit PDSWrapperRasterBand( GDALRasterBand* poBaseBandIn )
+        {
+            this->poBaseBand = poBaseBandIn;
+            eDataType = poBaseBand->GetRasterDataType();
+            poBaseBand->GetBlockSize(&nBlockXSize, &nBlockYSize);
+        }
+    ~PDSWrapperRasterBand() {}
+};",0,"[334, 2000, 381, 58, 439, 2001, 123, 2002, 42, 2003, 59, 438, 58, 491, 2002, 42, 2004, 40, 41, 431, 123, 450, 2003, 59, 125, 439, 58, 376, 2000, 40, 2002, 42, 2005, 41, 123, 467, 624, 2003, 61, 2005, 59, 2006, 61, 2003, 624, 2007, 40, 41, 59, 2003, 624, 2008, 40, 38, 2009, 44, 38, 2010, 41, 59, 125, 126, 2000, 40, 41, 123, 125, 125, 59]",0.00092220743,0
+6,99578,C++,"class GXFRasterBand final: public GDALPamRasterBand
+{
+    friend class GXFDataset;
+
+  public:
+
+                GXFRasterBand( GXFDataset *, int );
+    double      GetNoDataValue( int* bGotNoDataValue ) override;
+
+    virtual CPLErr IReadBlock( int, int, void * ) override;
+};",0,"[334, 2000, 381, 58, 439, 2001, 123, 387, 334, 2002, 59, 439, 58, 2000, 40, 2002, 42, 44, 404, 41, 59, 356, 2003, 40, 404, 42, 2004, 41, 431, 59, 491, 2005, 2006, 40, 404, 44, 404, 44, 492, 42, 41, 431, 59, 125, 59]",0.00074011344,0
+7,100269,C++,"class VSITarFilesystemHandler final : public VSIArchiveFilesystemHandler
+{
+public:
+    const char* GetPrefix() override { return ""/vsitar""; }
+    std::vector<CPLString> GetExtensions() override;
+    VSIArchiveReader* CreateReader(const char* pszTarFileName) override;
+
+    VSIVirtualHandle *Open( const char *pszFilename,
+                            const char *pszAccess,
+                            bool bSetError,
+                            CSLConstList /* papszOptions */ ) override;
+};",0,"[334, 2000, 381, 58, 439, 2001, 123, 439, 58, 341, 330, 42, 2002, 40, 41, 431, 123, 450, 59, 125, 2003, 646, 2004, 60, 2005, 62, 2006, 40, 41, 431, 59, 2007, 42, 2008, 40, 341, 330, 42, 2009, 41, 431, 59, 2010, 42, 2011, 40, 341, 330, 42, 2012, 44, 341, 330, 42, 2013, 44, 323, 2014, 44, 2015, 41, 431, 59, 125, 59]",0.0010316835,0
+8,100303,C++,"       class SWIG_Python_Thread_Block {
+         bool status;
+         PyGILState_STATE state;
+       public:
+         void end() { if (status) { PyGILState_Release(state); status = false;} }
+         SWIG_Python_Thread_Block() : status(true), state(PyGILState_Ensure()) {}
+         ~SWIG_Python_Thread_Block() { end(); }
+       };",0,"[334, 2000, 123, 323, 2001, 59, 2002, 2003, 59, 439, 58, 492, 2004, 40, 41, 123, 392, 40, 2001, 41, 123, 2005, 40, 2003, 41, 59, 2001, 61, 380, 59, 125, 125, 2000, 40, 41, 58, 2001, 40, 473, 41, 44, 2003, 40, 2006, 40, 41, 41, 123, 125, 126, 2000, 40, 41, 123, 2004, 40, 41, 59, 125, 125, 59]",0.0008479624,0
+9,117448,C++,"class BufferedLogSink : public google::LogSink, private boost::noncopyable {
+ public:
+  /// We create this as a Singleton for proper disable/shutdown.
+  static BufferedLogSink& get();
+
+  /// The Glog-API LogSink call-in method.
+  void send(google::LogSeverity severity,
+            const char* full_filename,
+            const char* base_filename,
+            int line,
+            const struct ::tm* tm_time,
+            const char* message,
+            size_t message_len) override;
+
+  /// Pop from the async sender queue and wait for one send to complete.
+  void WaitTillSent() override;
+
+ public:
+  /// Accessor/mutator to dump all of the buffered logs.
+  std::vector<StatusLogLine>& dump();
+
+  /// Add the buffered log sink to Glog.
+  void enable();
+
+  /// Start the Buffered Sink, without enabling forwarding to loggers.
+  void setUp();
+
+  /**
+   * @brief Add a logger plugin that should receive status updates.
+   *
+   * Since the logger may support multiple active logger plugins the sink
+   * will keep track of those plugins that returned success after ::init.
+   * This list of plugins will received forwarded messages from the sink.
+   *
+   * This list is important because sending logs to plugins that also use
+   * and active Glog Sink (supports multiple) will create a logging loop.
+   */
+  void addPlugin(const std::string& name);
+
+  /// Clear the sinks list, clear the named plugins added by addPlugin.s
+  void resetPlugins();
+
+  /// Retrieve the list of enabled plugins that should have logs forwarded.
+  const std::vector<std::string>& enabledPlugins() const;
+
+ public:
+  BufferedLogSink(BufferedLogSink const&) = delete;
+  void operator=(BufferedLogSink const&) = delete;
+
+ private:
+  /// Create the log sink as buffering or forwarding.
+  BufferedLogSink() = default;
+
+  /// Stop the log sink.
+  ~BufferedLogSink();
+
+ private:
+  /// Intermediate log storage until an osquery logger is initialized.
+  std::vector<StatusLogLine> logs_;
+
+  /**
+   * @Brief Is the logger temporarily disabled.
+   *
+   * The Google Log Sink will still be active, but the send method also checks
+   * enabled and drops log lines to the flood if the forwarder is not enabled.
+   */
+  std::atomic<bool> enabled_{false};
+
+  /// Track multiple loggers that should receive sinks from the send forwarder.
+  std::vector<std::string> sinks_;
+};",0,"[334, 2000, 58, 439, 2001, 646, 2002, 44, 437, 2003, 646, 2004, 123, 439, 58, 457, 2000, 38, 2005, 40, 41, 59, 492, 2006, 40, 2001, 646, 2007, 2008, 44, 341, 330, 42, 2009, 44, 341, 330, 42, 2010, 44, 404, 2011, 44, 341, 462, 646, 2012, 42, 2013, 44, 341, 330, 42, 2014, 44, 2015, 2016, 41, 431, 59, 492, 2017, 40, 41, 431, 59, 439, 58, 2018, 646, 2019, 60, 2020, 62, 38, 2021, 40, 41, 59, 492, 2022, 40, 41, 59, 492, 2023, 40, 41, 59, 492, 2024, 40, 341, 2018, 646, 461, 38, 2025, 41, 59, 492, 2026, 40, 41, 59, 341, 2018, 646, 2019, 60, 2018, 646, 461, 62, 38, 2027, 40, 41, 341, 59, 439, 58, 2000, 40, 2000, 341, 38, 41, 61, 353, 59, 492, 427, 61, 40, 2000, 341, 38, 41, 61, 353, 59, 437, 58, 2000, 40, 41, 61, 349, 59, 126, 2000, 40, 41, 59, 437, 58, 2018, 646, 2019, 60, 2020, 62, 2028, 59, 2018, 646, 2029, 60, 323, 62, 2030, 123, 380, 125, 59, 2018, 646, 2019, 60, 2018, 646, 461, 62, 2031, 59, 125, 59]",0.004829942,0
+10,101968,C++,"class Config : public QObject
+{
+    Q_OBJECT
+
+public:
+    Q_DISABLE_COPY(Config)
+
+    enum ConfigKey
+    {
+        SingleInstance,
+        RememberLastDatabases,
+        NumberOfRememberedLastDatabases,
+        RememberLastKeyFiles,
+        OpenPreviousDatabasesOnStartup,
+        AutoSaveAfterEveryChange,
+        AutoReloadOnChange,
+        AutoSaveOnExit,
+        AutoSaveNonDataChanges,
+        BackupBeforeSave,
+        BackupFilePathPattern,
+        UseAtomicSaves,
+        UseDirectWriteSaves,
+        SearchLimitGroup,
+        MinimizeOnOpenUrl,
+        HideWindowOnCopy,
+        MinimizeOnCopy,
+        MinimizeAfterUnlock,
+        DropToBackgroundOnCopy,
+        UseGroupIconOnEntryCreation,
+        AutoTypeEntryTitleMatch,
+        AutoTypeEntryURLMatch,
+        AutoTypeDelay,
+        AutoTypeStartDelay,
+        AutoTypeHideExpiredEntry,
+        GlobalAutoTypeKey,
+        GlobalAutoTypeModifiers,
+        FaviconDownloadTimeout,
+        UpdateCheckMessageShown,
+        UseTouchID,
+
+        LastDatabases,
+        LastKeyFiles,
+        LastChallengeResponse,
+        LastActiveDatabase,
+        LastOpenedDatabases,
+        LastDir,
+
+        GUI_Language,
+        GUI_HideToolbar,
+        GUI_MovableToolbar,
+        GUI_HideGroupsPanel,
+        GUI_HidePreviewPanel,
+        GUI_AlwaysOnTop,
+        GUI_ToolButtonStyle,
+        GUI_ShowTrayIcon,
+        GUI_TrayIconAppearance,
+        GUI_MinimizeToTray,
+        GUI_MinimizeOnStartup,
+        GUI_MinimizeOnClose,
+        GUI_HideUsernames,
+        GUI_HidePasswords,
+        GUI_AdvancedSettings,
+        GUI_MonospaceNotes,
+        GUI_ApplicationTheme,
+        GUI_CompactMode,
+        GUI_CheckForUpdates,
+        GUI_CheckForUpdatesIncludeBetas,
+
+        GUI_MainWindowGeometry,
+        GUI_MainWindowState,
+        GUI_ListViewState,
+        GUI_SearchViewState,
+        GUI_PreviewSplitterState,
+        GUI_SplitterState,
+        GUI_AutoTypeSelectDialogSize,
+        GUI_CheckForUpdatesNextCheck,
+
+        Security_ClearClipboard,
+        Security_ClearClipboardTimeout,
+        Security_ClearSearch,
+        Security_ClearSearchTimeout,
+        Security_HideNotes,
+        Security_LockDatabaseIdle,
+        Security_LockDatabaseIdleSeconds,
+        Security_LockDatabaseMinimize,
+        Security_LockDatabaseScreenLock,
+        Security_RelockAutoType,
+        Security_PasswordsRepeatVisible,
+        Security_PasswordsHidden,
+        Security_PasswordEmptyPlaceholder,
+        Security_HidePasswordPreviewPanel,
+        Security_AutoTypeAsk,
+        Security_IconDownloadFallback,
+        Security_ResetTouchId,
+        Security_ResetTouchIdTimeout,
+        Security_ResetTouchIdScreenlock,
+        Security_NoConfirmMoveEntryToRecycleBin,
+        Security_EnableCopyOnDoubleClick,
+
+        Browser_Enabled,
+        Browser_ShowNotification,
+        Browser_BestMatchOnly,
+        Browser_UnlockDatabase,
+        Browser_MatchUrlScheme,
+        Browser_SupportBrowserProxy,
+        Browser_UseCustomProxy,
+        Browser_CustomProxyLocation,
+        Browser_UpdateBinaryPath,
+        Browser_AllowExpiredCredentials,
+        Browser_AlwaysAllowAccess,
+        Browser_AlwaysAllowUpdate,
+        Browser_HttpAuthPermission,
+        Browser_SearchInAllDatabases,
+        Browser_SupportKphFields,
+        Browser_NoMigrationPrompt,
+        Browser_UseCustomBrowser,
+        Browser_CustomBrowserType,
+        Browser_CustomBrowserLocation,
+#ifdef QT_DEBUG
+        Browser_CustomExtensionId,
+#endif
+
+        SSHAgent_Enabled,
+        SSHAgent_UseOpenSSH,
+        SSHAgent_UsePageant,
+        SSHAgent_AuthSockOverride,
+        SSHAgent_SecurityKeyProviderOverride,
+
+        FdoSecrets_Enabled,
+        FdoSecrets_ShowNotification,
+        FdoSecrets_ConfirmDeleteItem,
+        FdoSecrets_ConfirmAccessItem,
+        FdoSecrets_UnlockBeforeSearch,
+
+        KeeShare_QuietSuccess,
+        KeeShare_Own,
+        KeeShare_Foreign,
+        KeeShare_Active,
+
+        PasswordGenerator_LowerCase,
+        PasswordGenerator_UpperCase,
+        PasswordGenerator_Numbers,
+        PasswordGenerator_EASCII,
+        PasswordGenerator_AdvancedMode,
+        PasswordGenerator_SpecialChars,
+        PasswordGenerator_AdditionalChars,
+        PasswordGenerator_Braces,
+        PasswordGenerator_Punctuation,
+        PasswordGenerator_Quotes,
+        PasswordGenerator_Dashes,
+        PasswordGenerator_Math,
+        PasswordGenerator_Logograms,
+        PasswordGenerator_ExcludedChars,
+        PasswordGenerator_ExcludeAlike,
+        PasswordGenerator_EnsureEvery,
+        PasswordGenerator_Length,
+        PasswordGenerator_WordCount,
+        PasswordGenerator_WordSeparator,
+        PasswordGenerator_WordList,
+        PasswordGenerator_WordCase,
+        PasswordGenerator_Type,
+
+        Messages_NoLegacyKeyFileWarning,
+        Messages_Qt55CompatibilityWarning,
+        Messages_HidePreReleaseWarning,
+
+        // Special internal value
+        Deleted
+    };
+
+    ~Config() override;
+    QVariant get(ConfigKey key);
+    QVariant getDefault(ConfigKey key);
+    QString getFileName();
+    void set(ConfigKey key, const QVariant& value);
+    void remove(ConfigKey key);
+    bool hasAccessError();
+    void sync();
+    void resetToDefaults();
+
+    static Config* instance();
+    static void createConfigFromFile(const QString& configFileName, const QString& localConfigFileName = {});
+    static void createTempFileInstance();
+
+signals:
+    void changed(ConfigKey key);
+
+private:
+    Config(const QString& configFileName, const QString& localConfigFileName, QObject* parent);
+    explicit Config(QObject* parent);
+    void init(const QString& configFileName, const QString& localConfigFileName);
+    void migrate();
+    static QPair<QString, QString> defaultConfigFiles();
+
+    static QPointer<Config> m_instance;
+
+    QScopedPointer<QSettings> m_settings;
+    QScopedPointer<QSettings> m_localSettings;
+    QHash<QString, QVariant> m_defaults;
+};",0,"[334, 2000, 58, 439, 2001, 123, 2002, 439, 58, 2003, 40, 2000, 41, 370, 2004, 123, 2005, 44, 2006, 44, 2007, 44, 2008, 44, 2009, 44, 2010, 44, 2011, 44, 2012, 44, 2013, 44, 2014, 44, 2015, 44, 2016, 44, 2017, 44, 2018, 44, 2019, 44, 2020, 44, 2021, 44, 2022, 44, 2023, 44, 2024, 44, 2025, 44, 2026, 44, 2027, 44, 2028, 44, 2029, 44, 2030, 44, 2031, 44, 2032, 44, 2033, 44, 2034, 44, 2035, 44, 2036, 44, 2037, 44, 2038, 44, 2039, 44, 2040, 44, 2041, 44, 2042, 44, 2043, 44, 2044, 44, 2045, 44, 2046, 44, 2047, 44, 2048, 44, 2049, 44, 2050, 44, 2051, 44, 2052, 44, 2053, 44, 2054, 44, 2055, 44, 2056, 44, 2057, 44, 2058, 44, 2059, 44, 2060, 44, 2061, 44, 2062, 44, 2063, 44, 2064, 44, 2065, 44, 2066, 44, 2067, 44, 2068, 44, 2069, 44, 2070, 44, 2071, 44, 2072, 44, 2073, 44, 2074, 44, 2075, 44, 2076, 44, 2077, 44, 2078, 44, 2079, 44, 2080, 44, 2081, 44, 2082, 44, 2083, 44, 2084, 44, 2085, 44, 2086, 44, 2087, 44, 2088, 44, 2089, 44, 2090, 44, 2091, 44, 2092, 44, 2093, 44, 2094, 44, 2095, 44, 2096, 44, 2097, 44, 2098, 44, 2099, 44, 2100, 44, 2101, 44, 2102, 44, 2103, 44, 2104, 44, 2105, 44, 2106, 44, 2107, 44, 2108, 44, 35, 393, 2109, 2110, 44, 35, 366, 2111, 44, 2112, 44, 2113, 44, 2114, 44, 2115, 44, 2116, 44, 2117, 44, 2118, 44, 2119, 44, 2120, 44, 2121, 44, 2122, 44, 2123, 44, 2124, 44, 2125, 44, 2126, 44, 2127, 44, 2128, 44, 2129, 44, 2130, 44, 2131, 44, 2132, 44, 2133, 44, 2134, 44, 2135, 44, 2136, 44, 2137, 44, 2138, 44, 2139, 44, 2140, 44, 2141, 44, 2142, 44, 2143, 44, 2144, 44, 2145, 44, 2146, 44, 2147, 44, 2148, 44, 2149, 44, 2150, 125, 59, 126, 2000, 40, 41, 431, 59, 2151, 2152, 40, 2004, 2153, 41, 59, 2151, 2154, 40, 2004, 2153, 41, 59, 2155, 2156, 40, 41, 59, 492, 2157, 40, 2004, 2153, 44, 341, 2151, 38, 2158, 41, 59, 492, 2159, 40, 2004, 2153, 41, 59, 323, 2160, 40, 41, 59, 492, 2161, 40, 41, 59, 492, 2162, 40, 41, 59, 457, 2000, 42, 2163, 40, 41, 59, 457, 492, 2164, 40, 341, 2155, 38, 2165, 44, 341, 2155, 38, 2166, 61, 123, 125, 41, 59, 457, 492, 2167, 40, 41, 59, 2168, 58, 492, 2169, 40, 2004, 2153, 41, 59, 437, 58, 2000, 40, 341, 2155, 38, 2165, 44, 341, 2155, 38, 2166, 44, 2001, 42, 2170, 41, 59, 376, 2000, 40, 2001, 42, 2170, 41, 59, 492, 2171, 40, 341, 2155, 38, 2165, 44, 341, 2155, 38, 2166, 41, 59, 492, 2172, 40, 41, 59, 457, 2173, 60, 2155, 44, 2155, 62, 2174, 40, 41, 59, 457, 2175, 60, 2000, 62, 2176, 59, 2177, 60, 2178, 62, 2179, 59, 2177, 60, 2178, 62, 2180, 59, 2181, 60, 2155, 44, 2151, 62, 2182, 59, 125, 59]",0.42952046,0
+11,99403,C++,"template<class T>
+class GDALGeneric3x3Dataset : public GDALDataset
+{
+    friend class GDALGeneric3x3RasterBand<T>;
+
+    typename GDALGeneric3x3ProcessingAlg<T>::type pfnAlg;
+    void*              pAlgData;
+    GDALDatasetH       hSrcDS;
+    GDALRasterBandH    hSrcBand;
+    T*                 apafSourceBuf[3];
+    int                bDstHasNoData;
+    double             dfDstNoDataValue;
+    int                nCurLine;
+    bool               bComputeAtEdges;
+
+  public:
+                        GDALGeneric3x3Dataset(
+                            GDALDatasetH hSrcDS,
+                            GDALRasterBandH hSrcBand,
+                            GDALDataType eDstDataType,
+                            int bDstHasNoData,
+                            double dfDstNoDataValue,
+                            typename GDALGeneric3x3ProcessingAlg<T>::type pfnAlg,
+                            void* pAlgData,
+                            bool bComputeAtEdges );
+                       ~GDALGeneric3x3Dataset();
+
+    bool                InitOK() const { return apafSourceBuf[0] != nullptr &&
+                                                apafSourceBuf[1] != nullptr &&
+                                                apafSourceBuf[2] != nullptr; }
+
+    CPLErr      GetGeoTransform( double * padfGeoTransform ) override;
+    const OGRSpatialReference* GetSpatialRef() const override;
+};",0,"[466, 60, 334, 2000, 62, 334, 2001, 58, 439, 2002, 123, 387, 334, 2003, 60, 2000, 62, 59, 477, 2004, 60, 2000, 62, 646, 2005, 2006, 59, 492, 42, 2007, 59, 2008, 2009, 59, 2010, 2011, 59, 2000, 42, 2012, 91, 1502, 93, 59, 404, 2013, 59, 356, 2014, 59, 404, 2015, 59, 323, 2016, 59, 439, 58, 2001, 40, 2008, 2009, 44, 2010, 2011, 44, 2017, 2018, 44, 404, 2013, 44, 356, 2014, 44, 477, 2004, 60, 2000, 62, 646, 2005, 2006, 44, 492, 42, 2007, 44, 323, 2016, 41, 59, 126, 2001, 40, 41, 59, 323, 2019, 40, 41, 341, 123, 450, 2012, 91, 1500, 93, 631, 425, 605, 2012, 91, 1501, 93, 631, 425, 605, 2012, 91, 1502, 93, 631, 425, 59, 125, 2020, 2021, 40, 356, 42, 2022, 41, 431, 59, 341, 2023, 42, 2024, 40, 41, 341, 431, 59, 125, 59]",0.0026008093,0
+12,98650,C++,"class VRTGroup final: public GDALGroup
+{
+public:
+    struct Ref
+    {
+        VRTGroup* m_ptr;
+        explicit Ref(VRTGroup* ptr): m_ptr(ptr) {}
+        Ref(const Ref&) = delete;
+        Ref& operator=(const Ref&) = delete;
+    };
+
+private:
+    std::shared_ptr<Ref> m_poSharedRefRootGroup{};
+    std::weak_ptr<Ref> m_poWeakRefRootGroup{};
+    std::shared_ptr<Ref> m_poRefSelf{};
+
+    std::string m_osFilename{};
+    mutable bool m_bDirty = false;
+    std::string m_osVRTPath{};
+    std::map<std::string, std::shared_ptr<VRTGroup>> m_oMapGroups{};
+    std::map<std::string, std::shared_ptr<VRTMDArray>> m_oMapMDArrays{};
+    std::map<std::string, std::shared_ptr<VRTAttribute>> m_oMapAttributes{};
+    std::map<std::string, std::shared_ptr<VRTDimension>> m_oMapDimensions{};
+
+    std::shared_ptr<VRTGroup> OpenGroupInternal(const std::string& osName) const;
+    void SetRootGroupRef(const std::weak_ptr<Ref>& rgRef);
+    std::weak_ptr<Ref> GetRootGroupRef() const;
+
+public:
+
+    VRTGroup(const std::string& osParentName, const std::string& osName);
+    ~VRTGroup();
+
+    bool XMLInit(const std::shared_ptr<VRTGroup>& poRoot,
+                 const std::shared_ptr<VRTGroup>& poThisGroup,
+                 const CPLXMLNode* psNode,
+                 const char* pszVRTPath);
+
+    std::vector<std::string> GetMDArrayNames(CSLConstList papszOptions) const override;
+    std::shared_ptr<GDALMDArray> OpenMDArray(const std::string& osName,
+                                             CSLConstList papszOptions = nullptr) const override;
+
+    std::vector<std::string> GetGroupNames(CSLConstList papszOptions) const override;
+    std::shared_ptr<GDALGroup> OpenGroup(const std::string& osName,
+                                         CSLConstList) const override
+    {
+        return OpenGroupInternal(osName);
+    }
+
+    std::vector<std::shared_ptr<GDALDimension>> GetDimensions(CSLConstList) const override;
+
+    std::vector<std::shared_ptr<GDALAttribute>> GetAttributes(CSLConstList) const override;
+
+    std::shared_ptr<VRTDimension> GetDimension(const std::string& name) const {
+        auto oIter = m_oMapDimensions.find(name);
+        return oIter == m_oMapDimensions.end() ? nullptr : oIter->second;
+    }
+    std::shared_ptr<VRTDimension> GetDimensionFromFullName(const std::string& name,
+                                                           bool bEmitError) const;
+
+    std::shared_ptr<GDALGroup> CreateGroup(const std::string& osName,
+                                           CSLConstList papszOptions = nullptr) override;
+
+    std::shared_ptr<GDALDimension> CreateDimension(const std::string& osName,
+                                                           const std::string& osType,
+                                                           const std::string& osDirection,
+                                                           GUInt64 nSize,
+                                                           CSLConstList papszOptions = nullptr) override;
+
+    std::shared_ptr<GDALAttribute> CreateAttribute(
+        const std::string& osName,
+        const std::vector<GUInt64>& anDimensions,
+        const GDALExtendedDataType& oDataType,
+        CSLConstList papszOptions = nullptr) override;
+
+    std::shared_ptr<GDALMDArray> CreateMDArray(const std::string& osName,
+                                                       const std::vector<std::shared_ptr<GDALDimension>>& aoDimensions,
+                                                       const GDALExtendedDataType& oDataType,
+                                                       CSLConstList papszOptions) override;
+
+    void SetIsRootGroup();
+
+    const std::shared_ptr<Ref>& GetRef() const { return m_poRefSelf; }
+    VRTGroup* GetRootGroup() const;
+
+    const std::string& GetVRTPath() const { return m_osVRTPath; }
+    void SetDirty();
+    void SetFilename(const std::string& osFilename) { m_osFilename = osFilename; }
+    const std::string& GetFilename() const { return m_osFilename; }
+    void Serialize() const;
+    CPLXMLNode* SerializeToXML( const char *pszVRTPathIn ) const;
+    void Serialize(CPLXMLNode* psParent, const char *pszVRTPathIn) const;
+};",1,"[334, 2000, 381, 58, 439, 2001, 123, 439, 58, 462, 2002, 123, 2000, 42, 2003, 59, 376, 2002, 40, 2000, 42, 2004, 41, 58, 2003, 40, 2004, 41, 123, 125, 2002, 40, 341, 2002, 38, 41, 61, 353, 59, 2002, 38, 427, 61, 40, 341, 2002, 38, 41, 61, 353, 59, 125, 59, 437, 58, 2005, 646, 2006, 60, 2002, 62, 2007, 123, 125, 59, 2005, 646, 2008, 60, 2002, 62, 2009, 123, 125, 59, 2005, 646, 2006, 60, 2002, 62, 2010, 123, 125, 59, 2005, 646, 461, 2011, 123, 125, 59, 415, 323, 2012, 61, 380, 59, 2005, 646, 461, 2013, 123, 125, 59, 2005, 646, 2014, 60, 2005, 646, 461, 44, 2005, 646, 2006, 60, 2000, 640, 2015, 123, 125, 59, 2005, 646, 2014, 60, 2005, 646, 461, 44, 2005, 646, 2006, 60, 2016, 640, 2017, 123, 125, 59, 2005, 646, 2014, 60, 2005, 646, 461, 44, 2005, 646, 2006, 60, 2018, 640, 2019, 123, 125, 59, 2005, 646, 2014, 60, 2005, 646, 461, 44, 2005, 646, 2006, 60, 2020, 640, 2021, 123, 125, 59, 2005, 646, 2006, 60, 2000, 62, 2022, 40, 341, 2005, 646, 461, 38, 2023, 41, 341, 59, 492, 2024, 40, 341, 2005, 646, 2008, 60, 2002, 62, 38, 2025, 41, 59, 2005, 646, 2008, 60, 2002, 62, 2026, 40, 41, 341, 59, 439, 58, 2000, 40, 341, 2005, 646, 461, 38, 2027, 44, 341, 2005, 646, 461, 38, 2023, 41, 59, 126, 2000, 40, 41, 59, 323, 2028, 40, 341, 2005, 646, 2006, 60, 2000, 62, 38, 2029, 44, 341, 2005, 646, 2006, 60, 2000, 62, 38, 2030, 44, 341, 2031, 42, 2032, 44, 341, 330, 42, 2033, 41, 59, 2005, 646, 2034, 60, 2005, 646, 461, 62, 2035, 40, 2036, 2037, 41, 341, 431, 59, 2005, 646, 2006, 60, 2038, 62, 2039, 40, 341, 2005, 646, 461, 38, 2023, 44, 2036, 2037, 61, 425, 41, 341, 431, 59, 2005, 646, 2034, 60, 2005, 646, 461, 62, 2040, 40, 2036, 2037, 41, 341, 431, 59, 2005, 646, 2006, 60, 2001, 62, 2041, 40, 341, 2005, 646, 461, 38, 2023, 44, 2036, 41, 341, 431, 123, 450, 2022, 40, 2023, 41, 59, 125, 2005, 646, 2034, 60, 2005, 646, 2006, 60, 2042, 640, 2043, 40, 2036, 41, 341, 431, 59, 2005, 646, 2034, 60, 2005, 646, 2006, 60, 2044, 640, 2045, 40, 2036, 41, 341, 431, 59, 2005, 646, 2006, 60, 2020, 62, 2046, 40, 341, 2005, 646, 461, 38, 2047, 41, 341, 123, 318, 2048, 61, 2021, 46, 2049, 40, 2047, 41, 59, 450, 2048, 614, 2021, 46, 2050, 40, 41, 63, 425, 58, 2048, 624, 2051, 59, 125, 2005, 646, 2006, 60, 2020, 62, 2052, 40, 341, 2005, 646, 461, 38, 2047, 44, 323, 2053, 41, 341, 59, 2005, 646, 2006, 60, 2001, 62, 2054, 40, 341, 2005, 646, 461, 38, 2023, 44, 2036, 2037, 61, 425, 41, 431, 59, 2005, 646, 2006, 60, 2042, 62, 2055, 40, 341, 2005, 646, 461, 38, 2023, 44, 341, 2005, 646, 461, 38, 2056, 44, 341, 2005, 646, 461, 38, 2057, 44, 2058, 2059, 44, 2036, 2037, 61, 425, 41, 431, 59, 2005, 646, 2006, 60, 2044, 62, 2060, 40, 341, 2005, 646, 461, 38, 2023, 44, 341, 2005, 646, 2034, 60, 2058, 62, 38, 2061, 44, 341, 2062, 38, 2063, 44, 2036, 2037, 61, 425, 41, 431, 59, 2005, 646, 2006, 60, 2038, 62, 2064, 40, 341, 2005, 646, 461, 38, 2023, 44, 341, 2005, 646, 2034, 60, 2005, 646, 2006, 60, 2042, 640, 38, 2065, 44, 341, 2062, 38, 2063, 44, 2036, 2037, 41, 431, 59, 492, 2066, 40, 41, 59, 341, 2005, 646, 2006, 60, 2002, 62, 38, 2067, 40, 41, 341, 123, 450, 2010, 59, 125, 2000, 42, 2068, 40, 41, 341, 59, 341, 2005, 646, 461, 38, 2069, 40, 41, 341, 123, 450, 2013, 59, 125, 492, 2070, 40, 41, 59, 492, 2071, 40, 341, 2005, 646, 461, 38, 2072, 41, 123, 2011, 61, 2072, 59, 125, 341, 2005, 646, 461, 38, 2073, 40, 41, 341, 123, 450, 2011, 59, 125, 492, 2074, 40, 41, 341, 59, 2031, 42, 2075, 40, 341, 330, 42, 2076, 41, 341, 59, 492, 2074, 40, 2031, 42, 2077, 44, 341, 330, 42, 2076, 41, 341, 59, 125, 59]",0.13019167,0
+13,118436,C++,"class Core : public QObject,
+             public ICoreFriendMessageSender,
+             public ICoreIdHandler,
+             public ICoreGroupMessageSender,
+             public ICoreGroupQuery
+{
+    Q_OBJECT
+public:
+    enum class ToxCoreErrors
+    {
+        BAD_PROXY,
+        INVALID_SAVE,
+        FAILED_TO_START,
+        ERROR_ALLOC
+    };
+
+    static ToxCorePtr makeToxCore(const QByteArray& savedata, const ICoreSettings* const settings,
+                                  IBootstrapListGenerator& bootstrapNodes, ToxCoreErrors* err = nullptr);
+    const CoreAV* getAv() const;
+    CoreAV* getAv();
+    void setAv(CoreAV* coreAv);
+
+    CoreFile* getCoreFile() const;
+    Tox* getTox() const;
+    CompatibleRecursiveMutex& getCoreLoopLock() const;
+
+    const CoreExt* getExt() const;
+    CoreExt* getExt();
+    ~Core();
+
+    static const QString TOX_EXT;
+    uint64_t getMaxMessageSize() const;
+    QString getPeerName(const ToxPk& id) const;
+    QVector<uint32_t> getFriendList() const;
+    GroupId getGroupPersistentId(uint32_t groupNumber) const override;
+    uint32_t getGroupNumberPeers(int groupId) const override;
+    QString getGroupPeerName(int groupId, int peerId) const override;
+    ToxPk getGroupPeerPk(int groupId, int peerId) const override;
+    QStringList getGroupPeerNames(int groupId) const override;
+    bool getGroupAvEnabled(int groupId) const override;
+    ToxPk getFriendPublicKey(uint32_t friendNumber) const;
+    QString getFriendUsername(uint32_t friendNumber) const;
+
+    bool isFriendOnline(uint32_t friendId) const;
+    bool hasFriendWithPublicKey(const ToxPk& publicKey) const;
+    uint32_t joinGroupchat(const GroupInvite& inviteInfo);
+    void quitGroupChat(int groupId) const;
+
+    QString getUsername() const override;
+    Status::Status getStatus() const;
+    QString getStatusMessage() const;
+    ToxId getSelfId() const override;
+    ToxPk getSelfPublicKey() const override;
+    QPair<QByteArray, QByteArray> getKeypair() const;
+
+    void sendFile(uint32_t friendId, QString filename, QString filePath, long long filesize);
+
+public slots:
+    void start();
+
+    QByteArray getToxSaveData();
+
+    void acceptFriendRequest(const ToxPk& friendPk);
+    void requestFriendship(const ToxId& friendAddress, const QString& message);
+    void groupInviteFriend(uint32_t friendId, int groupId);
+    int createGroup(uint8_t type = TOX_CONFERENCE_TYPE_AV);
+
+    void removeFriend(uint32_t friendId);
+    void removeGroup(int groupId);
+
+    void setStatus(Status::Status status);
+    void setUsername(const QString& username);
+    void setStatusMessage(const QString& message);
+
+    bool sendMessage(uint32_t friendId, const QString& message, ReceiptNum& receipt) override;
+    void sendGroupMessage(int groupId, const QString& message) override;
+    void sendGroupAction(int groupId, const QString& message) override;
+    void changeGroupTitle(int groupId, const QString& title);
+    bool sendAction(uint32_t friendId, const QString& action, ReceiptNum& receipt) override;
+    void sendTyping(uint32_t friendId, bool typing);
+
+    void setNospam(uint32_t nospam);
+
+signals:
+    void connected();
+    void disconnected();
+
+    void friendRequestReceived(const ToxPk& friendPk, const QString& message);
+    void friendAvatarChanged(const ToxPk& friendPk, const QByteArray& pic);
+    void friendAvatarRemoved(const ToxPk& friendPk);
+
+    void requestSent(const ToxPk& friendPk, const QString& message);
+    void failedToAddFriend(const ToxPk& friendPk, const QString& errorInfo = QString());
+
+    void usernameSet(const QString& username);
+    void statusMessageSet(const QString& message);
+    void statusSet(Status::Status status);
+    void idSet(const ToxId& id);
+
+    void failedToSetUsername(const QString& username);
+    void failedToSetStatusMessage(const QString& message);
+    void failedToSetStatus(Status::Status status);
+    void failedToSetTyping(bool typing);
+
+    void saveRequest();
+
+    /**
+     * @deprecated prefer signals using ToxPk
+     */
+
+    void fileAvatarOfferReceived(uint32_t friendId, uint32_t fileId, const QByteArray& avatarHash);
+
+    void friendMessageReceived(uint32_t friendId, const QString& message, bool isAction);
+    void friendAdded(uint32_t friendId, const ToxPk& friendPk);
+
+    void friendStatusChanged(uint32_t friendId, Status::Status status);
+    void friendStatusMessageChanged(uint32_t friendId, const QString& message);
+    void friendUsernameChanged(uint32_t friendId, const QString& username);
+    void friendTypingChanged(uint32_t friendId, bool isTyping);
+
+    void friendRemoved(uint32_t friendId);
+    void friendLastSeenChanged(uint32_t friendId, const QDateTime& dateTime);
+
+    void emptyGroupCreated(int groupnumber, const GroupId groupId, const QString& title = QString());
+    void groupInviteReceived(const GroupInvite& inviteInfo);
+    void groupMessageReceived(int groupnumber, int peernumber, const QString& message, bool isAction);
+    void groupNamelistChanged(int groupnumber, int peernumber, uint8_t change);
+    void groupPeerlistChanged(int groupnumber);
+    void groupPeerNameChanged(int groupnumber, const ToxPk& peerPk, const QString& newName);
+    void groupTitleChanged(int groupnumber, const QString& author, const QString& title);
+    void groupPeerAudioPlaying(int groupnumber, ToxPk peerPk);
+    void groupSentFailed(int groupId);
+    void groupJoined(int groupnumber, GroupId groupId);
+    void actionSentResult(uint32_t friendId, const QString& action, int success);
+
+    void receiptRecieved(int friedId, ReceiptNum receipt);
+
+    void failedToRemoveFriend(uint32_t friendId);
+
+private:
+    Core(QThread* coreThread, IBootstrapListGenerator& _bootstrapNodes);
+
+    static void onFriendRequest(Tox* tox, const uint8_t* cUserId, const uint8_t* cMessage,
+                                size_t cMessageSize, void* core);
+    static void onFriendMessage(Tox* tox, uint32_t friendId, Tox_Message_Type type,
+                                const uint8_t* cMessage, size_t cMessageSize, void* core);
+    static void onFriendNameChange(Tox* tox, uint32_t friendId, const uint8_t* cName,
+                                   size_t cNameSize, void* core);
+    static void onFriendTypingChange(Tox* tox, uint32_t friendId, bool isTyping, void* core);
+    static void onStatusMessageChanged(Tox* tox, uint32_t friendId, const uint8_t* cMessage,
+                                       size_t cMessageSize, void* core);
+    static void onUserStatusChanged(Tox* tox, uint32_t friendId, Tox_User_Status userstatus,
+                                    void* core);
+    static void onConnectionStatusChanged(Tox* tox, uint32_t friendId, Tox_Connection status,
+                                          void* vCore);
+    static void onGroupInvite(Tox* tox, uint32_t friendId, Tox_Conference_Type type,
+                              const uint8_t* cookie, size_t length, void* vCore);
+    static void onGroupMessage(Tox* tox, uint32_t groupId, uint32_t peerId, Tox_Message_Type type,
+                               const uint8_t* cMessage, size_t length, void* vCore);
+    static void onGroupPeerListChange(Tox*, uint32_t groupId, void* core);
+    static void onGroupPeerNameChange(Tox*, uint32_t groupId, uint32_t peerId, const uint8_t* name,
+                                      size_t length, void* core);
+    static void onGroupTitleChange(Tox* tox, uint32_t groupId, uint32_t peerId,
+                                   const uint8_t* cTitle, size_t length, void* vCore);
+
+    static void onLosslessPacket(Tox* tox, uint32_t friendId,
+                                   const uint8_t* data, size_t length, void* core);
+    static void onReadReceiptCallback(Tox* tox, uint32_t friendId, uint32_t receipt, void* core);
+
+    void sendGroupMessageWithType(int groupId, const QString& message, Tox_Message_Type type);
+    bool sendMessageWithType(uint32_t friendId, const QString& message, Tox_Message_Type type, ReceiptNum& receipt);
+    bool checkConnection();
+
+    void makeTox(QByteArray savedata, ICoreSettings* s);
+    void loadFriends();
+    void loadGroups();
+    void bootstrapDht();
+
+    void checkLastOnline(uint32_t friendId);
+
+    QString getFriendRequestErrorMessage(const ToxId& friendId, const QString& message) const;
+    static void registerCallbacks(Tox* tox);
+
+private slots:
+    void process();
+    void onStarted();
+
+private:
+    struct ToxDeleter
+    {
+        void operator()(Tox* tox)
+        {
+            tox_kill(tox);
+        }
+    };
+
+    using ToxPtr = std::unique_ptr<Tox, ToxDeleter>;
+    ToxPtr tox;
+
+    std::unique_ptr<CoreFile> file;
+    CoreAV* av = nullptr;
+    std::unique_ptr<CoreExt> ext;
+    QTimer* toxTimer = nullptr;
+    // recursive, since we might call our own functions
+    mutable CompatibleRecursiveMutex coreLoopLock;
+
+    std::unique_ptr<QThread> coreThread;
+    IBootstrapListGenerator& bootstrapNodes;
+};",1,"[334, 2000, 58, 439, 2001, 44, 439, 2002, 44, 439, 2003, 44, 439, 2004, 44, 439, 2005, 123, 2006, 439, 58, 370, 334, 2007, 123, 2008, 44, 2009, 44, 2010, 44, 2011, 125, 59, 457, 2012, 2013, 40, 341, 2014, 38, 2015, 44, 341, 2016, 42, 341, 2017, 44, 2018, 38, 2019, 44, 2007, 42, 2020, 61, 425, 41, 59, 341, 2021, 42, 2022, 40, 41, 341, 59, 2021, 42, 2022, 40, 41, 59, 492, 2023, 40, 2021, 42, 2024, 41, 59, 2025, 42, 2026, 40, 41, 341, 59, 2027, 42, 2028, 40, 41, 341, 59, 2029, 38, 2030, 40, 41, 341, 59, 341, 2031, 42, 2032, 40, 41, 341, 59, 2031, 42, 2032, 40, 41, 59, 126, 2000, 40, 41, 59, 457, 341, 2033, 2034, 59, 2035, 2036, 40, 41, 341, 59, 2033, 2037, 40, 341, 2038, 38, 2039, 41, 341, 59, 2040, 60, 2041, 62, 2042, 40, 41, 341, 59, 2043, 2044, 40, 2041, 2045, 41, 341, 431, 59, 2041, 2046, 40, 404, 2047, 41, 341, 431, 59, 2033, 2048, 40, 404, 2047, 44, 404, 2049, 41, 341, 431, 59, 2038, 2050, 40, 404, 2047, 44, 404, 2049, 41, 341, 431, 59, 2051, 2052, 40, 404, 2047, 41, 341, 431, 59, 323, 2053, 40, 404, 2047, 41, 341, 431, 59, 2038, 2054, 40, 2041, 2055, 41, 341, 59, 2033, 2056, 40, 2041, 2055, 41, 341, 59, 323, 2057, 40, 2041, 2058, 41, 341, 59, 323, 2059, 40, 341, 2038, 38, 2060, 41, 341, 59, 2041, 2061, 40, 341, 2062, 38, 2063, 41, 59, 492, 2064, 40, 404, 2047, 41, 341, 59, 2033, 2065, 40, 41, 341, 431, 59, 2066, 646, 2066, 2067, 40, 41, 341, 59, 2033, 2068, 40, 41, 341, 59, 2069, 2070, 40, 41, 341, 431, 59, 2038, 2071, 40, 41, 341, 431, 59, 2072, 60, 2014, 44, 2014, 62, 2073, 40, 41, 341, 59, 492, 2074, 40, 2041, 2058, 44, 2033, 2075, 44, 2033, 2076, 44, 413, 413, 2077, 41, 59, 439, 2078, 58, 492, 2079, 40, 41, 59, 2014, 2080, 40, 41, 59, 492, 2081, 40, 341, 2038, 38, 2082, 41, 59, 492, 2083, 40, 341, 2069, 38, 2084, 44, 341, 2033, 38, 2085, 41, 59, 492, 2086, 40, 2041, 2058, 44, 404, 2047, 41, 59, 404, 2087, 40, 2088, 2089, 61, 2090, 41, 59, 492, 2091, 40, 2041, 2058, 41, 59, 492, 2092, 40, 404, 2047, 41, 59, 492, 2093, 40, 2066, 646, 2066, 2094, 41, 59, 492, 2095, 40, 341, 2033, 38, 2096, 41, 59, 492, 2097, 40, 341, 2033, 38, 2085, 41, 59, 323, 2098, 40, 2041, 2058, 44, 341, 2033, 38, 2085, 44, 2099, 38, 2100, 41, 431, 59, 492, 2101, 40, 404, 2047, 44, 341, 2033, 38, 2085, 41, 431, 59, 492, 2102, 40, 404, 2047, 44, 341, 2033, 38, 2085, 41, 431, 59, 492, 2103, 40, 404, 2047, 44, 341, 2033, 38, 2104, 41, 59, 323, 2105, 40, 2041, 2058, 44, 341, 2033, 38, 2106, 44, 2099, 38, 2100, 41, 431, 59, 492, 2107, 40, 2041, 2058, 44, 323, 2108, 41, 59, 492, 2109, 40, 2041, 2110, 41, 59, 2111, 58, 492, 2112, 40, 41, 59, 492, 2113, 40, 41, 59, 492, 2114, 40, 341, 2038, 38, 2082, 44, 341, 2033, 38, 2085, 41, 59, 492, 2115, 40, 341, 2038, 38, 2082, 44, 341, 2014, 38, 2116, 41, 59, 492, 2117, 40, 341, 2038, 38, 2082, 41, 59, 492, 2118, 40, 341, 2038, 38, 2082, 44, 341, 2033, 38, 2085, 41, 59, 492, 2119, 40, 341, 2038, 38, 2082, 44, 341, 2033, 38, 2120, 61, 2033, 40, 41, 41, 59, 492, 2121, 40, 341, 2033, 38, 2096, 41, 59, 492, 2122, 40, 341, 2033, 38, 2085, 41, 59, 492, 2123, 40, 2066, 646, 2066, 2094, 41, 59, 492, 2124, 40, 341, 2069, 38, 2039, 41, 59, 492, 2125, 40, 341, 2033, 38, 2096, 41, 59, 492, 2126, 40, 341, 2033, 38, 2085, 41, 59, 492, 2127, 40, 2066, 646, 2066, 2094, 41, 59, 492, 2128, 40, 323, 2108, 41, 59, 492, 2129, 40, 41, 59, 492, 2130, 40, 2041, 2058, 44, 2041, 2131, 44, 341, 2014, 38, 2132, 41, 59, 492, 2133, 40, 2041, 2058, 44, 341, 2033, 38, 2085, 44, 323, 2134, 41, 59, 492, 2135, 40, 2041, 2058, 44, 341, 2038, 38, 2082, 41, 59, 492, 2136, 40, 2041, 2058, 44, 2066, 646, 2066, 2094, 41, 59, 492, 2137, 40, 2041, 2058, 44, 341, 2033, 38, 2085, 41, 59, 492, 2138, 40, 2041, 2058, 44, 341, 2033, 38, 2096, 41, 59, 492, 2139, 40, 2041, 2058, 44, 323, 2140, 41, 59, 492, 2141, 40, 2041, 2058, 41, 59, 492, 2142, 40, 2041, 2058, 44, 341, 2143, 38, 2144, 41, 59, 492, 2145, 40, 404, 2146, 44, 341, 2043, 2047, 44, 341, 2033, 38, 2104, 61, 2033, 40, 41, 41, 59, 492, 2147, 40, 341, 2062, 38, 2063, 41, 59, 492, 2148, 40, 404, 2146, 44, 404, 2149, 44, 341, 2033, 38, 2085, 44, 323, 2134, 41, 59, 492, 2150, 40, 404, 2146, 44, 404, 2149, 44, 2088, 2151, 41, 59, 492, 2152, 40, 404, 2146, 41, 59, 492, 2153, 40, 404, 2146, 44, 341, 2038, 38, 2154, 44, 341, 2033, 38, 2155, 41, 59, 492, 2156, 40, 404, 2146, 44, 341, 2033, 38, 2157, 44, 341, 2033, 38, 2104, 41, 59, 492, 2158, 40, 404, 2146, 44, 2038, 2154, 41, 59, 492, 2159, 40, 404, 2047, 41, 59, 492, 2160, 40, 404, 2146, 44, 2043, 2047, 41, 59, 492, 2161, 40, 2041, 2058, 44, 341, 2033, 38, 2106, 44, 404, 2162, 41, 59, 492, 2163, 40, 404, 2164, 44, 2099, 2100, 41, 59, 492, 2165, 40, 2041, 2058, 41, 59, 437, 58, 2000, 40, 2166, 42, 2167, 44, 2018, 38, 2168, 41, 59, 457, 492, 2169, 40, 2027, 42, 2170, 44, 341, 2088, 42, 2171, 44, 341, 2088, 42, 2172, 44, 2173, 2174, 44, 492, 42, 2175, 41, 59, 457, 492, 2176, 40, 2027, 42, 2170, 44, 2041, 2058, 44, 2177, 2089, 44, 341, 2088, 42, 2172, 44, 2173, 2174, 44, 492, 42, 2175, 41, 59, 457, 492, 2178, 40, 2027, 42, 2170, 44, 2041, 2058, 44, 341, 2088, 42, 2179, 44, 2173, 2180, 44, 492, 42, 2175, 41, 59, 457, 492, 2181, 40, 2027, 42, 2170, 44, 2041, 2058, 44, 323, 2140, 44, 492, 42, 2175, 41, 59, 457, 492, 2182, 40, 2027, 42, 2170, 44, 2041, 2058, 44, 341, 2088, 42, 2172, 44, 2173, 2174, 44, 492, 42, 2175, 41, 59, 457, 492, 2183, 40, 2027, 42, 2170, 44, 2041, 2058, 44, 2184, 2185, 44, 492, 42, 2175, 41, 59, 457, 492, 2186, 40, 2027, 42, 2170, 44, 2041, 2058, 44, 2187, 2094, 44, 492, 42, 2188, 41, 59, 457, 492, 2189, 40, 2027, 42, 2170, 44, 2041, 2058, 44, 2190, 2089, 44, 341, 2088, 42, 2191, 44, 2173, 2192, 44, 492, 42, 2188, 41, 59, 457, 492, 2193, 40, 2027, 42, 2170, 44, 2041, 2047, 44, 2041, 2049, 44, 2177, 2089, 44, 341, 2088, 42, 2172, 44, 2173, 2192, 44, 492, 42, 2188, 41, 59, 457, 492, 2194, 40, 2027, 42, 44, 2041, 2047, 44, 492, 42, 2175, 41, 59, 457, 492, 2195, 40, 2027, 42, 44, 2041, 2047, 44, 2041, 2049, 44, 341, 2088, 42, 2196, 44, 2173, 2192, 44, 492, 42, 2175, 41, 59, 457, 492, 2197, 40, 2027, 42, 2170, 44, 2041, 2047, 44, 2041, 2049, 44, 341, 2088, 42, 2198, 44, 2173, 2192, 44, 492, 42, 2188, 41, 59, 457, 492, 2199, 40, 2027, 42, 2170, 44, 2041, 2058, 44, 341, 2088, 42, 2200, 44, 2173, 2192, 44, 492, 42, 2175, 41, 59, 457, 492, 2201, 40, 2027, 42, 2170, 44, 2041, 2058, 44, 2041, 2100, 44, 492, 42, 2175, 41, 59, 492, 2202, 40, 404, 2047, 44, 341, 2033, 38, 2085, 44, 2177, 2089, 41, 59, 323, 2203, 40, 2041, 2058, 44, 341, 2033, 38, 2085, 44, 2177, 2089, 44, 2099, 38, 2100, 41, 59, 323, 2204, 40, 41, 59, 492, 2205, 40, 2014, 2015, 44, 2016, 42, 2206, 41, 59, 492, 2207, 40, 41, 59, 492, 2208, 40, 41, 59, 492, 2209, 40, 41, 59, 492, 2210, 40, 2041, 2058, 41, 59, 2033, 2211, 40, 341, 2069, 38, 2058, 44, 341, 2033, 38, 2085, 41, 341, 59, 457, 492, 2212, 40, 2027, 42, 2170, 41, 59, 437, 2078, 58, 492, 2213, 40, 41, 59, 492, 2214, 40, 41, 59, 437, 58, 462, 2215, 123, 492, 427, 40, 41, 40, 2027, 42, 2170, 41, 123, 2216, 40, 2170, 41, 59, 125, 125, 59, 489, 2217, 61, 2218, 646, 2219, 60, 2027, 44, 2215, 62, 59, 2217, 2170, 59, 2218, 646, 2219, 60, 2025, 62, 2220, 59, 2021, 42, 2221, 61, 425, 59, 2218, 646, 2219, 60, 2031, 62, 2222, 59, 2223, 42, 2224, 61, 425, 59, 415, 2029, 2225, 59, 2218, 646, 2219, 60, 2166, 62, 2167, 59, 2018, 38, 2019, 59, 125, 59]",0.9955634,1
+14,98665,C++,"class CPL_DLL VRTWarpedDataset final: public VRTDataset
+{
+    int               m_nBlockXSize;
+    int               m_nBlockYSize;
+    GDALWarpOperation *m_poWarper;
+
+    int               m_nOverviewCount;
+    VRTWarpedDataset **m_papoOverviews;
+    int               m_nSrcOvrLevel;
+
+    void              CreateImplicitOverviews();
+
+    friend class VRTWarpedRasterBand;
+
+    CPL_DISALLOW_COPY_ASSIGN(VRTWarpedDataset)
+
+  protected:
+    virtual int         CloseDependentDatasets() override;
+
+public:
+                      VRTWarpedDataset( int nXSize, int nYSize );
+    virtual ~VRTWarpedDataset();
+
+    virtual void  FlushCache(bool bAtClosing) override;
+
+    CPLErr            Initialize( /* GDALWarpOptions */ void * );
+
+    virtual CPLErr IBuildOverviews( const char *, int, int *,
+                                    int, int *, GDALProgressFunc, void * ) override;
+
+    virtual CPLErr SetMetadataItem( const char *pszName, const char *pszValue,
+                                    const char *pszDomain = """" ) override;
+
+    virtual CPLXMLNode *SerializeToXML( const char *pszVRTPath ) override;
+    virtual CPLErr    XMLInit( CPLXMLNode *, const char * ) override;
+
+    virtual CPLErr AddBand( GDALDataType eType,
+                            char **papszOptions=nullptr ) override;
+
+    virtual char      **GetFileList() override;
+
+    CPLErr            ProcessBlock( int iBlockX, int iBlockY );
+
+    void              GetBlockSize( int *, int * ) const;
+};",1,"[334, 2000, 2001, 381, 58, 439, 2002, 123, 404, 2003, 59, 404, 2004, 59, 2005, 42, 2006, 59, 404, 2007, 59, 2001, 42, 42, 2008, 59, 404, 2009, 59, 492, 2010, 40, 41, 59, 387, 334, 2011, 59, 2012, 40, 2001, 41, 438, 58, 491, 404, 2013, 40, 41, 431, 59, 439, 58, 2001, 40, 404, 2014, 44, 404, 2015, 41, 59, 491, 126, 2001, 40, 41, 59, 491, 492, 2016, 40, 323, 2017, 41, 431, 59, 2018, 2019, 40, 492, 42, 41, 59, 491, 2018, 2020, 40, 341, 330, 42, 44, 404, 44, 404, 42, 44, 404, 44, 404, 42, 44, 2021, 44, 492, 42, 41, 431, 59, 491, 2018, 2022, 40, 341, 330, 42, 2023, 44, 341, 330, 42, 2024, 44, 341, 330, 42, 2025, 61, 41, 431, 59, 491, 2026, 42, 2027, 40, 341, 330, 42, 2028, 41, 431, 59, 491, 2018, 2029, 40, 2026, 42, 44, 341, 330, 42, 41, 431, 59, 491, 2018, 2030, 40, 2031, 2032, 44, 330, 42, 42, 2033, 61, 425, 41, 431, 59, 491, 330, 42, 42, 2034, 40, 41, 431, 59, 2018, 2035, 40, 404, 2036, 44, 404, 2037, 41, 59, 492, 2038, 40, 404, 42, 44, 404, 42, 41, 341, 59, 125, 59]",0.009931641,0
+15,118602,C++,"class RawDatabase : QObject
+{
+    Q_OBJECT
+
+public:
+    class Query
+    {
+    public:
+        Query(QString query, QVector<QByteArray> blobs = {},
+              const std::function<void(RowId)>& insertCallback = {})
+            : query{query.toUtf8()}
+            , blobs{blobs}
+            , insertCallback{insertCallback}
+        {
+        }
+        Query(QString query, const std::function<void(RowId)>& insertCallback)
+            : query{query.toUtf8()}
+            , insertCallback{insertCallback}
+        {
+        }
+        Query(QString query, const std::function<void(const QVector<QVariant>&)>& rowCallback)
+            : query{query.toUtf8()}
+            , rowCallback{rowCallback}
+        {
+        }
+        Query() = default;
+
+    private:
+        QByteArray query;
+        QVector<QByteArray> blobs;
+        std::function<void(RowId)> insertCallback;
+        std::function<void(const QVector<QVariant>&)> rowCallback;
+        QVector<sqlite3_stmt*> statements;
+
+        friend class RawDatabase;
+    };
+
+public:
+    enum class SqlCipherParams {
+        // keep these sorted in upgrade order
+        p3_0, // SQLCipher 3.0 default encryption params
+        // SQLCipher 4.0 default params where SQLCipher 3.0 supports them, but 3.0 params where not possible.
+        // We accidentally got to this state when attemption to update all databases to 4.0 defaults even when using
+        // SQLCipher 3.x, but might as well keep using these for people with SQLCipher 3.x.
+        halfUpgradedTo4,
+        p4_0 // SQLCipher 4.0 default encryption params
+    };
+
+    RawDatabase(const QString& path, const QString& password, const QByteArray& salt);
+    ~RawDatabase();
+    bool isOpen();
+
+    bool execNow(const QString& statement);
+    bool execNow(const Query& statement);
+    bool execNow(const QVector<Query>& statements);
+
+    void execLater(const QString& statement);
+    void execLater(const Query& statement);
+    void execLater(const QVector<Query>& statements);
+
+    void sync();
+
+    static QString toString(SqlCipherParams params)
+    {
+        switch (params)
+        {
+        case SqlCipherParams::p3_0:
+            return ""3.0 default"";
+        case SqlCipherParams::halfUpgradedTo4:
+            return ""3.x max compatible"";
+        case SqlCipherParams::p4_0:
+            return ""4.0 default"";
+        }
+        assert(false);
+        return {};
+    }
+
+public slots:
+    bool setPassword(const QString& password);
+    bool rename(const QString& newPath);
+    bool remove();
+
+protected slots:
+    bool open(const QString& path, const QString& hexKey = {});
+    void close();
+    void process();
+
+private:
+    QString anonymizeQuery(const QByteArray& query);
+    bool openEncryptedDatabaseAtLatestSupportedVersion(const QString& hexKey);
+    bool updateSavedCipherParameters(const QString& hexKey, SqlCipherParams newParams);
+    bool setCipherParameters(SqlCipherParams params, const QString& database = {});
+    SqlCipherParams highestSupportedParams();
+    SqlCipherParams readSavedCipherParams(const QString& hexKey, SqlCipherParams newParams);
+    bool setKey(const QString& hexKey);
+    int getUserVersion();
+    bool encryptDatabase(const QString& newHexKey);
+    bool decryptDatabase();
+    bool commitDbSwap(const QString& hexKey);
+    bool testUsable();
+
+protected:
+    static QString deriveKey(const QString& password, const QByteArray& salt);
+    static QString deriveKey(const QString& password);
+    static QVariant extractData(sqlite3_stmt* stmt, int col);
+    static void regexpInsensitive(sqlite3_context* ctx, int argc, sqlite3_value** argv);
+    static void regexpSensitive(sqlite3_context* ctx, int argc, sqlite3_value** argv);
+
+private:
+    static void regexp(sqlite3_context* ctx, int argc, sqlite3_value** argv, const QRegularExpression::PatternOptions cs);
+
+    struct Transaction
+    {
+        QVector<Query> queries;
+        std::atomic_bool* success = nullptr;
+        std::atomic_bool* done = nullptr;
+    };
+
+private:
+    sqlite3* sqlite;
+    std::unique_ptr<QThread> workerThread;
+    QQueue<Transaction> pendingTransactions;
+    QMutex transactionsMutex;
+    QString path;
+    QByteArray currentSalt;
+    QString currentHexKey;
+};",1,"[334, 2000, 58, 2001, 123, 2002, 439, 58, 334, 2003, 123, 439, 58, 2003, 40, 2004, 2005, 44, 2006, 60, 2007, 62, 2008, 61, 123, 125, 44, 341, 2009, 646, 389, 60, 492, 40, 2010, 41, 62, 38, 2011, 61, 123, 125, 41, 58, 2005, 123, 2005, 46, 2012, 40, 41, 125, 44, 2008, 123, 2008, 125, 44, 2011, 123, 2011, 125, 123, 125, 2003, 40, 2004, 2005, 44, 341, 2009, 646, 389, 60, 492, 40, 2010, 41, 62, 38, 2011, 41, 58, 2005, 123, 2005, 46, 2013, 40, 41, 125, 44, 2011, 123, 2011, 125, 123, 125, 2003, 40, 2004, 2005, 44, 341, 2009, 646, 389, 60, 492, 40, 341, 2006, 60, 2014, 62, 38, 41, 62, 38, 2015, 41, 58, 2005, 123, 2005, 46, 2016, 40, 41, 125, 44, 2015, 123, 2015, 125, 123, 125, 2003, 40, 41, 61, 349, 59, 437, 58, 2007, 2005, 59, 2006, 60, 2007, 62, 2008, 59, 2009, 646, 389, 60, 492, 40, 2010, 41, 62, 2011, 59, 2009, 646, 389, 60, 492, 40, 341, 2006, 60, 2014, 62, 38, 41, 62, 2015, 59, 2006, 60, 2017, 42, 62, 2018, 59, 387, 334, 2000, 59, 125, 59, 439, 58, 370, 334, 2019, 123, 2020, 44, 2021, 44, 2022, 125, 59, 2000, 40, 341, 2023, 38, 2024, 44, 341, 2023, 38, 2025, 44, 341, 2026, 38, 2027, 41, 59, 126, 2000, 40, 41, 59, 323, 2028, 40, 41, 59, 323, 2029, 40, 341, 2023, 38, 2030, 41, 59, 323, 2029, 40, 341, 2003, 38, 2030, 41, 59, 323, 2029, 40, 341, 2031, 60, 2003, 62, 38, 2032, 41, 59, 492, 2033, 40, 341, 2023, 38, 2030, 41, 59, 492, 2033, 40, 341, 2003, 38, 2030, 41, 59, 492, 2033, 40, 341, 2031, 60, 2003, 62, 38, 2032, 41, 59, 492, 2034, 40, 41, 59, 457, 2023, 2035, 40, 2019, 433, 41, 123, 464, 40, 433, 41, 123, 328, 2019, 646, 2036, 58, 450, 59, 328, 2019, 646, 2037, 58, 450, 59, 328, 2019, 646, 2038, 58, 450, 59, 125, 313, 40, 380, 41, 59, 450, 123, 125, 59, 125, 439, 2039, 58, 323, 2040, 40, 341, 2023, 38, 2025, 41, 59, 323, 2041, 40, 341, 2023, 38, 2042, 41, 59, 323, 2043, 40, 41, 59, 438, 2039, 58, 323, 2044, 40, 341, 2023, 38, 2024, 44, 341, 2023, 38, 2045, 61, 123, 125, 41, 59, 492, 2046, 40, 41, 59, 492, 2047, 40, 41, 59, 437, 58, 2023, 2048, 40, 341, 2026, 38, 2049, 41, 59, 323, 2050, 40, 341, 2023, 38, 2045, 41, 59, 323, 2051, 40, 341, 2023, 38, 2045, 44, 2019, 2052, 41, 59, 323, 2053, 40, 2019, 433, 44, 341, 2023, 38, 2054, 61, 123, 125, 41, 59, 2019, 2055, 40, 41, 59, 2019, 2056, 40, 341, 2023, 38, 2045, 44, 2019, 2052, 41, 59, 323, 2057, 40, 341, 2023, 38, 2045, 41, 59, 404, 2058, 40, 41, 59, 323, 2059, 40, 341, 2023, 38, 2060, 41, 59, 323, 2061, 40, 41, 59, 323, 2062, 40, 341, 2023, 38, 2045, 41, 59, 323, 2063, 40, 41, 59, 438, 58, 457, 2023, 2064, 40, 341, 2023, 38, 2025, 44, 341, 2026, 38, 2027, 41, 59, 457, 2023, 2064, 40, 341, 2023, 38, 2025, 41, 59, 457, 2065, 2066, 40, 2067, 42, 2068, 44, 404, 2069, 41, 59, 457, 492, 2070, 40, 2071, 42, 2072, 44, 404, 2073, 44, 2074, 42, 42, 2075, 41, 59, 457, 492, 2076, 40, 2071, 42, 2072, 44, 404, 2073, 44, 2074, 42, 42, 2075, 41, 59, 437, 58, 457, 492, 2077, 40, 2071, 42, 2072, 44, 404, 2073, 44, 2074, 42, 42, 2075, 44, 341, 2078, 646, 2079, 2080, 41, 59, 462, 2081, 123, 2031, 60, 2003, 62, 2082, 59, 2083, 646, 2084, 42, 2085, 61, 425, 59, 2083, 646, 2084, 42, 2086, 61, 425, 59, 125, 59, 437, 58, 2087, 42, 2088, 59, 2089, 646, 2090, 60, 2091, 62, 2092, 59, 2093, 60, 2081, 62, 2094, 59, 2095, 2096, 59, 2023, 2024, 59, 2026, 2097, 59, 2023, 2098, 59, 125, 59]",0.62160224,1
+16,102138,C++,"class TestGuiFdoSecrets : public QObject
+{
+    Q_OBJECT
+
+public:
+    ~TestGuiFdoSecrets() override;
+
+private slots:
+    void initTestCase();
+    void init();
+    void cleanup();
+    void cleanupTestCase();
+
+    void testServiceEnable();
+    void testServiceEnableNoExposedDatabase();
+    void testServiceSearch();
+    void testServiceSearchBlockingUnlock();
+    void testServiceSearchForce();
+    void testServiceUnlock();
+    void testServiceUnlockDatabaseConcurrent();
+    void testServiceUnlockItems();
+    void testServiceLock();
+    void testServiceLockConcurrent();
+
+    void testSessionOpen();
+    void testSessionClose();
+
+    void testCollectionCreate();
+    void testCollectionDelete();
+    void testCollectionDeleteConcurrent();
+    void testCollectionChange();
+
+    void testItemCreate();
+    void testItemChange();
+    void testItemReplace();
+    void testItemReplaceExistingLocked();
+    void testItemSecret();
+    void testItemDelete();
+    void testItemLockState();
+    void testItemRejectSetReferenceFields();
+
+    void testAlias();
+    void testDefaultAliasAlwaysPresent();
+
+    void testExposeSubgroup();
+    void testModifyingExposedGroup();
+
+    void testHiddenFilename();
+    void testDuplicateName();
+
+private:
+    bool driveUnlockDialog();
+    bool driveNewDatabaseWizard();
+    bool driveAccessControlDialog(bool remember = true);
+    bool waitForSignal(QSignalSpy& spy, int expectedCount);
+
+    void processEvents();
+
+    void lockDatabaseInBackend();
+    void unlockDatabaseInBackend();
+    QSharedPointer<ServiceProxy> enableService();
+    QSharedPointer<SessionProxy> openSession(const QSharedPointer<ServiceProxy>& service, const QString& algo);
+    QSharedPointer<CollectionProxy> getDefaultCollection(const QSharedPointer<ServiceProxy>& service);
+    QSharedPointer<ItemProxy> getFirstItem(const QSharedPointer<CollectionProxy>& coll);
+    QSharedPointer<ItemProxy> createItem(const QSharedPointer<SessionProxy>& sess,
+                                         const QSharedPointer<CollectionProxy>& coll,
+                                         const QString& label,
+                                         const QString& pass,
+                                         const FdoSecrets::wire::StringStringMap& attr,
+                                         bool replace,
+                                         bool expectPrompt = false);
+    FdoSecrets::wire::Secret
+    encryptPassword(QByteArray value, QString contentType, const QSharedPointer<SessionProxy>& sess);
+    template <typename Proxy> QSharedPointer<Proxy> getProxy(const QDBusObjectPath& path) const
+    {
+        auto ret = QSharedPointer<Proxy>{
+            new Proxy(QStringLiteral(""org.freedesktop.secrets""), path.path(), QDBusConnection::sessionBus())};
+        if (!ret->isValid()) {
+            return {};
+        }
+        return ret;
+    }
+
+    template <typename T> T getSignalVariantArgument(const QVariant& arg)
+    {
+        const auto& in = arg.value<QDBusVariant>().variant();
+        return qdbus_cast<T>(in);
+    }
+
+private:
+    QScopedPointer<MainWindow> m_mainWindow;
+    QPointer<DatabaseTabWidget> m_tabWidget;
+    QPointer<DatabaseWidget> m_dbWidget;
+    QSharedPointer<Database> m_db;
+
+    QPointer<FdoSecretsPlugin> m_plugin;
+    QSharedPointer<FdoSecrets::DBusClient> m_client;
+
+    QScopedPointer<FdoSecrets::DhIetf1024Sha256Aes128CbcPkcs7> m_clientCipher;
+
+    QByteArray m_dbData;
+    QScopedPointer<TemporaryFile> m_dbFile;
+};",1,"[334, 2000, 58, 439, 2001, 123, 2002, 439, 58, 126, 2000, 40, 41, 431, 59, 437, 2003, 58, 492, 2004, 40, 41, 59, 492, 2005, 40, 41, 59, 492, 2006, 40, 41, 59, 492, 2007, 40, 41, 59, 492, 2008, 40, 41, 59, 492, 2009, 40, 41, 59, 492, 2010, 40, 41, 59, 492, 2011, 40, 41, 59, 492, 2012, 40, 41, 59, 492, 2013, 40, 41, 59, 492, 2014, 40, 41, 59, 492, 2015, 40, 41, 59, 492, 2016, 40, 41, 59, 492, 2017, 40, 41, 59, 492, 2018, 40, 41, 59, 492, 2019, 40, 41, 59, 492, 2020, 40, 41, 59, 492, 2021, 40, 41, 59, 492, 2022, 40, 41, 59, 492, 2023, 40, 41, 59, 492, 2024, 40, 41, 59, 492, 2025, 40, 41, 59, 492, 2026, 40, 41, 59, 492, 2027, 40, 41, 59, 492, 2028, 40, 41, 59, 492, 2029, 40, 41, 59, 492, 2030, 40, 41, 59, 492, 2031, 40, 41, 59, 492, 2032, 40, 41, 59, 492, 2033, 40, 41, 59, 492, 2034, 40, 41, 59, 492, 2035, 40, 41, 59, 492, 2036, 40, 41, 59, 492, 2037, 40, 41, 59, 437, 58, 323, 2038, 40, 41, 59, 323, 2039, 40, 41, 59, 323, 2040, 40, 323, 2041, 61, 473, 41, 59, 323, 2042, 40, 2043, 38, 2044, 44, 404, 2045, 41, 59, 492, 2046, 40, 41, 59, 492, 2047, 40, 41, 59, 492, 2048, 40, 41, 59, 2049, 60, 2050, 62, 2051, 40, 41, 59, 2049, 60, 2052, 62, 2053, 40, 341, 2049, 60, 2050, 62, 38, 2054, 44, 341, 2055, 38, 2056, 41, 59, 2049, 60, 2057, 62, 2058, 40, 341, 2049, 60, 2050, 62, 38, 2054, 41, 59, 2049, 60, 2059, 62, 2060, 40, 341, 2049, 60, 2057, 62, 38, 2061, 41, 59, 2049, 60, 2059, 62, 2062, 40, 341, 2049, 60, 2052, 62, 38, 2063, 44, 341, 2049, 60, 2057, 62, 38, 2061, 44, 341, 2055, 38, 2064, 44, 341, 2055, 38, 434, 44, 341, 2065, 646, 2066, 646, 2067, 38, 2068, 44, 323, 2069, 44, 323, 2070, 61, 380, 41, 59, 2065, 646, 2066, 646, 2071, 2072, 40, 2073, 2074, 44, 2055, 2075, 44, 341, 2049, 60, 2052, 62, 38, 2063, 41, 59, 466, 60, 477, 2076, 62, 2049, 60, 2076, 62, 2077, 40, 341, 2078, 38, 2079, 41, 341, 123, 318, 2080, 61, 2049, 60, 2076, 62, 123, 418, 2076, 40, 2081, 40, 41, 44, 2079, 46, 2079, 40, 41, 44, 2082, 646, 2083, 40, 41, 41, 125, 59, 392, 40, 33, 2080, 624, 2084, 40, 41, 41, 123, 450, 123, 125, 59, 125, 450, 2080, 59, 125, 466, 60, 477, 2085, 62, 2085, 2086, 40, 341, 2087, 38, 2088, 41, 123, 341, 318, 38, 398, 61, 2088, 46, 2074, 60, 2089, 62, 40, 41, 46, 2090, 40, 41, 59, 450, 2091, 60, 2085, 62, 40, 398, 41, 59, 125, 437, 58, 2092, 60, 2093, 62, 2094, 59, 2095, 60, 2096, 62, 2097, 59, 2095, 60, 2098, 62, 2099, 59, 2049, 60, 2100, 62, 2101, 59, 2095, 60, 2102, 62, 2103, 59, 2049, 60, 2065, 646, 2104, 62, 2105, 59, 2092, 60, 2065, 646, 2106, 62, 2107, 59, 2073, 2108, 59, 2092, 60, 2109, 62, 2110, 59, 125, 59]",0.16744094,0
+17,117663,C++,"class Gyroscope
+{
+public:
+	static constexpr int MAX_SENSOR_COUNT = 4;
+
+	static constexpr uint8_t DEFAULT_PRIORITY = 50;
+	static constexpr uint8_t DEFAULT_EXTERNAL_PRIORITY = 25;
+
+	static constexpr const char *SensorString() { return ""GYRO""; }
+
+	Gyroscope();
+	explicit Gyroscope(uint32_t device_id, bool external = false);
+
+	~Gyroscope() = default;
+
+	void PrintStatus();
+
+	void set_calibration_index(uint8_t calibration_index) { _calibration_index = calibration_index; }
+	void set_device_id(uint32_t device_id, bool external = false);
+	void set_external(bool external = true);
+	bool set_offset(const matrix::Vector3f &offset);
+	void set_rotation(Rotation rotation);
+	void set_temperature(float temperature) { _temperature = temperature; };
+
+	uint8_t calibration_count() const { return _calibration_count; }
+	uint32_t device_id() const { return _device_id; }
+	bool enabled() const { return (_priority > 0); }
+	bool external() const { return _external; }
+	const matrix::Vector3f &offset() const { return _offset; }
+	const int32_t &priority() const { return _priority; }
+	const matrix::Dcmf &rotation() const { return _rotation; }
+	const Rotation &rotation_enum() const { return _rotation_enum; }
+	const matrix::Vector3f &thermal_offset() const { return _thermal_offset; }
+
+	// apply offsets and scale
+	// rotate corrected measurements from sensor to body frame
+	inline matrix::Vector3f Correct(const matrix::Vector3f &data) const
+	{
+		return _rotation * matrix::Vector3f{data - _thermal_offset - _offset};
+	}
+
+	inline matrix::Vector3f Uncorrect(const matrix::Vector3f &corrected_data) const
+	{
+		return (_rotation.I() * corrected_data) + _thermal_offset + _offset;
+	}
+
+	// Compute sensor offset from bias (board frame)
+	matrix::Vector3f BiasCorrectedSensorOffset(const matrix::Vector3f &bias) const
+	{
+		return (_rotation.I() * bias) + _thermal_offset + _offset;
+	}
+
+	bool ParametersSave();
+	void ParametersUpdate();
+
+	void Reset();
+
+	void SensorCorrectionsUpdate(bool force = false);
+
+private:
+	static constexpr float TEMPERATURE_INVALID = -1000.f;
+
+	uORB::Subscription _sensor_correction_sub{ORB_ID(sensor_correction)};
+
+	Rotation _rotation_enum{ROTATION_NONE};
+
+	matrix::Dcmf _rotation;
+	matrix::Vector3f _offset;
+	matrix::Vector3f _thermal_offset;
+	float _temperature{NAN};
+
+	int8_t _calibration_index{-1};
+	uint32_t _device_id{0};
+	int32_t _priority{-1};
+
+	bool _external{false};
+
+	uint8_t _calibration_count{0};
+};",1,"[334, 2000, 123, 439, 58, 457, 343, 404, 2001, 61, 1502, 59, 457, 343, 2002, 2003, 61, 1503, 59, 457, 343, 2002, 2004, 61, 1503, 59, 457, 343, 341, 330, 42, 2005, 40, 41, 123, 450, 59, 125, 2000, 40, 41, 59, 376, 2000, 40, 2006, 2007, 44, 323, 2008, 61, 380, 41, 59, 126, 2000, 40, 41, 61, 349, 59, 492, 2009, 40, 41, 59, 492, 2010, 40, 2002, 2011, 41, 123, 2012, 61, 2011, 59, 125, 492, 2013, 40, 2006, 2007, 44, 323, 2008, 61, 380, 41, 59, 492, 2014, 40, 323, 2008, 61, 473, 41, 59, 323, 2015, 40, 341, 2016, 646, 2017, 38, 2018, 41, 59, 492, 2019, 40, 2020, 2021, 41, 59, 492, 2022, 40, 384, 2023, 41, 123, 2024, 61, 2023, 59, 125, 59, 2002, 2025, 40, 41, 341, 123, 450, 2026, 59, 125, 2006, 2007, 40, 41, 341, 123, 450, 2027, 59, 125, 323, 2028, 40, 41, 341, 123, 450, 40, 2029, 62, 1500, 41, 59, 125, 323, 2008, 40, 41, 341, 123, 450, 2030, 59, 125, 341, 2016, 646, 2017, 38, 2018, 40, 41, 341, 123, 450, 2031, 59, 125, 341, 2032, 38, 2033, 40, 41, 341, 123, 450, 2034, 59, 125, 341, 2016, 646, 2035, 38, 2021, 40, 41, 341, 123, 450, 2036, 59, 125, 341, 2020, 38, 2037, 40, 41, 341, 123, 450, 2038, 59, 125, 341, 2016, 646, 2017, 38, 2039, 40, 41, 341, 123, 450, 2040, 59, 125, 401, 2016, 646, 2017, 2041, 40, 341, 2016, 646, 2017, 38, 2042, 41, 341, 123, 450, 2043, 42, 2016, 646, 2017, 123, 2042, 45, 2044, 45, 2045, 125, 59, 125, 401, 2016, 646, 2017, 2046, 40, 341, 2016, 646, 2017, 38, 2047, 41, 341, 123, 450, 40, 2048, 46, 2049, 40, 41, 42, 2047, 41, 43, 2050, 43, 2051, 59, 125, 2016, 646, 2017, 2052, 40, 341, 2016, 646, 2017, 38, 2053, 41, 341, 123, 450, 40, 2054, 46, 2055, 40, 41, 42, 2053, 41, 43, 2056, 43, 2057, 59, 125, 323, 2058, 40, 41, 59, 492, 2059, 40, 41, 59, 492, 2060, 40, 41, 59, 492, 2061, 40, 323, 2062, 61, 380, 41, 59, 437, 58, 457, 343, 384, 2063, 61, 45, 1504, 59, 2064, 646, 2065, 2066, 123, 2067, 40, 2068, 41, 125, 59, 2020, 2069, 123, 2070, 125, 59, 2016, 646, 2035, 2071, 59, 2016, 646, 2017, 2072, 59, 2016, 646, 2017, 2073, 59, 384, 2074, 123, 2075, 125, 59, 2076, 2077, 123, 45, 1501, 125, 59, 2006, 2078, 123, 1500, 125, 59, 2032, 2079, 123, 45, 1501, 125, 59, 323, 2080, 123, 380, 125, 59, 2002, 2081, 123, 1500, 125, 59, 125, 59]",0.13076976,0
+18,118460,C++,"class GroupInviteForm : public QWidget
+{
+    Q_OBJECT
+public:
+    GroupInviteForm();
+    ~GroupInviteForm();
+
+    void show(ContentLayout* contentLayout);
+    bool addGroupInvite(const GroupInvite& inviteInfo);
+    bool isShown() const;
+
+signals:
+    void groupCreate(uint8_t type);
+    void groupInviteAccepted(const GroupInvite& inviteInfo);
+    void groupInvitesSeen();
+
+protected:
+    void showEvent(QShowEvent* event) final;
+
+private:
+    void retranslateUi();
+    void deleteInviteWidget(const GroupInvite& inviteInfo);
+
+private:
+    QWidget* headWidget;
+    QLabel* headLabel;
+    QPushButton* createButton;
+    QGroupBox* inviteBox;
+    QList<GroupInviteWidget*> invites;
+    QScrollArea* scroll;
+};",1,"[334, 2000, 58, 439, 2001, 123, 2002, 439, 58, 2000, 40, 41, 59, 126, 2000, 40, 41, 59, 492, 2003, 40, 2004, 42, 2005, 41, 59, 323, 2006, 40, 341, 2007, 38, 2008, 41, 59, 323, 2009, 40, 41, 341, 59, 2010, 58, 492, 2011, 40, 2012, 2013, 41, 59, 492, 2014, 40, 341, 2007, 38, 2008, 41, 59, 492, 2015, 40, 41, 59, 438, 58, 492, 2016, 40, 2017, 42, 373, 41, 381, 59, 437, 58, 492, 2018, 40, 41, 59, 492, 2019, 40, 341, 2007, 38, 2008, 41, 59, 437, 58, 2001, 42, 2020, 59, 2021, 42, 2022, 59, 2023, 42, 2024, 59, 2025, 42, 2026, 59, 2027, 60, 2028, 42, 62, 2029, 59, 2030, 42, 2031, 59, 125, 59]",0.0024532543,0
+19,117641,C++,"class RoverPositionControl final : public ModuleBase<RoverPositionControl>, public ModuleParams, public px4::WorkItem
+{
+public:
+	RoverPositionControl();
+	~RoverPositionControl();
+	RoverPositionControl(const RoverPositionControl &) = delete;
+	RoverPositionControl operator=(const RoverPositionControl &other) = delete;
+
+	/** @see ModuleBase */
+	static int task_spawn(int argc, char *argv[]);
+
+	/** @see ModuleBase */
+	static int custom_command(int argc, char *argv[]);
+
+	/** @see ModuleBase */
+	static int print_usage(const char *reason = nullptr);
+
+	bool init();
+
+private:
+	void Run() override;
+
+	uORB::SubscriptionCallbackWorkItem _vehicle_angular_velocity_sub{this, ORB_ID(vehicle_angular_velocity)};
+
+	uORB::SubscriptionInterval _parameter_update_sub{ORB_ID(parameter_update), 1_s};
+
+	uORB::Publication<vehicle_attitude_setpoint_s>	_attitude_sp_pub{ORB_ID(vehicle_attitude_setpoint)};
+	uORB::Publication<position_controller_status_s>	_pos_ctrl_status_pub{ORB_ID(position_controller_status)};  /**< navigation capabilities publication */
+	uORB::Publication<actuator_controls_s>		_actuator_controls_pub{ORB_ID(actuator_controls_0)};  /**< actuator controls publication */
+
+	uORB::Subscription _control_mode_sub{ORB_ID(vehicle_control_mode)}; /**< control mode subscription */
+	uORB::Subscription _global_pos_sub{ORB_ID(vehicle_global_position)};
+	uORB::Subscription _local_pos_sub{ORB_ID(vehicle_local_position)};
+	uORB::Subscription _manual_control_setpoint_sub{ORB_ID(manual_control_setpoint)}; /**< notification of manual control updates */
+	uORB::Subscription _pos_sp_triplet_sub{ORB_ID(position_setpoint_triplet)};
+	uORB::Subscription _att_sub{ORB_ID(vehicle_attitude)};
+	uORB::Subscription _att_sp_sub{ORB_ID(vehicle_attitude_setpoint)};
+	uORB::Subscription _trajectory_setpoint_sub{ORB_ID(trajectory_setpoint)};
+
+	manual_control_setpoint_s		_manual_control_setpoint{};			    /**< r/c channel data */
+	position_setpoint_triplet_s		_pos_sp_triplet{};		/**< triplet of mission items */
+	vehicle_attitude_setpoint_s		_att_sp{};			/**< attitude setpoint > */
+	vehicle_control_mode_s			_control_mode{};		/**< control mode */
+	vehicle_global_position_s		_global_pos{};			/**< global vehicle position */
+	vehicle_local_position_s		_local_pos{};			/**< global vehicle position */
+	actuator_controls_s				_act_controls{};		/**< direct control of actuators */
+	vehicle_attitude_s				_vehicle_att{};
+	vehicle_local_position_setpoint_s       _trajectory_setpoint{};
+
+	uORB::SubscriptionData<vehicle_acceleration_s>		_vehicle_acceleration_sub{ORB_ID(vehicle_acceleration)};
+
+	perf_counter_t	_loop_perf;			/**< loop performance counter */
+
+	hrt_abstime _control_position_last_called{0}; 	/**<last call of control_position  */
+	hrt_abstime _manual_setpoint_last_called{0};
+
+	MapProjection _global_local_proj_ref{};
+	float                      _global_local_alt0{NAN};
+
+	/* Pid controller for the speed. Here we assume we can control airspeed but the control variable is actually on
+	 the throttle. For now just assuming a proportional scaler between controlled airspeed and throttle output.*/
+	PID_t _speed_ctrl{};
+
+	// estimator reset counters
+	uint8_t _pos_reset_counter{0};		// captures the number of times the estimator has reset the horizontal position
+
+	ECL_L1_Pos_Controller				_gnd_control;
+
+	enum UGV_POSCTRL_MODE {
+		UGV_POSCTRL_MODE_AUTO,
+		UGV_POSCTRL_MODE_OTHER
+	} _control_mode_current{UGV_POSCTRL_MODE_OTHER};			///< used to check the mode in the last control loop iteration. Use to check if the last iteration was in the same mode.
+
+
+	enum POS_CTRLSTATES {
+		GOTO_WAYPOINT,
+		STOPPING
+	} _pos_ctrl_state {STOPPING};			/// Position control state machine
+
+	/* previous waypoint */
+	matrix::Vector2d _prev_wp{0, 0};
+
+	enum class VelocityFrame {
+		NED,
+		BODY,
+	} _velocity_frame{VelocityFrame::NED};
+
+	float _manual_yaw_sp{0.0};
+	bool _reset_yaw_sp{true};
+
+	DEFINE_PARAMETERS(
+		(ParamFloat<px4::params::GND_L1_PERIOD>) _param_l1_period,
+		(ParamFloat<px4::params::GND_L1_DAMPING>) _param_l1_damping,
+		(ParamFloat<px4::params::GND_L1_DIST>) _param_l1_distance,
+
+		(ParamFloat<px4::params::GND_SPEED_TRIM>) _param_gndspeed_trim,
+		(ParamFloat<px4::params::GND_SPEED_MAX>) _param_gndspeed_max,
+
+		(ParamInt<px4::params::GND_SP_CTRL_MODE>) _param_speed_control_mode,
+		(ParamFloat<px4::params::GND_SPEED_P>) _param_speed_p,
+		(ParamFloat<px4::params::GND_SPEED_I>) _param_speed_i,
+		(ParamFloat<px4::params::GND_SPEED_D>) _param_speed_d,
+		(ParamFloat<px4::params::GND_SPEED_IMAX>) _param_speed_imax,
+		(ParamFloat<px4::params::GND_SPEED_THR_SC>) _param_throttle_speed_scaler,
+
+		(ParamFloat<px4::params::GND_THR_MIN>) _param_throttle_min,
+		(ParamFloat<px4::params::GND_THR_MAX>) _param_throttle_max,
+		(ParamFloat<px4::params::GND_THR_CRUISE>) _param_throttle_cruise,
+
+		(ParamFloat<px4::params::GND_WHEEL_BASE>) _param_wheel_base,
+		(ParamFloat<px4::params::GND_MAX_ANG>) _param_max_turn_angle,
+		(ParamFloat<px4::params::GND_MAN_Y_MAX>) _param_gnd_man_y_max,
+		(ParamFloat<px4::params::NAV_LOITER_RAD>) _param_nav_loiter_rad	/**< loiter radius for Rover */
+	)
+
+	/**
+	 * Update our local parameter cache.
+	 */
+	void parameters_update(bool force = false);
+
+	void		position_setpoint_triplet_poll();
+	void		attitude_setpoint_poll();
+	void		vehicle_control_mode_poll();
+	void 		vehicle_attitude_poll();
+	void		manual_control_setpoint_poll();
+
+	/**
+	 * Control position.
+	 */
+	bool		control_position(const matrix::Vector2d &global_pos, const matrix::Vector3f &ground_speed,
+					 const position_setpoint_triplet_s &_pos_sp_triplet);
+	void		control_velocity(const matrix::Vector3f &current_velocity);
+	void		control_attitude(const vehicle_attitude_s &att, const vehicle_attitude_setpoint_s &att_sp);
+
+};",1,"[334, 2000, 381, 58, 439, 2001, 60, 2000, 62, 44, 439, 2002, 44, 439, 2003, 646, 2004, 123, 439, 58, 2000, 40, 41, 59, 126, 2000, 40, 41, 59, 2000, 40, 341, 2000, 38, 41, 61, 353, 59, 2000, 427, 61, 40, 341, 2000, 38, 2005, 41, 61, 353, 59, 457, 404, 2006, 40, 404, 2007, 44, 330, 42, 2008, 91, 93, 41, 59, 457, 404, 2009, 40, 404, 2007, 44, 330, 42, 2008, 91, 93, 41, 59, 457, 404, 2010, 40, 341, 330, 42, 2011, 61, 425, 41, 59, 323, 2012, 40, 41, 59, 437, 58, 492, 2013, 40, 41, 431, 59, 2014, 646, 2015, 2016, 123, 467, 44, 2017, 40, 2018, 41, 125, 59, 2014, 646, 2019, 2020, 123, 2021, 40, 2022, 41, 44, 1501, 125, 59, 2014, 646, 2023, 60, 2024, 62, 2025, 123, 2026, 40, 2027, 41, 125, 59, 2014, 646, 2023, 60, 2028, 62, 2029, 123, 2030, 40, 2031, 41, 125, 59, 2014, 646, 2023, 60, 2032, 62, 2033, 123, 2034, 40, 2035, 41, 125, 59, 2014, 646, 2036, 2037, 123, 2038, 40, 2039, 41, 125, 59, 2014, 646, 2036, 2040, 123, 2041, 40, 2042, 41, 125, 59, 2014, 646, 2036, 2043, 123, 2044, 40, 2045, 41, 125, 59, 2014, 646, 2036, 2046, 123, 2047, 40, 2048, 41, 125, 59, 2014, 646, 2036, 2049, 123, 2050, 40, 2051, 41, 125, 59, 2014, 646, 2036, 2052, 123, 2053, 40, 2054, 41, 125, 59, 2014, 646, 2036, 2055, 123, 2056, 40, 2057, 41, 125, 59, 2014, 646, 2036, 2058, 123, 2059, 40, 2060, 41, 125, 59, 2061, 2062, 123, 125, 59, 2063, 2064, 123, 125, 59, 2024, 2065, 123, 125, 59, 2066, 2067, 123, 125, 59, 2068, 2069, 123, 125, 59, 2070, 2071, 123, 125, 59, 2032, 2072, 123, 125, 59, 2073, 2074, 123, 125, 59, 2075, 2076, 123, 125, 59, 2014, 646, 2077, 60, 2078, 62, 2079, 123, 2080, 40, 2081, 41, 125, 59, 2082, 2083, 59, 2084, 2085, 123, 1500, 125, 59, 2084, 2086, 123, 1500, 125, 59, 2087, 2088, 123, 125, 59, 384, 2089, 123, 2090, 125, 59, 2091, 2092, 123, 125, 59, 2093, 2094, 123, 1500, 125, 59, 2095, 2096, 59, 370, 2097, 123, 2098, 44, 2099, 125, 2100, 123, 2101, 125, 59, 370, 2102, 123, 2103, 44, 2104, 125, 2105, 123, 2106, 125, 59, 2107, 646, 2108, 2109, 123, 1500, 44, 1500, 125, 59, 370, 334, 2110, 123, 2111, 44, 2112, 44, 125, 2113, 123, 2110, 646, 2114, 125, 59, 384, 2115, 123, 1500, 125, 59, 323, 2116, 123, 473, 125, 59, 2117, 40, 40, 2118, 60, 2003, 646, 433, 646, 2119, 62, 41, 2120, 44, 40, 2118, 60, 2003, 646, 433, 646, 2121, 62, 41, 2122, 44, 40, 2118, 60, 2003, 646, 433, 646, 2123, 62, 41, 2124, 44, 40, 2118, 60, 2003, 646, 433, 646, 2125, 62, 41, 2126, 44, 40, 2118, 60, 2003, 646, 433, 646, 2127, 62, 41, 2128, 44, 40, 2129, 60, 2003, 646, 433, 646, 2130, 62, 41, 2131, 44, 40, 2118, 60, 2003, 646, 433, 646, 2132, 62, 41, 2133, 44, 40, 2118, 60, 2003, 646, 433, 646, 2134, 62, 41, 2135, 44, 40, 2118, 60, 2003, 646, 433, 646, 2136, 62, 41, 2137, 44, 40, 2118, 60, 2003, 646, 433, 646, 2138, 62, 41, 2139, 44, 40, 2118, 60, 2003, 646, 433, 646, 2140, 62, 41, 2141, 44, 40, 2118, 60, 2003, 646, 433, 646, 2142, 62, 41, 2143, 44, 40, 2118, 60, 2003, 646, 433, 646, 2144, 62, 41, 2145, 44, 40, 2118, 60, 2003, 646, 433, 646, 2146, 62, 41, 2147, 44, 40, 2118, 60, 2003, 646, 433, 646, 2148, 62, 41, 2149, 44, 40, 2118, 60, 2003, 646, 433, 646, 2150, 62, 41, 2151, 44, 40, 2118, 60, 2003, 646, 433, 646, 2152, 62, 41, 2153, 44, 40, 2118, 60, 2003, 646, 433, 646, 2154, 62, 41, 2155, 41, 492, 2156, 40, 323, 2157, 61, 380, 41, 59, 492, 2158, 40, 41, 59, 492, 2159, 40, 41, 59, 492, 2160, 40, 41, 59, 492, 2161, 40, 41, 59, 492, 2162, 40, 41, 59, 323, 2163, 40, 341, 2107, 646, 2108, 38, 2164, 44, 341, 2107, 646, 2165, 38, 2166, 44, 341, 2063, 38, 2064, 41, 59, 492, 2167, 40, 341, 2107, 646, 2165, 38, 2168, 41, 59, 492, 2169, 40, 341, 2073, 38, 2170, 44, 341, 2024, 38, 2171, 41, 59, 125, 59]",0.23909,0
+20,118514,C++,"class AddFriendForm : public QObject
+{
+    Q_OBJECT
+public:
+    enum Mode
+    {
+        AddFriend = 0,
+        ImportContacts = 1,
+        FriendRequest = 2
+    };
+
+    AddFriendForm(ToxId _ownId);
+    AddFriendForm(const AddFriendForm&) = delete;
+    AddFriendForm& operator=(const AddFriendForm&) = delete;
+    ~AddFriendForm();
+
+    bool isShown() const;
+    void show(ContentLayout* contentLayout);
+    void setMode(Mode mode);
+
+    bool addFriendRequest(const QString& friendAddress, const QString& message);
+
+signals:
+    void friendRequested(const ToxId& friendAddress, const QString& message);
+    void friendRequestAccepted(const ToxPk& friendAddress);
+    void friendRequestsSeen();
+
+public slots:
+    void onUsernameSet(const QString& userName);
+
+private slots:
+    void onSendTriggered();
+    void onIdChanged(const QString& id);
+    void onImportSendClicked();
+    void onImportOpenClicked();
+    void onFriendRequestAccepted();
+    void onFriendRequestRejected();
+    void onCurrentChanged(int index);
+
+private:
+    void addFriend(const QString& idText);
+    void retranslateUi();
+    void addFriendRequestWidget(const QString& friendAddress, const QString& message);
+    void removeFriendRequestWidget(QWidget* friendWidget);
+    void retranslateAcceptButton(QPushButton* acceptButton);
+    void retranslateRejectButton(QPushButton* rejectButton);
+    void deleteFriendRequest(const ToxId& toxId);
+    void setIdFromClipboard();
+    QString getMessage() const;
+    QString getImportMessage() const;
+
+private:
+    QLabel headLabel;
+    QLabel toxIdLabel;
+    QLabel messageLabel;
+    QLabel importFileLabel;
+    QLabel importMessageLabel;
+
+    QPushButton sendButton;
+    QPushButton importFileButton;
+    QPushButton importSendButton;
+    QLineEdit toxId;
+    QTextEdit message;
+    QTextEdit importMessage;
+    QVBoxLayout layout;
+    QVBoxLayout headLayout;
+    QVBoxLayout importContactsLayout;
+    QHBoxLayout importFileLine;
+    QWidget* head;
+    QWidget* main;
+    QWidget* importContacts;
+    QString lastUsername;
+    QTabWidget* tabWidget;
+    QVBoxLayout* requestsLayout;
+    QList<QPushButton*> acceptButtons;
+    QList<QPushButton*> rejectButtons;
+    QList<QString> contactsToImport;
+
+    ToxId ownId;
+};",1,"[334, 2000, 58, 439, 2001, 123, 2002, 439, 58, 370, 2003, 123, 2004, 61, 1500, 44, 2005, 61, 1501, 44, 2006, 61, 1502, 125, 59, 2000, 40, 2007, 2008, 41, 59, 2000, 40, 341, 2000, 38, 41, 61, 353, 59, 2000, 38, 427, 61, 40, 341, 2000, 38, 41, 61, 353, 59, 126, 2000, 40, 41, 59, 323, 2009, 40, 41, 341, 59, 492, 2010, 40, 2011, 42, 2012, 41, 59, 492, 2013, 40, 2003, 2014, 41, 59, 323, 2015, 40, 341, 2016, 38, 2017, 44, 341, 2016, 38, 2018, 41, 59, 2019, 58, 492, 2020, 40, 341, 2007, 38, 2017, 44, 341, 2016, 38, 2018, 41, 59, 492, 2021, 40, 341, 2022, 38, 2017, 41, 59, 492, 2023, 40, 41, 59, 439, 2024, 58, 492, 2025, 40, 341, 2016, 38, 2026, 41, 59, 437, 2024, 58, 492, 2027, 40, 41, 59, 492, 2028, 40, 341, 2016, 38, 2029, 41, 59, 492, 2030, 40, 41, 59, 492, 2031, 40, 41, 59, 492, 2032, 40, 41, 59, 492, 2033, 40, 41, 59, 492, 2034, 40, 404, 2035, 41, 59, 437, 58, 492, 2036, 40, 341, 2016, 38, 2037, 41, 59, 492, 2038, 40, 41, 59, 492, 2039, 40, 341, 2016, 38, 2017, 44, 341, 2016, 38, 2018, 41, 59, 492, 2040, 40, 2041, 42, 2042, 41, 59, 492, 2043, 40, 2044, 42, 2045, 41, 59, 492, 2046, 40, 2044, 42, 2047, 41, 59, 492, 2048, 40, 341, 2007, 38, 2049, 41, 59, 492, 2050, 40, 41, 59, 2016, 2051, 40, 41, 341, 59, 2016, 2052, 40, 41, 341, 59, 437, 58, 2053, 2054, 59, 2053, 2055, 59, 2053, 2056, 59, 2053, 2057, 59, 2053, 2058, 59, 2044, 2059, 59, 2044, 2060, 59, 2044, 2061, 59, 2062, 2049, 59, 2063, 2018, 59, 2063, 2064, 59, 2065, 2066, 59, 2065, 2067, 59, 2065, 2068, 59, 2069, 2070, 59, 2041, 42, 2071, 59, 2041, 42, 2072, 59, 2041, 42, 2073, 59, 2016, 2074, 59, 2075, 42, 2076, 59, 2065, 42, 2077, 59, 2078, 60, 2044, 42, 62, 2079, 59, 2078, 60, 2044, 42, 62, 2080, 59, 2078, 60, 2016, 62, 2081, 59, 2007, 2082, 59, 125, 59]",0.06441235,0
+21,121345,C++,"class Application final : public QObject {
+public:
+	struct ProxyChange {
+		MTP::ProxyData was;
+		MTP::ProxyData now;
+	};
+
+	Application(not_null<Launcher*> launcher);
+	Application(const Application &other) = delete;
+	Application &operator=(const Application &other) = delete;
+	~Application();
+
+	[[nodiscard]] not_null<Launcher*> launcher() const {
+		return _launcher;
+	}
+
+	void run();
+
+	[[nodiscard]] Ui::Animations::Manager &animationManager() const {
+		return *_animationsManager;
+	}
+	[[nodiscard]] Window::Notifications::System &notifications() const {
+		Expects(_notifications != nullptr);
+
+		return *_notifications;
+	}
+
+	// Windows interface.
+	bool hasActiveWindow(not_null<Main::Session*> session) const;
+	void saveCurrentDraftsToHistories();
+	[[nodiscard]] Window::Controller *activeWindow() const;
+	bool closeActiveWindow();
+	bool minimizeActiveWindow();
+	[[nodiscard]] QWidget *getFileDialogParent();
+	void notifyFileDialogShown(bool shown);
+	void checkSystemDarkMode();
+
+	// Media view interface.
+	void checkMediaViewActivation();
+	bool hideMediaView();
+
+	[[nodiscard]] QPoint getPointForCallPanelCenter() const;
+
+	void startSettingsAndBackground();
+	[[nodiscard]] Settings &settings() {
+		return _settings;
+	}
+	void saveSettingsDelayed(crl::time delay = kDefaultSaveDelay);
+	void saveSettings();
+
+	// Fallback config and proxy.
+	[[nodiscard]] MTP::Config &fallbackProductionConfig() const;
+	void refreshFallbackProductionConfig(const MTP::Config &config);
+	void constructFallbackProductionConfig(const QByteArray &serialized);
+	void setCurrentProxy(
+		const MTP::ProxyData &proxy,
+		MTP::ProxyData::Settings settings);
+	[[nodiscard]] rpl::producer<ProxyChange> proxyChanges() const;
+	void badMtprotoConfigurationError();
+
+	// Databases.
+	[[nodiscard]] Storage::Databases &databases() {
+		return *_databases;
+	}
+
+	// Domain component.
+	[[nodiscard]] Main::Domain &domain() const {
+		return *_domain;
+	}
+	[[nodiscard]] Main::Account &activeAccount() const;
+	[[nodiscard]] bool someSessionExists() const;
+	[[nodiscard]] Export::Manager &exportManager() const {
+		return *_exportManager;
+	}
+	[[nodiscard]] bool exportPreventsQuit();
+
+	// Main::Session component.
+	Main::Session *maybeActiveSession() const;
+	[[nodiscard]] int unreadBadge() const;
+	[[nodiscard]] bool unreadBadgeMuted() const;
+	[[nodiscard]] rpl::producer<> unreadBadgeChanges() const;
+
+	// Media component.
+	[[nodiscard]] Media::Audio::Instance &audio() {
+		return *_audio;
+	}
+
+	// Langpack and emoji keywords.
+	[[nodiscard]] Lang::Instance &langpack() {
+		return *_langpack;
+	}
+	[[nodiscard]] Lang::CloudManager *langCloudManager() {
+		return _langCloudManager.get();
+	}
+	[[nodiscard]] bool offerLegacyLangPackSwitch() const;
+	[[nodiscard]] bool canApplyLangPackWithoutRestart() const;
+	[[nodiscard]] ChatHelpers::EmojiKeywords &emojiKeywords() {
+		return *_emojiKeywords;
+	}
+	[[nodiscard]] auto emojiImageLoader() const
+	-> const crl::object_on_queue<Stickers::EmojiImageLoader> & {
+		return _emojiImageLoader;
+	}
+
+	// Internal links.
+	void checkStartUrl();
+	bool openLocalUrl(const QString &url, QVariant context);
+	bool openInternalUrl(const QString &url, QVariant context);
+	[[nodiscard]] QString changelogLink() const;
+
+	// Float player.
+	void setDefaultFloatPlayerDelegate(
+		not_null<Media::Player::FloatDelegate*> delegate);
+	void replaceFloatPlayerDelegate(
+		not_null<Media::Player::FloatDelegate*> replacement);
+	void restoreFloatPlayerDelegate(
+		not_null<Media::Player::FloatDelegate*> replacement);
+	[[nodiscard]] rpl::producer<FullMsgId> floatPlayerClosed() const;
+
+	// Calls.
+	Calls::Instance &calls() const {
+		return *_calls;
+	}
+
+	void logout(Main::Account *account = nullptr);
+	void forceLogOut(
+		not_null<Main::Account*> account,
+		const TextWithEntities &explanation);
+	void checkLocalTime();
+	void lockByPasscode();
+	void unlockPasscode();
+	[[nodiscard]] bool passcodeLocked() const;
+	rpl::producer<bool> passcodeLockChanges() const;
+	rpl::producer<bool> passcodeLockValue() const;
+
+	void checkAutoLock(crl::time lastNonIdleTime = 0);
+	void checkAutoLockIn(crl::time time);
+	void localPasscodeChanged();
+
+	[[nodiscard]] crl::time lastNonIdleTime() const;
+	void updateNonIdle();
+
+	void registerLeaveSubscription(not_null<QWidget*> widget);
+	void unregisterLeaveSubscription(not_null<QWidget*> widget);
+
+	// Sandbox interface.
+	void postponeCall(FnMut<void()> &&callable);
+	void refreshGlobalProxy();
+
+	void quitPreventFinished();
+
+	void handleAppActivated();
+	void handleAppDeactivated();
+	[[nodiscard]] rpl::producer<bool> appDeactivatedValue() const;
+
+	void switchDebugMode();
+	void switchFreeType();
+	void writeInstallBetaVersionsSetting();
+
+	void preventOrInvoke(Fn<void()> &&callback);
+
+	void call_handleObservables();
+
+	// Global runtime variables.
+	void setScreenIsLocked(bool locked);
+	bool screenIsLocked() const;
+
+	static void RegisterUrlScheme();
+
+protected:
+	bool eventFilter(QObject *object, QEvent *event) override;
+
+private:
+	static constexpr auto kDefaultSaveDelay = crl::time(1000);
+
+	friend bool IsAppLaunched();
+	friend Application &App();
+
+	void clearEmojiSourceImages();
+	[[nodiscard]] auto prepareEmojiSourceImages()
+		-> std::shared_ptr<Ui::Emoji::UniversalImages>;
+	void startLocalStorage();
+	void startShortcuts();
+	void startDomain();
+	void startEmojiImageLoader();
+	void startSystemDarkModeViewer();
+
+	friend void App::quit();
+	static void QuitAttempt();
+	void quitDelayed();
+	[[nodiscard]] bool readyToQuit();
+
+	void showOpenGLCrashNotification();
+	void clearPasscodeLock();
+
+	bool openCustomUrl(
+		const QString &protocol,
+		const std::vector<LocalUrlHandler> &handlers,
+		const QString &url,
+		const QVariant &context);
+
+	static Application *Instance;
+	struct InstanceSetter {
+		InstanceSetter(not_null<Application*> instance) {
+			Expects(Instance == nullptr);
+
+			Instance = instance;
+		}
+	};",1,"[334, 2000, 381, 58, 439, 2001, 123, 439, 58, 462, 2002, 123, 2003, 646, 2004, 2005, 59, 2003, 646, 2004, 2006, 59, 125, 59, 2000, 40, 2007, 60, 2008, 42, 62, 2009, 41, 59, 2000, 40, 341, 2000, 38, 2010, 41, 61, 353, 59, 2000, 38, 427, 61, 40, 341, 2000, 38, 2010, 41, 61, 353, 59, 126, 2000, 40, 41, 59, 91, 91, 2011, 93, 93, 2007, 60, 2008, 42, 62, 2009, 40, 41, 341, 123, 450, 2012, 59, 125, 492, 2013, 40, 41, 59, 91, 91, 2011, 93, 93, 2014, 646, 2015, 646, 2016, 38, 2017, 40, 41, 341, 123, 450, 42, 2018, 59, 125, 91, 91, 2011, 93, 93, 2019, 646, 2020, 646, 2021, 38, 2022, 40, 41, 341, 123, 2023, 40, 2024, 631, 425, 41, 59, 450, 42, 2024, 59, 125, 323, 2025, 40, 2007, 60, 2026, 646, 2027, 42, 62, 2028, 41, 341, 59, 492, 2029, 40, 41, 59, 91, 91, 2011, 93, 93, 2019, 646, 2030, 42, 2031, 40, 41, 341, 59, 323, 2032, 40, 41, 59, 323, 2033, 40, 41, 59, 91, 91, 2011, 93, 93, 2034, 42, 2035, 40, 41, 59, 492, 2036, 40, 323, 2037, 41, 59, 492, 2038, 40, 41, 59, 492, 2039, 40, 41, 59, 323, 2040, 40, 41, 59, 91, 91, 2011, 93, 93, 2041, 2042, 40, 41, 341, 59, 492, 2043, 40, 41, 59, 91, 91, 2011, 93, 93, 2044, 38, 2045, 40, 41, 123, 450, 2046, 59, 125, 492, 2047, 40, 2048, 646, 2049, 2050, 61, 2051, 41, 59, 492, 2052, 40, 41, 59, 91, 91, 2011, 93, 93, 2053, 646, 2054, 38, 2055, 40, 41, 341, 59, 492, 2056, 40, 341, 2053, 646, 2054, 38, 2057, 41, 59, 492, 2058, 40, 341, 2059, 38, 2060, 41, 59, 492, 2061, 40, 341, 2053, 646, 2062, 38, 2063, 44, 2053, 646, 2062, 646, 2044, 2045, 41, 59, 91, 91, 2011, 93, 93, 2064, 646, 2065, 60, 2002, 62, 2066, 40, 41, 341, 59, 492, 2067, 40, 41, 59, 91, 91, 2011, 93, 93, 2068, 646, 2069, 38, 2070, 40, 41, 123, 450, 42, 2071, 59, 125, 91, 91, 2011, 93, 93, 2026, 646, 2072, 38, 2073, 40, 41, 341, 123, 450, 42, 2074, 59, 125, 91, 91, 2011, 93, 93, 2026, 646, 2075, 38, 2076, 40, 41, 341, 59, 91, 91, 2011, 93, 93, 323, 2077, 40, 41, 341, 59, 91, 91, 2011, 93, 93, 2078, 646, 2016, 38, 2079, 40, 41, 341, 123, 450, 42, 2080, 59, 125, 91, 91, 2011, 93, 93, 323, 2081, 40, 41, 59, 2026, 646, 2027, 42, 2082, 40, 41, 341, 59, 91, 91, 2011, 93, 93, 404, 2083, 40, 41, 341, 59, 91, 91, 2011, 93, 93, 323, 2084, 40, 41, 341, 59, 91, 91, 2011, 93, 93, 2064, 646, 2065, 60, 62, 2085, 40, 41, 341, 59, 91, 91, 2011, 93, 93, 2086, 646, 2087, 646, 2088, 38, 2089, 40, 41, 123, 450, 42, 2090, 59, 125, 91, 91, 2011, 93, 93, 2091, 646, 2088, 38, 2092, 40, 41, 123, 450, 42, 2093, 59, 125, 91, 91, 2011, 93, 93, 2091, 646, 2094, 42, 2095, 40, 41, 123, 450, 2096, 46, 2097, 40, 41, 59, 125, 91, 91, 2011, 93, 93, 323, 2098, 40, 41, 341, 59, 91, 91, 2011, 93, 93, 323, 2099, 40, 41, 341, 59, 91, 91, 2011, 93, 93, 2100, 646, 2101, 38, 2102, 40, 41, 123, 450, 42, 2103, 59, 125, 91, 91, 2011, 93, 93, 318, 2104, 40, 41, 341, 624, 341, 2048, 646, 2105, 60, 2106, 646, 2107, 62, 38, 123, 450, 2108, 59, 125, 492, 2109, 40, 41, 59, 323, 2110, 40, 341, 2111, 38, 2112, 44, 2113, 2114, 41, 59, 323, 2115, 40, 341, 2111, 38, 2112, 44, 2113, 2114, 41, 59, 91, 91, 2011, 93, 93, 2111, 2116, 40, 41, 341, 59, 492, 2117, 40, 2007, 60, 2086, 646, 2118, 646, 2119, 42, 62, 352, 41, 59, 492, 2120, 40, 2007, 60, 2086, 646, 2118, 646, 2119, 42, 62, 2121, 41, 59, 492, 2122, 40, 2007, 60, 2086, 646, 2118, 646, 2119, 42, 62, 2121, 41, 59, 91, 91, 2011, 93, 93, 2064, 646, 2065, 60, 2123, 62, 2124, 40, 41, 341, 59, 2125, 646, 2088, 38, 2126, 40, 41, 341, 123, 450, 42, 2127, 59, 125, 492, 2128, 40, 2026, 646, 2075, 42, 2129, 61, 425, 41, 59, 492, 2130, 40, 2007, 60, 2026, 646, 2075, 42, 62, 2129, 44, 341, 2131, 38, 2132, 41, 59, 492, 2133, 40, 41, 59, 492, 2134, 40, 41, 59, 492, 2135, 40, 41, 59, 91, 91, 2011, 93, 93, 323, 2136, 40, 41, 341, 59, 2064, 646, 2065, 60, 323, 62, 2137, 40, 41, 341, 59, 2064, 646, 2065, 60, 323, 62, 2138, 40, 41, 341, 59, 492, 2139, 40, 2048, 646, 2049, 2140, 61, 1500, 41, 59, 492, 2141, 40, 2048, 646, 2049, 2049, 41, 59, 492, 2142, 40, 41, 59, 91, 91, 2011, 93, 93, 2048, 646, 2049, 2140, 40, 41, 341, 59, 492, 2143, 40, 41, 59, 492, 2144, 40, 2007, 60, 2034, 42, 62, 2145, 41, 59, 492, 2146, 40, 2007, 60, 2034, 42, 62, 2145, 41, 59, 492, 2147, 40, 2148, 60, 492, 40, 41, 62, 605, 327, 41, 59, 492, 2149, 40, 41, 59, 492, 2150, 40, 41, 59, 492, 2151, 40, 41, 59, 492, 2152, 40, 41, 59, 91, 91, 2011, 93, 93, 2064, 646, 2065, 60, 323, 62, 2153, 40, 41, 341, 59, 492, 2154, 40, 41, 59, 492, 2155, 40, 41, 59, 492, 2156, 40, 41, 59, 492, 2157, 40, 2158, 60, 492, 40, 41, 62, 605, 2159, 41, 59, 492, 2160, 40, 41, 59, 492, 2161, 40, 323, 2162, 41, 59, 323, 2163, 40, 41, 341, 59, 457, 492, 2164, 40, 41, 59, 438, 58, 323, 2165, 40, 2001, 42, 426, 44, 2166, 42, 373, 41, 431, 59, 437, 58, 457, 343, 318, 2051, 61, 2048, 646, 2049, 40, 1504, 41, 59, 387, 323, 2167, 40, 41, 59, 387, 2000, 38, 2168, 40, 41, 59, 492, 2169, 40, 41, 59, 91, 91, 2011, 93, 93, 318, 2170, 40, 41, 624, 2171, 646, 2172, 60, 2014, 646, 2173, 646, 2174, 62, 59, 492, 2175, 40, 41, 59, 492, 2176, 40, 41, 59, 492, 2177, 40, 41, 59, 492, 2178, 40, 41, 59, 492, 2179, 40, 41, 59, 387, 492, 2168, 646, 2180, 40, 41, 59, 457, 492, 2181, 40, 41, 59, 492, 2182, 40, 41, 59, 91, 91, 2011, 93, 93, 323, 2183, 40, 41, 59, 492, 2184, 40, 41, 59, 492, 2185, 40, 41, 59, 323, 2186, 40, 341, 2111, 38, 2187, 44, 341, 2171, 646, 2188, 60, 2189, 62, 38, 2190, 44, 341, 2111, 38, 2112, 44, 341, 2113, 38, 2114, 41, 59, 457, 2000, 42, 2088, 59, 462, 2191, 123, 2191, 40, 2007, 60, 2000, 42, 62, 2192, 41, 123, 2193, 40, 2088, 614, 425, 41, 59, 2088, 61, 2192, 59, 125, 125, 59]",0.8678128,1
+22,118522,C++,"class ChatMessage : public ChatLine
+{
+public:
+    using Ptr = std::shared_ptr<ChatMessage>;
+
+    enum SystemMessageType
+    {
+        INFO,
+        ERROR,
+        TYPING,
+    };
+
+    enum MessageType
+    {
+        NORMAL,
+        ACTION,
+        ALERT,
+    };
+
+    ChatMessage();
+    ~ChatMessage();
+    ChatMessage(const ChatMessage&) = default;
+    ChatMessage& operator=(const ChatMessage&) = default;
+    ChatMessage(ChatMessage&&) = default;
+
+    static ChatMessage::Ptr createChatMessage(const QString& sender, const QString& rawMessage,
+                                              MessageType type, bool isMe, MessageState state,
+                                              const QDateTime& date, bool colorizeName = false);
+    static ChatMessage::Ptr createChatInfoMessage(const QString& rawMessage, SystemMessageType type,
+                                                  const QDateTime& date);
+    static ChatMessage::Ptr createFileTransferMessage(const QString& sender, CoreFile& coreFile,
+                                                      ToxFile file, bool isMe, const QDateTime& date);
+    static ChatMessage::Ptr createTypingNotification();
+    static ChatMessage::Ptr createBusyNotification();
+
+    void markAsDelivered(const QDateTime& time);
+    void markAsBroken();
+    QString toString() const;
+    bool isAction() const;
+    void setAsAction();
+    void hideSender();
+    void hideDate();
+
+protected:
+    static QString detectQuotes(const QString& str, MessageType type);
+    static QString wrapDiv(const QString& str, const QString& div);
+
+private:
+    bool action = false;
+};",1,"[334, 2000, 58, 439, 2001, 123, 439, 58, 489, 2002, 61, 2003, 646, 2004, 60, 2000, 62, 59, 370, 2005, 123, 2006, 44, 2007, 44, 2008, 44, 125, 59, 370, 2009, 123, 2010, 44, 2011, 44, 2012, 44, 125, 59, 2000, 40, 41, 59, 126, 2000, 40, 41, 59, 2000, 40, 341, 2000, 38, 41, 61, 349, 59, 2000, 38, 427, 61, 40, 341, 2000, 38, 41, 61, 349, 59, 2000, 40, 2000, 605, 41, 61, 349, 59, 457, 2000, 646, 2002, 2013, 40, 341, 2014, 38, 2015, 44, 341, 2014, 38, 2016, 44, 2009, 2017, 44, 323, 2018, 44, 2019, 2020, 44, 341, 2021, 38, 2022, 44, 323, 2023, 61, 380, 41, 59, 457, 2000, 646, 2002, 2024, 40, 341, 2014, 38, 2016, 44, 2005, 2017, 44, 341, 2021, 38, 2022, 41, 59, 457, 2000, 646, 2002, 2025, 40, 341, 2014, 38, 2015, 44, 2026, 38, 2027, 44, 2028, 2029, 44, 323, 2018, 44, 341, 2021, 38, 2022, 41, 59, 457, 2000, 646, 2002, 2030, 40, 41, 59, 457, 2000, 646, 2002, 2031, 40, 41, 59, 492, 2032, 40, 341, 2021, 38, 2033, 41, 59, 492, 2034, 40, 41, 59, 2014, 2035, 40, 41, 341, 59, 323, 2036, 40, 41, 341, 59, 492, 2037, 40, 41, 59, 492, 2038, 40, 41, 59, 492, 2039, 40, 41, 59, 438, 58, 457, 2014, 2040, 40, 341, 2014, 38, 2041, 44, 2009, 2017, 41, 59, 457, 2014, 2042, 40, 341, 2014, 38, 2041, 44, 341, 2014, 38, 2043, 41, 59, 437, 58, 323, 2044, 61, 380, 59, 125, 59]",0.020164954,0
+23,99744,C++,"class CPL_DLL CPLJSonStreamingParser
+{
+        CPL_DISALLOW_COPY_ASSIGN(CPLJSonStreamingParser)
+
+        enum State
+        {
+            INIT,
+            OBJECT,
+            ARRAY,
+            STRING,
+            NUMBER,
+            STATE_TRUE,
+            STATE_FALSE,
+            STATE_NULL
+        };
+
+        bool m_bExceptionOccurred = false;
+        bool m_bElementFound = false;
+        int m_nLastChar = 0;
+        int m_nLineCounter = 1;
+        int m_nCharCounter = 1;
+        std::vector<State> m_aState{};
+        std::string m_osToken{};
+        enum class ArrayState
+        {
+            INIT,
+            AFTER_COMMA,
+            AFTER_VALUE
+        };
+        std::vector<ArrayState> m_abArrayState{};
+        bool m_bInStringEscape = false;
+        bool m_bInUnicode = false;
+        std::string m_osUnicodeHex{};
+        size_t m_nMaxDepth = 1024;
+        size_t m_nMaxStringSize = 10000000;
+
+        enum MemberState
+        {
+            WAITING_KEY,
+            IN_KEY,
+            KEY_FINISHED,
+            IN_VALUE
+        };
+        std::vector<MemberState> m_aeObjectState{};
+
+        enum State currentState() { return m_aState.back(); }
+        void SkipSpace(const char*& pStr, size_t& nLength);
+        void AdvanceChar(const char*& pStr, size_t& nLength);
+        bool EmitException(const char* pszMessage);
+        bool EmitUnexpectedChar(char ch, const char* pszExpecting = nullptr);
+        bool StartNewToken(const char*& pStr, size_t& nLength);
+        bool CheckAndEmitTrueFalseOrNull(char ch);
+        bool CheckStackEmpty();
+        void DecodeUnicode();
+
+    public:
+        CPLJSonStreamingParser();
+        virtual ~CPLJSonStreamingParser();
+
+        void SetMaxDepth(size_t nVal);
+        void SetMaxStringSize(size_t nVal);
+        bool ExceptionOccurred() const { return m_bExceptionOccurred; }
+
+        static std::string GetSerializedString(const char* pszStr);
+
+        virtual void Reset();
+        virtual bool Parse(const char* pStr, size_t nLength, bool bFinished);
+
+        virtual void String(const char* /*pszValue*/, size_t /*nLength*/) {}
+        virtual void Number(const char* /*pszValue*/, size_t /*nLength*/) {}
+        virtual void Boolean(bool /*b*/) {}
+        virtual void Null() {}
+
+        virtual void StartObject() {}
+        virtual void EndObject() {}
+        virtual void StartObjectMember(const char* /*pszKey*/, size_t /*nLength*/) {}
+
+        virtual void StartArray() {}
+        virtual void EndArray() {}
+        virtual void StartArrayMember() {}
+
+        virtual void Exception(const char* /*pszMessage*/) {}
+};",1,"[334, 2000, 2001, 123, 2002, 40, 2001, 41, 370, 2003, 123, 2004, 44, 2005, 44, 2006, 44, 2007, 44, 2008, 44, 2009, 44, 2010, 44, 2011, 125, 59, 323, 2012, 61, 380, 59, 323, 2013, 61, 380, 59, 404, 2014, 61, 1500, 59, 404, 2015, 61, 1501, 59, 404, 2016, 61, 1501, 59, 2017, 646, 2018, 60, 2003, 62, 2019, 123, 125, 59, 2017, 646, 461, 2020, 123, 125, 59, 370, 334, 2021, 123, 2022, 44, 2023, 44, 2024, 125, 59, 2017, 646, 2018, 60, 2021, 62, 2025, 123, 125, 59, 323, 2026, 61, 380, 59, 323, 2027, 61, 380, 59, 2017, 646, 461, 2028, 123, 125, 59, 2029, 2030, 61, 1505, 59, 2029, 2031, 61, 1508, 59, 370, 2032, 123, 2033, 44, 2034, 44, 2035, 44, 2036, 125, 59, 2017, 646, 2018, 60, 2032, 62, 2037, 123, 125, 59, 370, 2003, 2038, 40, 41, 123, 450, 2019, 46, 2039, 40, 41, 59, 125, 492, 2040, 40, 341, 330, 42, 38, 2041, 44, 2029, 38, 2042, 41, 59, 492, 2043, 40, 341, 330, 42, 38, 2041, 44, 2029, 38, 2042, 41, 59, 323, 2044, 40, 341, 330, 42, 2045, 41, 59, 323, 2046, 40, 330, 2047, 44, 341, 330, 42, 2048, 61, 425, 41, 59, 323, 2049, 40, 341, 330, 42, 38, 2041, 44, 2029, 38, 2042, 41, 59, 323, 2050, 40, 330, 2047, 41, 59, 323, 2051, 40, 41, 59, 492, 2052, 40, 41, 59, 439, 58, 2001, 40, 41, 59, 491, 126, 2001, 40, 41, 59, 492, 2053, 40, 2029, 2054, 41, 59, 492, 2055, 40, 2029, 2054, 41, 59, 323, 2056, 40, 41, 341, 123, 450, 2012, 59, 125, 457, 2017, 646, 461, 2057, 40, 341, 330, 42, 2058, 41, 59, 491, 492, 2059, 40, 41, 59, 491, 323, 2060, 40, 341, 330, 42, 2041, 44, 2029, 2042, 44, 323, 2061, 41, 59, 491, 492, 2062, 40, 341, 330, 42, 44, 2029, 41, 123, 125, 491, 492, 2063, 40, 341, 330, 42, 44, 2029, 41, 123, 125, 491, 492, 2064, 40, 323, 41, 123, 125, 491, 492, 2065, 40, 41, 123, 125, 491, 492, 2066, 40, 41, 123, 125, 491, 492, 2067, 40, 41, 123, 125, 491, 492, 2068, 40, 341, 330, 42, 44, 2029, 41, 123, 125, 491, 492, 2069, 40, 41, 123, 125, 491, 492, 2070, 40, 41, 123, 125, 491, 492, 2071, 40, 41, 123, 125, 491, 492, 2072, 40, 341, 330, 42, 41, 123, 125, 125, 59]",0.116421774,0

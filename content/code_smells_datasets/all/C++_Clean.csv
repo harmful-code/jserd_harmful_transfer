@@ -1,0 +1,3322 @@
+id,language,text,smell,tokens
+98641,C++,"class VRTAverageFilteredSource final: public VRTKernelFilteredSource
+{
+    CPL_DISALLOW_COPY_ASSIGN(VRTAverageFilteredSource)
+
+public:
+            explicit VRTAverageFilteredSource( int nKernelSize );
+    virtual ~VRTAverageFilteredSource();
+
+    virtual CPLErr  XMLInit( CPLXMLNode *psTree, const char *,
+                             std::map<CPLString, GDALDataset*>& ) override;
+    virtual CPLXMLNode *SerializeToXML( const char *pszVRTPath ) override;
+};",0,334 2000 381 58 439 2001 123 2002 40 2000 41 439 58 376 2000 40 404 2003 41 59 491 126 2000 40 41 59 491 2004 2005 40 2006 42 2007 44 341 330 42 44 2008 646 2009 60 2010 44 2011 42 62 38 41 431 59 491 2006 42 2012 40 341 330 42 2013 41 431 59 125 59 
+98793,C++,"class JPGMaskBand final: public GDALRasterBand
+{
+  protected:
+    virtual CPLErr IReadBlock( int, int, void * ) override;
+
+  public:
+    explicit JPGMaskBand( JPGDatasetCommon *poDS );
+    virtual ~JPGMaskBand() {}
+};",0,334 2000 381 58 439 2001 123 438 58 491 2002 2003 40 404 44 404 44 492 42 41 431 59 439 58 376 2000 40 2004 42 2005 41 59 491 126 2000 40 41 123 125 125 59 
+98789,C++,"class GDALJPGDriver final: public GDALDriver
+{
+  public:
+    GDALJPGDriver() {}
+
+    char      **GetMetadata( const char *pszDomain = """" ) override;
+    const char *GetMetadataItem( const char *pszName,
+                                 const char *pszDomain = """" ) override;
+};",0,334 2000 381 58 439 2001 123 439 58 2000 40 41 123 125 330 42 42 2002 40 341 330 42 2003 61 648 41 431 59 341 330 42 2004 40 341 330 42 2005 44 341 330 42 2003 61 648 41 431 59 125 59 
+98810,C++,"class PDSWrapperRasterBand final: public GDALProxyRasterBand
+{
+  GDALRasterBand* poBaseBand;
+
+  protected:
+    virtual GDALRasterBand* RefUnderlyingRasterBand() override { return poBaseBand; }
+
+  public:
+    explicit PDSWrapperRasterBand( GDALRasterBand* poBaseBandIn )
+        {
+            this->poBaseBand = poBaseBandIn;
+            eDataType = poBaseBand->GetRasterDataType();
+            poBaseBand->GetBlockSize(&nBlockXSize, &nBlockYSize);
+        }
+    ~PDSWrapperRasterBand() {}
+};",0,334 2000 381 58 439 2001 123 2002 42 2003 59 438 58 491 2002 42 2004 40 41 431 123 450 2003 59 125 439 58 376 2000 40 2002 42 2005 41 123 467 624 2003 61 2005 59 2006 61 2003 624 2007 40 41 59 2003 624 2008 40 38 2009 44 38 2010 41 59 125 126 2000 40 41 123 125 125 59 
+99050,C++,    RegisterMinidriver(OGCAPIMaps);,0,2000 40 2001 41 59 
+99052,C++,    RegisterMinidriver(TileService);,0,2000 40 2001 41 59 
+99293,C++,"class ENVIRasterBand final: public RawRasterBand
+{
+    CPL_DISALLOW_COPY_ASSIGN(ENVIRasterBand)
+
+  public:
+    ENVIRasterBand( GDALDataset *poDSIn, int nBandIn, VSILFILE *fpRawIn,
+                    vsi_l_offset nImgOffsetIn, int nPixelOffsetIn,
+                    int nLineOffsetIn, GDALDataType eDataTypeIn,
+                    int bNativeOrderIn );
+    ~ENVIRasterBand() override {}
+
+    void SetDescription( const char * ) override;
+    CPLErr SetNoDataValue( double ) override;
+
+    CPLErr SetCategoryNames( char ** ) override;
+};",0,334 2000 381 58 439 2001 123 2002 40 2000 41 439 58 2000 40 2003 42 2004 44 404 2005 44 2006 42 2007 44 2008 2009 44 404 2010 44 404 2011 44 2012 2013 44 404 2014 41 59 126 2000 40 41 431 123 125 492 2015 40 341 330 42 41 431 59 2016 2017 40 356 41 431 59 2016 2018 40 330 42 42 41 431 59 125 59 
+99362,C++,"class GMLJP2V2StyleDesc
+{
+    public:
+        CPLString osFile{};
+        int       bParentCoverageCollection = true;
+};",0,334 2000 123 439 58 2001 2002 123 125 59 404 2003 61 473 59 125 59 
+99403,C++,"template<class T>
+class GDALGeneric3x3Dataset : public GDALDataset
+{
+    friend class GDALGeneric3x3RasterBand<T>;
+
+    typename GDALGeneric3x3ProcessingAlg<T>::type pfnAlg;
+    void*              pAlgData;
+    GDALDatasetH       hSrcDS;
+    GDALRasterBandH    hSrcBand;
+    T*                 apafSourceBuf[3];
+    int                bDstHasNoData;
+    double             dfDstNoDataValue;
+    int                nCurLine;
+    bool               bComputeAtEdges;
+
+  public:
+                        GDALGeneric3x3Dataset(
+                            GDALDatasetH hSrcDS,
+                            GDALRasterBandH hSrcBand,
+                            GDALDataType eDstDataType,
+                            int bDstHasNoData,
+                            double dfDstNoDataValue,
+                            typename GDALGeneric3x3ProcessingAlg<T>::type pfnAlg,
+                            void* pAlgData,
+                            bool bComputeAtEdges );
+                       ~GDALGeneric3x3Dataset();
+
+    bool                InitOK() const { return apafSourceBuf[0] != nullptr &&
+                                                apafSourceBuf[1] != nullptr &&
+                                                apafSourceBuf[2] != nullptr; }
+
+    CPLErr      GetGeoTransform( double * padfGeoTransform ) override;
+    const OGRSpatialReference* GetSpatialRef() const override;
+};",0,466 60 334 2000 62 334 2001 58 439 2002 123 387 334 2003 60 2000 62 59 477 2004 60 2000 62 646 2005 2006 59 492 42 2007 59 2008 2009 59 2010 2011 59 2000 42 2012 91 1502 93 59 404 2013 59 356 2014 59 404 2015 59 323 2016 59 439 58 2001 40 2008 2009 44 2010 2011 44 2017 2018 44 404 2013 44 356 2014 44 477 2004 60 2000 62 646 2005 2006 44 492 42 2007 44 323 2016 41 59 126 2001 40 41 59 323 2019 40 41 341 123 450 2012 91 1500 93 631 425 605 2012 91 1501 93 631 425 605 2012 91 1502 93 631 425 59 125 2020 2021 40 356 42 2022 41 431 59 341 2023 42 2024 40 41 341 431 59 125 59 
+99414,C++,"class TABMAPObjCustomPoint final : public TABMAPObjPoint
+{
+  public:
+    GByte m_nUnknown_;
+    GByte m_nCustomStyle;
+    GByte m_nFontId;
+
+    TABMAPObjCustomPoint():
+        m_nUnknown_(0),
+        m_nCustomStyle(0),
+        m_nFontId(0)
+        {}
+    virtual ~TABMAPObjCustomPoint() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override;
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override;
+};",0,334 2000 381 58 439 2001 123 439 58 2002 2003 59 2002 2004 59 2002 2005 59 2000 40 41 58 2003 40 1500 41 44 2004 40 1500 41 44 2005 40 1500 41 123 125 491 126 2000 40 41 123 125 491 404 2006 40 2007 42 41 431 59 621 491 404 2008 40 2007 42 41 431 59 125 59 
+99417,C++,"class TABMAPObjMultiPoint final : public TABMAPObjHdrWithCoord
+{
+  public:
+    GInt32      m_nNumPoints;
+    GInt32      m_nComprOrgX;   /* Present only in compressed coord. case */
+    GInt32      m_nComprOrgY;
+    GByte       m_nSymbolId;
+    GInt32      m_nLabelX;      /* Not sure if it is a label point, but */
+    GInt32      m_nLabelY;      /* it is similar to what we find in PLINE */
+
+    TABMAPObjMultiPoint():
+        m_nNumPoints(0),
+        m_nComprOrgX(0),
+        m_nComprOrgY(0),
+        m_nSymbolId(0),
+        m_nLabelX(0),
+        m_nLabelY(0)
+        {}
+    virtual ~TABMAPObjMultiPoint() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override;
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override;
+};",0,334 2000 381 58 439 2001 123 439 58 2002 2003 59 2002 2004 59 604 2002 2005 59 2006 2007 59 2002 2008 59 604 2002 2009 59 604 2000 40 41 58 2003 40 1500 41 44 2004 40 1500 41 44 2005 40 1500 41 44 2007 40 1500 41 44 2008 40 1500 41 44 2009 40 1500 41 123 125 491 126 2000 40 41 123 125 491 404 2010 40 2011 42 41 431 59 621 491 404 2012 40 2011 42 41 431 59 125 59 
+99445,C++,"  class SwigPtr_PyObject {
+  protected:
+    PyObject *_obj;
+
+  public:
+    SwigPtr_PyObject() :_obj(0)
+    {
+    }
+
+    SwigPtr_PyObject(const SwigPtr_PyObject& item) : _obj(item._obj)
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XINCREF(_obj);      
+      SWIG_PYTHON_THREAD_END_BLOCK;
+    }
+    
+    SwigPtr_PyObject(PyObject *obj, bool initial_ref = true) :_obj(obj)
+    {
+      if (initial_ref) {
+        SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+        Py_XINCREF(_obj);
+        SWIG_PYTHON_THREAD_END_BLOCK;
+      }
+    }
+    
+    SwigPtr_PyObject & operator=(const SwigPtr_PyObject& item) 
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XINCREF(item._obj);
+      Py_XDECREF(_obj);
+      _obj = item._obj;
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return *this;      
+    }
+    
+    ~SwigPtr_PyObject() 
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XDECREF(_obj);
+      SWIG_PYTHON_THREAD_END_BLOCK;
+    }
+    
+    operator PyObject *() const
+    {
+      return _obj;
+    }
+
+    PyObject *operator->() const
+    {
+      return _obj;
+    }
+  };",0,334 2000 123 438 58 2001 42 2002 59 439 58 2000 40 41 58 2002 40 1500 41 123 125 2000 40 341 2000 38 2003 41 58 2002 40 2003 46 2002 41 123 2004 59 2005 40 2002 41 59 2006 59 125 2000 40 2001 42 2007 44 323 2008 61 473 41 58 2002 40 2007 41 123 392 40 2008 41 123 2009 59 2010 40 2002 41 59 2011 59 125 125 2000 38 427 61 40 341 2000 38 2003 41 123 2012 59 2013 40 2003 46 2002 41 59 2014 40 2002 41 59 2002 61 2003 46 2002 59 2015 59 450 42 467 59 125 126 2000 40 41 123 2016 59 2017 40 2002 41 59 2018 59 125 427 2001 42 40 41 341 123 450 2002 59 125 2001 42 427 624 40 41 341 123 450 2002 59 125 125 59 
+99661,C++,"class TABFontPoint final : public TABPoint,
+                    public ITABFeatureFont
+{
+    CPL_DISALLOW_COPY_ASSIGN(TABFontPoint)
+
+  protected:
+    double      m_dAngle;
+    GInt16      m_nFontStyle;           // Bold/shadow/halo/etc.
+
+  public:
+    explicit TABFontPoint(OGRFeatureDefn *poDefnIn);
+    virtual ~TABFontPoint();
+
+    virtual TABFeatureClass GetFeatureClass() override { return TABFCFontPoint; }
+
+    virtual TABFeature *CloneTABFeature(OGRFeatureDefn *poNewDefn = nullptr ) override;
+
+    virtual int ReadGeometryFromMAPFile(TABMAPFile *poMapFile, TABMAPObjHdr *,
+                                        GBool bCoordDataOnly=FALSE,
+                                        TABMAPCoordBlock **ppoCoordBlock=nullptr) override;
+    virtual int WriteGeometryToMAPFile(TABMAPFile *poMapFile, TABMAPObjHdr *,
+                                       GBool bCoordDataOnly=FALSE,
+                                       TABMAPCoordBlock **ppoCoordBlock=nullptr) override;
+
+    virtual int ReadGeometryFromMIFFile(MIDDATAFile *fp) override;
+    virtual int WriteGeometryToMIFFile(MIDDATAFile *fp) override;
+
+    virtual const char *GetSymbolStyleString(double dfAngle = 0.0) const override;
+    virtual const char *GetStyleString() const override;
+    virtual void SetSymbolFromStyle(OGRStyleSymbol* poSymbolStyle) override;
+
+    GBool       QueryFontStyle(TABFontStyle eStyleToQuery);
+    void        ToggleFontStyle(TABFontStyle eStyleToToggle, GBool bStatus);
+
+    int         GetFontStyleMIFValue();
+    void        SetFontStyleMIFValue(int nStyle);
+    int         GetFontStyleTABValue()           {return m_nFontStyle;}
+    void        SetFontStyleTABValue(int nStyle){m_nFontStyle=static_cast<GInt16>(nStyle);}
+
+    // GetSymbolAngle(): Return angle in degrees counterclockwise
+    double      GetSymbolAngle() const {return m_dAngle;}
+    void        SetSymbolAngle(double dAngle);
+};",0,334 2000 381 58 439 2001 44 439 2002 123 2003 40 2000 41 438 58 356 2004 59 2005 2006 59 621 439 58 376 2000 40 2007 42 2008 41 59 491 126 2000 40 41 59 491 2009 2010 40 41 431 123 450 2011 59 125 491 2012 42 2013 40 2007 42 2014 61 425 41 431 59 491 404 2015 40 2016 42 2017 44 2018 42 44 2019 2020 61 2021 44 2022 42 42 2023 61 425 41 431 59 491 404 2024 40 2016 42 2017 44 2018 42 44 2019 2020 61 2021 44 2022 42 42 2023 61 425 41 431 59 491 404 2025 40 2026 42 2027 41 431 59 491 404 2028 40 2026 42 2027 41 431 59 491 341 330 42 2029 40 356 2030 61 1500 41 341 431 59 491 341 330 42 2031 40 41 341 431 59 491 492 2032 40 2033 42 2034 41 431 59 2019 2035 40 2036 2037 41 59 492 2038 40 2036 2039 44 2019 2040 41 59 404 2041 40 41 59 492 2042 40 404 2043 41 59 404 2044 40 41 123 450 2006 59 125 492 2045 40 404 2043 41 123 2006 61 459 60 2005 62 40 2043 41 59 125 621 356 2046 40 41 341 123 450 2004 59 125 492 2047 40 356 2048 41 59 125 59 
+100297,C++,"       class SWIG_Python_Thread_Block {
+         bool status;
+         PyGILState_STATE state;
+       public:
+         void end() { if (status) { PyGILState_Release(state); status = false;} }
+         SWIG_Python_Thread_Block() : status(true), state(PyGILState_Ensure()) {}
+         ~SWIG_Python_Thread_Block() { end(); }
+       };",0,334 2000 123 323 2001 59 2002 2003 59 439 58 492 2004 40 41 123 392 40 2001 41 123 2005 40 2003 41 59 2001 61 380 59 125 125 2000 40 41 58 2001 40 473 41 44 2003 40 2006 40 41 41 123 125 126 2000 40 41 123 2004 40 41 59 125 125 59 
+100303,C++,"       class SWIG_Python_Thread_Block {
+         bool status;
+         PyGILState_STATE state;
+       public:
+         void end() { if (status) { PyGILState_Release(state); status = false;} }
+         SWIG_Python_Thread_Block() : status(true), state(PyGILState_Ensure()) {}
+         ~SWIG_Python_Thread_Block() { end(); }
+       };",0,334 2000 123 323 2001 59 2002 2003 59 439 58 492 2004 40 41 123 392 40 2001 41 123 2005 40 2003 41 59 2001 61 380 59 125 125 2000 40 41 58 2001 40 473 41 44 2003 40 2006 40 41 41 123 125 126 2000 40 41 123 2004 40 41 59 125 125 59 
+101968,C++,"class Config : public QObject
+{
+    Q_OBJECT
+
+public:
+    Q_DISABLE_COPY(Config)
+
+    enum ConfigKey
+    {
+        SingleInstance,
+        RememberLastDatabases,
+        NumberOfRememberedLastDatabases,
+        RememberLastKeyFiles,
+        OpenPreviousDatabasesOnStartup,
+        AutoSaveAfterEveryChange,
+        AutoReloadOnChange,
+        AutoSaveOnExit,
+        AutoSaveNonDataChanges,
+        BackupBeforeSave,
+        BackupFilePathPattern,
+        UseAtomicSaves,
+        UseDirectWriteSaves,
+        SearchLimitGroup,
+        MinimizeOnOpenUrl,
+        HideWindowOnCopy,
+        MinimizeOnCopy,
+        MinimizeAfterUnlock,
+        DropToBackgroundOnCopy,
+        UseGroupIconOnEntryCreation,
+        AutoTypeEntryTitleMatch,
+        AutoTypeEntryURLMatch,
+        AutoTypeDelay,
+        AutoTypeStartDelay,
+        AutoTypeHideExpiredEntry,
+        GlobalAutoTypeKey,
+        GlobalAutoTypeModifiers,
+        FaviconDownloadTimeout,
+        UpdateCheckMessageShown,
+        UseTouchID,
+
+        LastDatabases,
+        LastKeyFiles,
+        LastChallengeResponse,
+        LastActiveDatabase,
+        LastOpenedDatabases,
+        LastDir,
+
+        GUI_Language,
+        GUI_HideToolbar,
+        GUI_MovableToolbar,
+        GUI_HideGroupsPanel,
+        GUI_HidePreviewPanel,
+        GUI_AlwaysOnTop,
+        GUI_ToolButtonStyle,
+        GUI_ShowTrayIcon,
+        GUI_TrayIconAppearance,
+        GUI_MinimizeToTray,
+        GUI_MinimizeOnStartup,
+        GUI_MinimizeOnClose,
+        GUI_HideUsernames,
+        GUI_HidePasswords,
+        GUI_AdvancedSettings,
+        GUI_MonospaceNotes,
+        GUI_ApplicationTheme,
+        GUI_CompactMode,
+        GUI_CheckForUpdates,
+        GUI_CheckForUpdatesIncludeBetas,
+
+        GUI_MainWindowGeometry,
+        GUI_MainWindowState,
+        GUI_ListViewState,
+        GUI_SearchViewState,
+        GUI_PreviewSplitterState,
+        GUI_SplitterState,
+        GUI_AutoTypeSelectDialogSize,
+        GUI_CheckForUpdatesNextCheck,
+
+        Security_ClearClipboard,
+        Security_ClearClipboardTimeout,
+        Security_ClearSearch,
+        Security_ClearSearchTimeout,
+        Security_HideNotes,
+        Security_LockDatabaseIdle,
+        Security_LockDatabaseIdleSeconds,
+        Security_LockDatabaseMinimize,
+        Security_LockDatabaseScreenLock,
+        Security_RelockAutoType,
+        Security_PasswordsRepeatVisible,
+        Security_PasswordsHidden,
+        Security_PasswordEmptyPlaceholder,
+        Security_HidePasswordPreviewPanel,
+        Security_AutoTypeAsk,
+        Security_IconDownloadFallback,
+        Security_ResetTouchId,
+        Security_ResetTouchIdTimeout,
+        Security_ResetTouchIdScreenlock,
+        Security_NoConfirmMoveEntryToRecycleBin,
+        Security_EnableCopyOnDoubleClick,
+
+        Browser_Enabled,
+        Browser_ShowNotification,
+        Browser_BestMatchOnly,
+        Browser_UnlockDatabase,
+        Browser_MatchUrlScheme,
+        Browser_SupportBrowserProxy,
+        Browser_UseCustomProxy,
+        Browser_CustomProxyLocation,
+        Browser_UpdateBinaryPath,
+        Browser_AllowExpiredCredentials,
+        Browser_AlwaysAllowAccess,
+        Browser_AlwaysAllowUpdate,
+        Browser_HttpAuthPermission,
+        Browser_SearchInAllDatabases,
+        Browser_SupportKphFields,
+        Browser_NoMigrationPrompt,
+        Browser_UseCustomBrowser,
+        Browser_CustomBrowserType,
+        Browser_CustomBrowserLocation,
+#ifdef QT_DEBUG
+        Browser_CustomExtensionId,
+#endif
+
+        SSHAgent_Enabled,
+        SSHAgent_UseOpenSSH,
+        SSHAgent_UsePageant,
+        SSHAgent_AuthSockOverride,
+        SSHAgent_SecurityKeyProviderOverride,
+
+        FdoSecrets_Enabled,
+        FdoSecrets_ShowNotification,
+        FdoSecrets_ConfirmDeleteItem,
+        FdoSecrets_ConfirmAccessItem,
+        FdoSecrets_UnlockBeforeSearch,
+
+        KeeShare_QuietSuccess,
+        KeeShare_Own,
+        KeeShare_Foreign,
+        KeeShare_Active,
+
+        PasswordGenerator_LowerCase,
+        PasswordGenerator_UpperCase,
+        PasswordGenerator_Numbers,
+        PasswordGenerator_EASCII,
+        PasswordGenerator_AdvancedMode,
+        PasswordGenerator_SpecialChars,
+        PasswordGenerator_AdditionalChars,
+        PasswordGenerator_Braces,
+        PasswordGenerator_Punctuation,
+        PasswordGenerator_Quotes,
+        PasswordGenerator_Dashes,
+        PasswordGenerator_Math,
+        PasswordGenerator_Logograms,
+        PasswordGenerator_ExcludedChars,
+        PasswordGenerator_ExcludeAlike,
+        PasswordGenerator_EnsureEvery,
+        PasswordGenerator_Length,
+        PasswordGenerator_WordCount,
+        PasswordGenerator_WordSeparator,
+        PasswordGenerator_WordList,
+        PasswordGenerator_WordCase,
+        PasswordGenerator_Type,
+
+        Messages_NoLegacyKeyFileWarning,
+        Messages_Qt55CompatibilityWarning,
+        Messages_HidePreReleaseWarning,
+
+        // Special internal value
+        Deleted
+    };
+
+    ~Config() override;
+    QVariant get(ConfigKey key);
+    QVariant getDefault(ConfigKey key);
+    QString getFileName();
+    void set(ConfigKey key, const QVariant& value);
+    void remove(ConfigKey key);
+    bool hasAccessError();
+    void sync();
+    void resetToDefaults();
+
+    static Config* instance();
+    static void createConfigFromFile(const QString& configFileName, const QString& localConfigFileName = {});
+    static void createTempFileInstance();
+
+signals:
+    void changed(ConfigKey key);
+
+private:
+    Config(const QString& configFileName, const QString& localConfigFileName, QObject* parent);
+    explicit Config(QObject* parent);
+    void init(const QString& configFileName, const QString& localConfigFileName);
+    void migrate();
+    static QPair<QString, QString> defaultConfigFiles();
+
+    static QPointer<Config> m_instance;
+
+    QScopedPointer<QSettings> m_settings;
+    QScopedPointer<QSettings> m_localSettings;
+    QHash<QString, QVariant> m_defaults;
+};",0,334 2000 58 439 2001 123 2002 439 58 2003 40 2000 41 370 2004 123 2005 44 2006 44 2007 44 2008 44 2009 44 2010 44 2011 44 2012 44 2013 44 2014 44 2015 44 2016 44 2017 44 2018 44 2019 44 2020 44 2021 44 2022 44 2023 44 2024 44 2025 44 2026 44 2027 44 2028 44 2029 44 2030 44 2031 44 2032 44 2033 44 2034 44 2035 44 2036 44 2037 44 2038 44 2039 44 2040 44 2041 44 2042 44 2043 44 2044 44 2045 44 2046 44 2047 44 2048 44 2049 44 2050 44 2051 44 2052 44 2053 44 2054 44 2055 44 2056 44 2057 44 2058 44 2059 44 2060 44 2061 44 2062 44 2063 44 2064 44 2065 44 2066 44 2067 44 2068 44 2069 44 2070 44 2071 44 2072 44 2073 44 2074 44 2075 44 2076 44 2077 44 2078 44 2079 44 2080 44 2081 44 2082 44 2083 44 2084 44 2085 44 2086 44 2087 44 2088 44 2089 44 2090 44 2091 44 2092 44 2093 44 2094 44 2095 44 2096 44 2097 44 2098 44 2099 44 2100 44 2101 44 2102 44 2103 44 2104 44 2105 44 2106 44 2107 44 2108 44 35 393 2109 2110 44 35 366 2111 44 2112 44 2113 44 2114 44 2115 44 2116 44 2117 44 2118 44 2119 44 2120 44 2121 44 2122 44 2123 44 2124 44 2125 44 2126 44 2127 44 2128 44 2129 44 2130 44 2131 44 2132 44 2133 44 2134 44 2135 44 2136 44 2137 44 2138 44 2139 44 2140 44 2141 44 2142 44 2143 44 2144 44 2145 44 2146 44 2147 44 2148 44 2149 44 621 2150 125 59 126 2000 40 41 431 59 2151 2152 40 2004 2153 41 59 2151 2154 40 2004 2153 41 59 2155 2156 40 41 59 492 2157 40 2004 2153 44 341 2151 38 2158 41 59 492 2159 40 2004 2153 41 59 323 2160 40 41 59 492 2161 40 41 59 492 2162 40 41 59 457 2000 42 2163 40 41 59 457 492 2164 40 341 2155 38 2165 44 341 2155 38 2166 61 123 125 41 59 457 492 2167 40 41 59 2168 58 492 2169 40 2004 2153 41 59 437 58 2000 40 341 2155 38 2165 44 341 2155 38 2166 44 2001 42 2170 41 59 376 2000 40 2001 42 2170 41 59 492 2171 40 341 2155 38 2165 44 341 2155 38 2166 41 59 492 2172 40 41 59 457 2173 60 2155 44 2155 62 2174 40 41 59 457 2175 60 2000 62 2176 59 2177 60 2178 62 2179 59 2177 60 2178 62 2180 59 2181 60 2155 44 2151 62 2182 59 125 59 
+118527,C++,"    class TimestampChatLine : public ChatLine
+    {
+    public:
+        explicit TimestampChatLine(QDateTime dateTime)
+            : ChatLine()
+            , timestamp(dateTime)
+        {}
+
+        QDateTime get() { return timestamp; }
+    private:
+        QDateTime timestamp;
+    };",0,334 2000 58 439 2001 123 439 58 376 2000 40 2002 2003 41 58 2001 40 41 44 2004 40 2003 41 123 125 2002 2005 40 41 123 450 2004 59 125 437 58 2002 2004 59 125 59 
+118537,C++,"class SearchExtraFunctions {
+public:
+    /**
+     * @brief generateFilterWordsOnly generate string for filter ""Whole words only"" for correct search phrase
+     * containing symbols ""\[]/^$.|?*+(){}""
+     * @param phrase for search
+     * @return new phrase for search
+     */
+    static QString generateFilterWordsOnly(const QString &phrase) {
+        QString filter = QRegularExpression::escape(phrase);
+
+        const QString symbols = QStringLiteral(""\\[]/^$.|?*+(){}"");
+
+        if (filter != phrase) {
+            if (filter.left(1) != QLatin1String(""\\"")) {
+                filter = QLatin1String(""\\b"") + filter;
+            } else {
+                filter = QLatin1String(""(^|\\s)"") + filter;
+            }
+            if (!symbols.contains(filter.right(1))) {
+                filter += QLatin1String(""\\b"");
+            } else {
+                filter += QLatin1String(""($|\\s)"");
+            }
+        } else {
+            filter = QStringLiteral(""\\b%1\\b"").arg(filter);
+        }
+
+        return filter;
+    }
+};",0,334 2000 123 439 58 618 457 2001 2002 40 341 2001 38 2003 41 123 2001 2004 61 2005 646 2006 40 2003 41 59 341 2001 2007 61 2008 40 648 41 59 392 40 2004 631 2003 41 123 392 40 2004 46 2009 40 1501 41 631 2010 40 648 41 41 123 2004 61 2010 40 648 41 43 2004 59 125 360 123 2004 61 2010 40 648 41 43 2004 59 125 392 40 33 2007 46 2011 40 2004 46 2012 40 1501 41 41 41 123 2004 636 2010 40 648 41 59 125 360 123 2004 636 2010 40 648 41 59 125 125 360 123 2004 61 2008 40 648 41 46 2013 40 2004 41 59 125 450 2004 59 125 125 59 
+117448,C++,"class BufferedLogSink : public google::LogSink, private boost::noncopyable {
+ public:
+  /// We create this as a Singleton for proper disable/shutdown.
+  static BufferedLogSink& get();
+
+  /// The Glog-API LogSink call-in method.
+  void send(google::LogSeverity severity,
+            const char* full_filename,
+            const char* base_filename,
+            int line,
+            const struct ::tm* tm_time,
+            const char* message,
+            size_t message_len) override;
+
+  /// Pop from the async sender queue and wait for one send to complete.
+  void WaitTillSent() override;
+
+ public:
+  /// Accessor/mutator to dump all of the buffered logs.
+  std::vector<StatusLogLine>& dump();
+
+  /// Add the buffered log sink to Glog.
+  void enable();
+
+  /// Start the Buffered Sink, without enabling forwarding to loggers.
+  void setUp();
+
+  /**
+   * @brief Add a logger plugin that should receive status updates.
+   *
+   * Since the logger may support multiple active logger plugins the sink
+   * will keep track of those plugins that returned success after ::init.
+   * This list of plugins will received forwarded messages from the sink.
+   *
+   * This list is important because sending logs to plugins that also use
+   * and active Glog Sink (supports multiple) will create a logging loop.
+   */
+  void addPlugin(const std::string& name);
+
+  /// Clear the sinks list, clear the named plugins added by addPlugin.s
+  void resetPlugins();
+
+  /// Retrieve the list of enabled plugins that should have logs forwarded.
+  const std::vector<std::string>& enabledPlugins() const;
+
+ public:
+  BufferedLogSink(BufferedLogSink const&) = delete;
+  void operator=(BufferedLogSink const&) = delete;
+
+ private:
+  /// Create the log sink as buffering or forwarding.
+  BufferedLogSink() = default;
+
+  /// Stop the log sink.
+  ~BufferedLogSink();
+
+ private:
+  /// Intermediate log storage until an osquery logger is initialized.
+  std::vector<StatusLogLine> logs_;
+
+  /**
+   * @Brief Is the logger temporarily disabled.
+   *
+   * The Google Log Sink will still be active, but the send method also checks
+   * enabled and drops log lines to the flood if the forwarder is not enabled.
+   */
+  std::atomic<bool> enabled_{false};
+
+  /// Track multiple loggers that should receive sinks from the send forwarder.
+  std::vector<std::string> sinks_;
+};",0,334 2000 58 439 2001 646 2002 44 437 2003 646 2004 123 439 58 621 457 2000 38 2005 40 41 59 621 492 2006 40 2001 646 2007 2008 44 341 330 42 2009 44 341 330 42 2010 44 404 2011 44 341 462 646 2012 42 2013 44 341 330 42 2014 44 2015 2016 41 431 59 621 492 2017 40 41 431 59 439 58 621 2018 646 2019 60 2020 62 38 2021 40 41 59 621 492 2022 40 41 59 621 492 2023 40 41 59 618 492 2024 40 341 2018 646 461 38 2025 41 59 621 492 2026 40 41 59 621 341 2018 646 2019 60 2018 646 461 62 38 2027 40 41 341 59 439 58 2000 40 2000 341 38 41 61 353 59 492 427 61 40 2000 341 38 41 61 353 59 437 58 621 2000 40 41 61 349 59 621 126 2000 40 41 59 437 58 621 2018 646 2019 60 2020 62 2028 59 618 2018 646 2029 60 323 62 2030 123 380 125 59 621 2018 646 2019 60 2018 646 461 62 2031 59 125 59 
+99578,C++,"class GXFRasterBand final: public GDALPamRasterBand
+{
+    friend class GXFDataset;
+
+  public:
+
+                GXFRasterBand( GXFDataset *, int );
+    double      GetNoDataValue( int* bGotNoDataValue ) override;
+
+    virtual CPLErr IReadBlock( int, int, void * ) override;
+};",0,334 2000 381 58 439 2001 123 387 334 2002 59 439 58 2000 40 2002 42 44 404 41 59 356 2003 40 404 42 2004 41 431 59 491 2005 2006 40 404 44 404 44 492 42 41 431 59 125 59 
+99056,C++,    RegisterMinidriver(WorldWind);,0,2000 40 2001 41 59 
+99053,C++,    RegisterMinidriver(TiledWMS);,0,2000 40 2001 41 59 
+99046,C++,    RegisterMinidriver(AGS);,0,2000 40 2001 41 59 
+99047,C++,    RegisterMinidriver(IIP);,0,2000 40 2001 41 59 
+99048,C++,    RegisterMinidriver(MRF);,0,2000 40 2001 41 59 
+99054,C++,    RegisterMinidriver(VirtualEarth);,0,2000 40 2001 41 59 
+99049,C++,    RegisterMinidriver(OGCAPICoverage);,0,2000 40 2001 41 59 
+99051,C++,    RegisterMinidriver(TMS);,0,2000 40 2001 41 59 
+100177,C++,"class OCAD_EXTERN CADXRecord : public CADDictionaryRecord
+{
+public:
+    CADXRecord();
+    virtual ~CADXRecord(){}
+
+    const std::string getRecordData() const;
+    void              setRecordData( const std::string& data );
+
+private:
+    std::string sRecordData;
+};",0,334 2000 2001 58 439 2002 123 439 58 2001 40 41 59 491 126 2001 40 41 123 125 341 2003 646 461 2004 40 41 341 59 492 2005 40 341 2003 646 461 38 2006 41 59 437 58 2003 646 461 2007 59 125 59 
+99789,C++,"class OCAD_EXTERN CADDictionary : public CADDictionaryRecord
+{
+public:
+    CADDictionary();
+    virtual ~CADDictionary();
+
+    size_t getRecordsCount();
+    void   addRecord( CADDictionaryItem );
+    CADDictionaryItem getRecord( size_t index );
+    std::string getRecordByName(const std::string& name) const;
+private:
+    std::vector< CADDictionaryItem > astXRecords;
+};",0,334 2000 2001 58 439 2002 123 439 58 2001 40 41 59 491 126 2001 40 41 59 2003 2004 40 41 59 492 2005 40 2006 41 59 2006 2007 40 2003 2008 41 59 2009 646 461 2010 40 341 2009 646 461 38 2011 41 341 59 437 58 2009 646 2012 60 2006 62 2013 59 125 59 
+118404,C++,"class ToxPk : public ContactId
+{
+public:
+    ToxPk();
+    ToxPk(const ToxPk& other);
+    explicit ToxPk(const QByteArray& rawId);
+    explicit ToxPk(const uint8_t* rawId);
+    int getSize() const override;
+};",0,334 2000 58 439 2001 123 439 58 2000 40 41 59 2000 40 341 2000 38 2002 41 59 376 2000 40 341 2003 38 2004 41 59 376 2000 40 341 2005 42 2004 41 59 404 2006 40 41 341 431 59 125 59 
+118611,C++,"class GroupInviteWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    GroupInviteWidget(QWidget* parent, const GroupInvite& invite);
+    void retranslateUi();
+    const GroupInvite getInviteInfo() const;
+
+signals:
+    void accepted(const GroupInvite& invite);
+    void rejected(const GroupInvite& invite);
+
+private:
+    QPushButton* acceptButton;
+    QPushButton* rejectButton;
+    CroppingLabel* inviteMessageLabel;
+    QHBoxLayout* widgetLayout;
+    GroupInvite inviteInfo;
+};",0,334 2000 58 439 2001 123 2002 439 58 2000 40 2001 42 2003 44 341 2004 38 2005 41 59 492 2006 40 41 59 341 2004 2007 40 41 341 59 2008 58 492 2009 40 341 2004 38 2005 41 59 492 2010 40 341 2004 38 2005 41 59 437 58 2011 42 2012 59 2011 42 2013 59 2014 42 2015 59 2016 42 2017 59 2004 2018 59 125 59 
+118519,C++,"    class Dialog : public ActivateDialog
+    {
+    public:
+        explicit Dialog(DialogType type, Settings& settings, Core* core)
+            : ActivateDialog(nullptr, Qt::Window)
+            , type(type)
+            , settings(settings)
+            , core{core}
+        {
+            restoreGeometry(settings.getDialogSettingsGeometry());
+            Translator::registerHandler(std::bind(&Dialog::retranslateUi, this), this);
+            retranslateUi();
+            setWindowIcon(QIcon("":/img/icons/qtox.svg""));
+            reloadTheme();
+
+            connect(core, &Core::usernameSet, this, &Dialog::retranslateUi);
+        }
+
+        ~Dialog()
+        {
+            Translator::unregister(this);
+        }
+
+    public slots:
+
+        void retranslateUi()
+        {
+            setWindowTitle(core->getUsername() + QStringLiteral("" - "") + Widget::fromDialogType(type));
+        }
+
+        void reloadTheme() final
+        {
+            setStyleSheet(Style::getStylesheet(""window/general.css""));
+        }
+
+    protected:
+        void resizeEvent(QResizeEvent* event) override
+        {
+            settings.setDialogSettingsGeometry(saveGeometry());
+            QDialog::resizeEvent(event);
+        }
+
+        void moveEvent(QMoveEvent* event) override
+        {
+            settings.setDialogSettingsGeometry(saveGeometry());
+            QDialog::moveEvent(event);
+        }
+
+    private:
+        DialogType type;
+        Settings& settings;
+        Core* core;
+    };",0,334 2000 58 439 2001 123 439 58 376 2000 40 2002 2003 44 2004 38 2005 44 2006 42 2007 41 58 2001 40 425 44 2008 646 2009 41 44 2003 40 2003 41 44 2005 40 2005 41 44 2007 123 2007 125 123 2010 40 2005 46 2011 40 41 41 59 2012 646 2013 40 2014 646 2015 40 38 2000 646 2016 44 467 41 44 467 41 59 2016 40 41 59 2017 40 2018 40 648 41 41 59 2019 40 41 59 2020 40 2007 44 38 2006 646 2021 44 467 44 38 2000 646 2016 41 59 125 126 2000 40 41 123 2022 646 2023 40 467 41 59 125 439 2024 58 492 2025 40 41 123 2026 40 2007 624 2027 40 41 43 2028 40 648 41 43 2029 646 2030 40 2003 41 41 59 125 492 2031 40 41 381 123 2032 40 2033 646 2034 40 648 41 41 59 125 438 58 492 2035 40 2036 42 373 41 431 123 2005 46 2037 40 2038 40 41 41 59 2039 646 2035 40 373 41 59 125 492 2040 40 2041 42 373 41 431 123 2005 46 2042 40 2043 40 41 41 59 2044 646 2040 40 373 41 59 125 437 58 2002 2003 59 2004 38 2005 59 2006 42 2007 59 125 59 
+118593,C++,"class AboutForm : public GenericForm
+{
+    Q_OBJECT
+public:
+    AboutForm(UpdateCheck* updateCheck);
+    ~AboutForm();
+    QString getFormName() final
+    {
+        return tr(""About"");
+    }
+
+public slots:
+    void onUpdateAvailable(QString latestVersion, QUrl link);
+    void onUpToDate();
+    void onUpdateCheckFailed();
+    void reloadTheme() override;
+    void onUnstableVersion();
+
+private:
+    void retranslateUi();
+    void replaceVersions();
+    inline QString createLink(QString path, QString text) const;
+
+private:
+    Ui::AboutSettings* bodyUI;
+    QTimer* progressTimer;
+    UpdateCheck* updateCheck;
+    QMetaObject::Connection linkConnection;
+};",0,334 2000 58 439 2001 123 2002 439 58 2000 40 2003 42 2004 41 59 126 2000 40 41 59 2005 2006 40 41 381 123 450 2007 40 648 41 59 125 439 2008 58 492 2009 40 2005 2010 44 2011 2012 41 59 492 2013 40 41 59 492 2014 40 41 59 492 2015 40 41 431 59 492 2016 40 41 59 437 58 492 2017 40 41 59 492 2018 40 41 59 401 2005 2019 40 2005 2020 44 2005 2021 41 341 59 437 58 2022 646 2023 42 2024 59 2025 42 2026 59 2003 42 2004 59 2027 646 2028 2029 59 125 59 
+118525,C++,"class TestChatLineStorage : public QObject
+{
+    Q_OBJECT
+
+private slots:
+    void init();
+    void testChatLogIdxAccess();
+    void testIndexAccess();
+    void testRangeBasedIteration();
+    void testAppendingItems();
+    void testPrependingItems();
+    void testMiddleInsertion();
+    void testIndexRemoval();
+    void testItRemoval();
+    void testDateLineAddition();
+    void testDateLineRemoval();
+    void testInsertionBeforeDates();
+    void testInsertionAfterDate();
+    void testContainsTimestamp();
+    void testContainsIdx();
+    void testEndOfStorageDateRemoval();
+    void testConsecutiveDateLineRemoval();
+private:
+    ChatLineStorage storage;
+
+    static constexpr size_t initialStartIdx = 10;
+    static constexpr size_t initialEndIdx = 20;
+    static const QDateTime initialTimestamp;
+
+};",0,334 2000 58 439 2001 123 2002 437 2003 58 492 2004 40 41 59 492 2005 40 41 59 492 2006 40 41 59 492 2007 40 41 59 492 2008 40 41 59 492 2009 40 41 59 492 2010 40 41 59 492 2011 40 41 59 492 2012 40 41 59 492 2013 40 41 59 492 2014 40 41 59 492 2015 40 41 59 492 2016 40 41 59 492 2017 40 41 59 492 2018 40 41 59 492 2019 40 41 59 492 2020 40 41 59 437 58 2021 2022 59 457 343 2023 2024 61 1502 59 457 343 2023 2025 61 1503 59 457 341 2026 2027 59 125 59 
+118526,C++,"    class IdxChatLine : public ChatLine
+    {
+    public:
+        explicit IdxChatLine(ChatLogIdx idx)
+            : ChatLine()
+            , idx(idx)
+        {}
+
+        ChatLogIdx get() { return idx; }
+    private:
+        ChatLogIdx idx;
+
+    };",0,334 2000 58 439 2001 123 439 58 376 2000 40 2002 2003 41 58 2001 40 41 44 2003 40 2003 41 123 125 2002 2004 40 41 123 450 2003 59 125 437 58 2002 2003 59 125 59 
+118476,C++,"class SearchSettingsForm : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit SearchSettingsForm(QWidget *parent = nullptr);
+    ~SearchSettingsForm();
+
+    ParameterSearch getParameterSearch();
+    void reloadTheme();
+
+private:
+    Ui::SearchSettingsForm *ui;
+    QDate startDate;
+    bool isUpdate{false};
+
+    void updateStartDateLabel();
+    void setUpdate(const bool isUpdate);
+
+private slots:
+    void onStartSearchSelected(const int index);
+    void onRegisterClicked(const bool checked);
+    void onWordsOnlyClicked(const bool checked);
+    void onRegularClicked(const bool checked);
+    void onChoiceDate();
+
+signals:
+    void updateSettings(const bool isUpdate);
+};",0,334 2000 58 439 2001 123 2002 439 58 376 2000 40 2001 42 2003 61 425 41 59 126 2000 40 41 59 2004 2005 40 41 59 492 2006 40 41 59 437 58 2007 646 2000 42 2008 59 2009 2010 59 323 2011 123 380 125 59 492 2012 40 41 59 492 2013 40 341 323 2011 41 59 437 2014 58 492 2015 40 341 404 2016 41 59 492 2017 40 341 323 333 41 59 492 2018 40 341 323 333 41 59 492 2019 40 341 323 333 41 59 492 2020 40 41 59 2021 58 492 2022 40 341 323 2011 41 59 125 59 
+118453,C++,"class IChatLog : public QObject
+{
+    Q_OBJECT
+public:
+    virtual ~IChatLog() = default;
+
+    /**
+     * @brief Returns reference to item at idx
+     * @param[in] idx
+     * @return Variant type referencing either a ToxFile or Message
+     * @pre idx must be between currentFirstIdx() and currentLastIdx()
+     */
+    virtual const ChatLogItem& at(ChatLogIdx idx) const = 0;
+
+    /**
+     * @brief searches forwards through the chat log until phrase is found according to parameter
+     * @param[in] startIdx inclusive start idx
+     * @param[in] phrase phrase to find (may be modified by parameter)
+     * @param[in] parameter search parameters
+     */
+    virtual SearchResult searchForward(SearchPos startIdx, const QString& phrase,
+                                       const ParameterSearch& parameter) const = 0;
+
+    /**
+     * @brief searches backwards through the chat log until phrase is found according to parameter
+     * @param[in] startIdx inclusive start idx
+     * @param[in] phrase phrase to find (may be modified by parameter)
+     * @param[in] parameter search parameters
+     */
+    virtual SearchResult searchBackward(SearchPos startIdx, const QString& phrase,
+                                        const ParameterSearch& parameter) const = 0;
+
+    /**
+     * @brief The underlying chat log instance may not want to start at 0
+     * @return Current first valid index to call at() with
+     */
+    virtual ChatLogIdx getFirstIdx() const = 0;
+
+    /**
+     * @return current last valid index to call at() with
+     */
+    virtual ChatLogIdx getNextIdx() const = 0;
+
+    struct DateChatLogIdxPair
+    {
+        QDate date;
+        ChatLogIdx idx;
+    };
+
+    /**
+     * @brief Gets indexes for each new date starting at startDate
+     * @param[in] startDate date to start searching from
+     * @param[in] maxDates maximum number of dates to be returned
+     */
+    virtual std::vector<DateChatLogIdxPair> getDateIdxs(const QDate& startDate,
+                                                        size_t maxDates) const = 0;
+
+    /**
+     * @brief Inserts a system message at the end of the chat
+     * @param[in] message systemMessage to insert
+     */
+    virtual void addSystemMessage(const SystemMessage& message) = 0;
+
+signals:
+    void itemUpdated(ChatLogIdx idx);
+};",0,334 2000 58 439 2001 123 2002 439 58 491 126 2000 40 41 61 349 59 618 491 341 2003 38 2004 40 2005 2006 41 341 61 1500 59 618 491 2007 2008 40 2009 2010 44 341 2011 38 2012 44 341 2013 38 2014 41 341 61 1500 59 618 491 2007 2015 40 2009 2010 44 341 2011 38 2012 44 341 2013 38 2014 41 341 61 1500 59 618 491 2005 2016 40 41 341 61 1500 59 618 491 2005 2017 40 41 341 61 1500 59 462 2018 123 2019 2020 59 2005 2006 59 125 59 618 491 2021 646 2022 60 2018 62 2023 40 341 2024 38 2025 44 2026 2027 41 341 61 1500 59 618 491 492 2028 40 341 2029 38 2030 41 61 1500 59 2031 58 492 2032 40 2005 2006 41 59 125 59 
+123879,C++,"class CpuBackendPrivate
+{
+public:
+    inline explicit CpuBackendPrivate(Controller *controller) : controller(controller)   {}
+
+
+    inline void start()
+    {
+        LOG_INFO(""%s use profile "" BLUE_BG(WHITE_BOLD_S "" %s "") WHITE_BOLD_S "" ("" CYAN_BOLD(""%zu"") WHITE_BOLD("" thread%s)"") "" scratchpad "" CYAN_BOLD(""%zu KB""),
+                 Tags::cpu(),
+                 profileName.data(),
+                 threads.size(),
+                 threads.size() > 1 ? ""s"" : """",
+                 algo.l3() / 1024
+                 );
+
+        status.start(threads, algo.l3());
+
+#       ifdef XMRIG_FEATURE_BENCHMARK
+        workers.start(threads, benchmark);
+#       else
+        workers.start(threads);
+#       endif
+    }
+
+
+    size_t ways() const
+    {
+        std::lock_guard<std::mutex> lock(mutex);
+
+        return status.ways();
+    }
+
+
+    rapidjson::Value hugePages(int version, rapidjson::Document &doc) const
+    {
+        HugePagesInfo pages;
+
+    #   ifdef XMRIG_ALGO_RANDOMX
+        if (algo.family() == Algorithm::RANDOM_X) {
+            pages += Rx::hugePages();
+        }
+    #   endif
+
+        mutex.lock();
+
+        pages += status.hugePages();
+
+        mutex.unlock();
+
+        rapidjson::Value hugepages;
+
+        if (version > 1) {
+            hugepages.SetArray();
+            hugepages.PushBack(static_cast<uint64_t>(pages.allocated), doc.GetAllocator());
+            hugepages.PushBack(static_cast<uint64_t>(pages.total), doc.GetAllocator());
+        }
+        else {
+            hugepages = pages.isFullyAllocated();
+        }
+
+        return hugepages;
+    }
+
+
+    Algorithm algo;
+    Controller *controller;
+    CpuLaunchStatus status;
+    std::vector<CpuLaunchData> threads;
+    String profileName;
+    Workers<CpuLaunchData> workers;
+
+#   ifdef XMRIG_FEATURE_BENCHMARK
+    std::shared_ptr<Benchmark> benchmark;
+#   endif
+};",0,334 2000 123 439 58 401 376 2000 40 2001 42 2002 41 58 2002 40 2002 41 123 125 401 492 2003 40 41 123 2004 40 648 2005 40 2006 648 41 2006 648 2007 40 648 41 2008 40 648 41 648 2007 40 648 41 44 2009 646 2010 40 41 44 2011 46 2012 40 41 44 2013 46 2014 40 41 44 2013 46 2014 40 41 62 1501 63 648 58 648 44 2015 46 2016 40 41 47 1505 41 59 2017 46 2003 40 2013 44 2015 46 2016 40 41 41 59 35 393 2018 2019 46 2003 40 2013 44 2020 41 59 35 360 2019 46 2003 40 2013 41 59 35 366 125 2021 2022 40 41 341 123 2023 646 2024 60 2023 646 2025 62 412 40 2025 41 59 450 2026 46 2022 40 41 59 125 2027 646 2028 2029 40 404 2030 44 2027 646 2031 38 2032 41 341 123 2033 2034 59 35 393 2035 392 40 2036 46 2037 40 41 614 2038 646 2039 41 123 2034 636 2040 646 2029 40 41 59 125 35 366 2041 46 412 40 41 59 2034 636 2042 46 2029 40 41 59 2041 46 2043 40 41 59 2027 646 2028 2044 59 392 40 2030 62 1501 41 123 2044 46 2045 40 41 59 2044 46 2046 40 459 60 2047 62 40 2034 46 2048 41 44 2032 46 2049 40 41 41 59 2044 46 2046 40 459 60 2047 62 40 2034 46 2050 41 44 2032 46 2049 40 41 41 59 125 360 123 2044 61 2034 46 2051 40 41 59 125 450 2044 59 125 2052 2053 59 2001 42 2002 59 2054 2055 59 2056 646 2057 60 2058 62 2059 59 2060 2061 59 2062 60 2058 62 2063 59 35 393 2064 2056 646 2065 60 2066 62 2067 59 35 366 125 59 
+100269,C++,"class VSITarFilesystemHandler final : public VSIArchiveFilesystemHandler
+{
+public:
+    const char* GetPrefix() override { return ""/vsitar""; }
+    std::vector<CPLString> GetExtensions() override;
+    VSIArchiveReader* CreateReader(const char* pszTarFileName) override;
+
+    VSIVirtualHandle *Open( const char *pszFilename,
+                            const char *pszAccess,
+                            bool bSetError,
+                            CSLConstList /* papszOptions */ ) override;
+};",0,334 2000 381 58 439 2001 123 439 58 341 330 42 2002 40 41 431 123 450 648 59 125 2003 646 2004 60 2005 62 2006 40 41 431 59 2007 42 2008 40 341 330 42 2009 41 431 59 2010 42 2011 40 341 330 42 2012 44 341 330 42 2013 44 323 2014 44 2015 604 41 431 59 125 59 
+100268,C++,"class VSITarEntryFileOffset final : public VSIArchiveEntryFileOffset
+{
+public:
+        GUIntBig m_nOffset = 0;
+#ifdef HAVE_FUZZER_FRIENDLY_ARCHIVE
+        GUIntBig m_nFileSize = 0;
+        CPLString m_osFileName{};
+#endif
+
+        explicit VSITarEntryFileOffset(GUIntBig nOffset): m_nOffset(nOffset)
+        {
+        }
+
+#ifdef HAVE_FUZZER_FRIENDLY_ARCHIVE
+        VSITarEntryFileOffset(GUIntBig nOffset, GUIntBig nFileSize, const CPLString& osFileName) :
+            m_nOffset(nOffset),
+            m_nFileSize(nFileSize),
+            m_osFileName(osFileName)
+        {
+        }
+#endif
+};",0,334 2000 381 58 439 2001 123 439 58 2002 2003 61 1500 59 35 393 2004 2002 2005 61 1500 59 2006 2007 123 125 59 35 366 376 2000 40 2002 2008 41 58 2003 40 2008 41 123 125 35 393 2004 2000 40 2002 2008 44 2002 2009 44 341 2006 38 2010 41 58 2003 40 2008 41 44 2005 40 2009 41 44 2007 40 2010 41 123 125 35 366 125 59 
+99401,C++,"class GDALColorReliefDataset : public GDALDataset
+{
+    friend class GDALColorReliefRasterBand;
+
+    GDALDatasetH       hSrcDS;
+    GDALRasterBandH    hSrcBand;
+    int                nColorAssociation;
+    ColorAssociation*  pasColorAssociation;
+    ColorSelectionMode eColorSelectionMode;
+    GByte*             pabyPrecomputed;
+    int                nIndexOffset;
+    float*             pafSourceBuf;
+    int*               panSourceBuf;
+    int                nCurBlockXOff;
+    int                nCurBlockYOff;
+
+  public:
+                        GDALColorReliefDataset(
+                            GDALDatasetH hSrcDS,
+                            GDALRasterBandH hSrcBand,
+                            const char* pszColorFilename,
+                            ColorSelectionMode eColorSelectionMode,
+                            int bAlpha);
+                       ~GDALColorReliefDataset();
+
+    bool        InitOK() const
+        { return pafSourceBuf != nullptr || panSourceBuf != nullptr; }
+
+    CPLErr      GetGeoTransform( double * padfGeoTransform ) override;
+    const OGRSpatialReference* GetSpatialRef() const override;
+};",0,334 2000 58 439 2001 123 387 334 2002 59 2003 2004 59 2005 2006 59 404 2007 59 2008 42 2009 59 2010 2011 59 2012 42 2013 59 404 2014 59 384 42 2015 59 404 42 2016 59 404 2017 59 404 2018 59 439 58 2000 40 2003 2004 44 2005 2006 44 341 330 42 2019 44 2010 2011 44 404 2020 41 59 126 2000 40 41 59 323 2021 40 41 341 123 450 2015 631 425 606 2016 631 425 59 125 2022 2023 40 356 42 2024 41 431 59 341 2025 42 2026 40 41 341 431 59 125 59 
+99818,C++,"class FetchBufferVirtualMemIO final
+{
+    const GByte* pabySrcData;
+    size_t       nMappingSize;
+    GByte       *pTempBuffer;
+
+public:
+            FetchBufferVirtualMemIO( const GByte* pabySrcDataIn,
+                                     size_t nMappingSizeIn,
+                                     GByte* pTempBufferIn ) :
+                pabySrcData(pabySrcDataIn),
+                nMappingSize(nMappingSizeIn),
+                pTempBuffer(pTempBufferIn) {}
+
+    const GByte* FetchBytes( vsi_l_offset nOffset,
+                             int nPixels, int nDTSize,
+                             bool bIsByteSwapped, bool bIsComplex,
+                             int nBlockId )
+    {
+        if( nOffset + nPixels * nDTSize > nMappingSize )
+        {
+            CPLError(CE_Failure, CPLE_FileIO,
+                     ""Missing data for block %d"", nBlockId);
+            return nullptr;
+        }
+        if( !bIsByteSwapped )
+            return pabySrcData + nOffset;
+        memcpy(pTempBuffer, pabySrcData + nOffset, nPixels * nDTSize);
+        if( bIsComplex )
+            GDALSwapWords( pTempBuffer, nDTSize / 2, 2 * nPixels, nDTSize / 2);
+        else
+            GDALSwapWords( pTempBuffer, nDTSize, nPixels, nDTSize);
+        return pTempBuffer;
+    }
+
+    bool FetchBytes( GByte* pabyDstBuffer,
+                     vsi_l_offset nOffset,
+                     int nPixels, int nDTSize,
+                     bool bIsByteSwapped, bool bIsComplex,
+                     int nBlockId )
+    {
+        if( nOffset + nPixels * nDTSize > nMappingSize )
+        {
+            CPLError(CE_Failure, CPLE_FileIO,
+                     ""Missing data for block %d"", nBlockId);
+            return false;
+        }
+        memcpy(pabyDstBuffer, pabySrcData + nOffset, nPixels * nDTSize);
+        if( bIsByteSwapped )
+        {
+            if( bIsComplex )
+                GDALSwapWords( pabyDstBuffer, nDTSize / 2, 2 * nPixels,
+                               nDTSize / 2);
+            else
+                GDALSwapWords( pabyDstBuffer, nDTSize, nPixels, nDTSize);
+        }
+        return true;
+    }
+
+    static const EMULATED_BOOL bMinimizeIO = false;
+};",0,334 2000 381 123 341 2001 42 2002 59 2003 2004 59 2001 42 2005 59 439 58 2000 40 341 2001 42 2006 44 2003 2007 44 2001 42 2008 41 58 2002 40 2006 41 44 2004 40 2007 41 44 2005 40 2008 41 123 125 341 2001 42 2009 40 2010 2011 44 404 2012 44 404 2013 44 323 2014 44 323 2015 44 404 2016 41 123 392 40 2011 43 2012 42 2013 62 2004 41 123 2017 40 2018 44 2019 44 648 44 2016 41 59 450 425 59 125 392 40 33 2014 41 450 2002 43 2011 59 2020 40 2005 44 2002 43 2011 44 2012 42 2013 41 59 392 40 2015 41 2021 40 2005 44 2013 47 1502 44 1502 42 2012 44 2013 47 1502 41 59 360 2021 40 2005 44 2013 44 2012 44 2013 41 59 450 2005 59 125 323 2009 40 2001 42 2022 44 2010 2011 44 404 2012 44 404 2013 44 323 2014 44 323 2015 44 404 2016 41 123 392 40 2011 43 2012 42 2013 62 2004 41 123 2023 40 2024 44 2025 44 648 44 2016 41 59 450 380 59 125 2026 40 2022 44 2002 43 2011 44 2012 42 2013 41 59 392 40 2014 41 123 392 40 2015 41 2027 40 2022 44 2013 47 1502 44 1502 42 2012 44 2013 47 1502 41 59 360 2027 40 2022 44 2013 44 2012 44 2013 41 59 125 450 473 59 125 457 341 2028 2029 61 380 59 125 59 
+99357,C++,"class GMLJP2V2AnnotationDesc
+{
+    public:
+        CPLString osFile{};
+};",0,334 2000 123 439 58 2001 2002 123 125 59 125 59 
+100080,C++,"class OGRPGMemLayerWrapper final: public OGRLayer
+{
+  private:
+      OGRPGMemLayerWrapper(const OGRPGMemLayerWrapper&) = delete;
+      OGRPGMemLayerWrapper& operator= (const OGRPGMemLayerWrapper&) = delete;
+
+      GDALDataset    *poMemDS = nullptr;
+      OGRLayer       *poMemLayer = nullptr;
+
+  public:
+                        explicit OGRPGMemLayerWrapper( GDALDataset  *poMemDSIn )
+                        {
+                            poMemDS = poMemDSIn;
+                            poMemLayer = poMemDS->GetLayer(0);
+                        }
+
+                        virtual ~OGRPGMemLayerWrapper() { delete poMemDS; }
+
+    virtual void        ResetReading() override { poMemLayer->ResetReading(); }
+    virtual OGRFeature *GetNextFeature() override { return poMemLayer->GetNextFeature(); }
+    virtual OGRFeatureDefn *GetLayerDefn() override { return poMemLayer->GetLayerDefn(); }
+    virtual int         TestCapability( const char * ) override { return FALSE; }
+};",0,334 2000 381 58 439 2001 123 437 58 2000 40 341 2000 38 41 61 353 59 2000 38 427 61 40 341 2000 38 41 61 353 59 2002 42 2003 61 425 59 2001 42 2004 61 425 59 439 58 376 2000 40 2002 42 2005 41 123 2003 61 2005 59 2004 61 2003 624 2006 40 1500 41 59 125 491 126 2000 40 41 123 353 2003 59 125 491 492 2007 40 41 431 123 2004 624 2007 40 41 59 125 491 2008 42 2009 40 41 431 123 450 2004 624 2009 40 41 59 125 491 2010 42 2011 40 41 431 123 450 2004 624 2011 40 41 59 125 491 404 2012 40 341 330 42 41 431 123 450 2013 59 125 125 59 
+98646,C++,"class VRTDimension final: public GDALDimension
+{
+    std::weak_ptr<VRTGroup::Ref> m_poGroupRef;
+    std::string m_osIndexingVariableName;
+
+public:
+    VRTDimension(const std::shared_ptr<VRTGroup::Ref>& poGroupRef,
+                  const std::string& osParentName,
+                  const std::string& osName,
+                  const std::string& osType,
+                  const std::string& osDirection,
+                  GUInt64 nSize,
+                  const std::string& osIndexingVariableName):
+        GDALDimension(osParentName, osName, osType, osDirection, nSize),
+        m_poGroupRef(poGroupRef),
+        m_osIndexingVariableName(osIndexingVariableName)
+    {}
+
+    VRTGroup* GetGroup() const;
+
+    static std::shared_ptr<VRTDimension> Create(const std::shared_ptr<VRTGroup>& poThisGroup,
+                                                const std::string& osParentName,
+                                                const CPLXMLNode* psNode);
+
+    std::shared_ptr<GDALMDArray> GetIndexingVariable() const override;
+
+    bool SetIndexingVariable(std::shared_ptr<GDALMDArray> poIndexingVariable) override;
+
+    void Serialize(CPLXMLNode* psParent) const;
+};",0,334 2000 381 58 439 2001 123 2002 646 2003 60 2004 646 2005 62 2006 59 2002 646 461 2007 59 439 58 2000 40 341 2002 646 2008 60 2004 646 2005 62 38 2009 44 341 2002 646 461 38 2010 44 341 2002 646 461 38 2011 44 341 2002 646 461 38 2012 44 341 2002 646 461 38 2013 44 2014 2015 44 341 2002 646 461 38 2016 41 58 2001 40 2010 44 2011 44 2012 44 2013 44 2015 41 44 2006 40 2009 41 44 2007 40 2016 41 123 125 2004 42 2017 40 41 341 59 457 2002 646 2008 60 2000 62 2018 40 341 2002 646 2008 60 2004 62 38 2019 44 341 2002 646 461 38 2010 44 341 2020 42 2021 41 59 2002 646 2008 60 2022 62 2023 40 41 341 431 59 323 2024 40 2002 646 2008 60 2022 62 2025 41 431 59 492 2026 40 2020 42 2027 41 341 59 125 59 
+98653,C++,"class VRTMDArraySource
+{
+public:
+    virtual ~VRTMDArraySource() = default;
+
+    virtual bool Read(const GUInt64* arrayStartIdx,
+                      const size_t* count,
+                      const GInt64* arrayStep,
+                      const GPtrDiff_t* bufferStride,
+                      const GDALExtendedDataType& bufferDataType,
+                      void* pDstBuffer) const = 0;
+
+    virtual void Serialize(CPLXMLNode* psParent, const char* pszVRTPath) const = 0;
+};",0,334 2000 123 439 58 491 126 2000 40 41 61 349 59 491 323 2001 40 341 2002 42 2003 44 341 2004 42 2005 44 341 2006 42 2007 44 341 2008 42 2009 44 341 2010 38 2011 44 492 42 2012 41 341 61 1500 59 491 492 2013 40 2014 42 2015 44 341 330 42 2016 41 341 61 1500 59 125 59 
+98656,C++,"class VRTMDArraySourceRegularlySpaced final: public VRTMDArraySource
+{
+    double m_dfStart;
+    double m_dfIncrement;
+
+public:
+    VRTMDArraySourceRegularlySpaced(
+                 double dfStart, double dfIncrement):
+        m_dfStart(dfStart),
+        m_dfIncrement(dfIncrement)
+    {
+    }
+
+    bool Read(const GUInt64* arrayStartIdx,
+                      const size_t* count,
+                      const GInt64* arrayStep,
+                      const GPtrDiff_t* bufferStride,
+                      const GDALExtendedDataType& bufferDataType,
+                      void* pDstBuffer) const override;
+
+    void Serialize(CPLXMLNode* psParent, const char* pszVRTPath) const override;
+};",0,334 2000 381 58 439 2001 123 356 2002 59 356 2003 59 439 58 2000 40 356 2004 44 356 2005 41 58 2002 40 2004 41 44 2003 40 2005 41 123 125 323 2006 40 341 2007 42 2008 44 341 2009 42 2010 44 341 2011 42 2012 44 341 2013 42 2014 44 341 2015 38 2016 44 492 42 2017 41 341 431 59 492 2018 40 2019 42 2020 44 341 330 42 2021 41 341 431 59 125 59 
+98657,C++,"class VRTOverviewInfo
+{
+    CPL_DISALLOW_COPY_ASSIGN(VRTOverviewInfo)
+
+public:
+    CPLString       osFilename{};
+    int             nBand = 0;
+    GDALRasterBand *poBand = nullptr;
+    int             bTriedToOpen = FALSE;
+
+    VRTOverviewInfo() = default;
+    VRTOverviewInfo(VRTOverviewInfo&& oOther) noexcept:
+        osFilename(std::move(oOther.osFilename)),
+        nBand(oOther.nBand),
+        poBand(oOther.poBand),
+        bTriedToOpen(oOther.bTriedToOpen)
+    {
+        oOther.poBand = nullptr;
+    }
+
+    ~VRTOverviewInfo() {
+        CloseDataset();
+    }
+
+    bool CloseDataset()
+    {
+        if( poBand == nullptr )
+            return false;
+
+        GDALDataset* poDS = poBand->GetDataset();
+        // Nullify now, to prevent recursion in some cases !
+        poBand = nullptr;
+        if( poDS->GetShared() )
+            GDALClose( /* (GDALDatasetH) */ poDS );
+        else
+            poDS->Dereference();
+
+        return true;
+    }
+};",0,334 2000 123 2001 40 2000 41 439 58 2002 2003 123 125 59 404 2004 61 1500 59 2005 42 2006 61 425 59 404 2007 61 2008 59 2000 40 41 61 349 59 2000 40 2000 605 2009 41 420 58 2003 40 2010 646 2011 40 2009 46 2003 41 41 44 2004 40 2009 46 2004 41 44 2006 40 2009 46 2006 41 44 2007 40 2009 46 2007 41 123 2009 46 2006 61 425 59 125 126 2000 40 41 123 2012 40 41 59 125 323 2013 40 41 123 392 40 2006 614 425 41 450 380 59 2014 42 2015 61 2006 624 2016 40 41 59 621 2006 61 425 59 392 40 2015 624 2017 40 41 41 2018 40 604 2015 41 59 360 2015 624 2019 40 41 59 450 473 59 125 125 59 
+99552,C++,"class ODSCellEvaluator : public IODSCellEvaluator
+{
+private:
+        OGRODSLayer* poLayer;
+        std::set<std::pair<int,int> > oVisisitedCells;
+
+public:
+        explicit ODSCellEvaluator(OGRODSLayer* poLayerIn) : poLayer(poLayerIn) {}
+
+        int EvaluateRange(int nRow1, int nCol1, int nRow2, int nCol2,
+                          std::vector<ods_formula_node>& aoOutValues) override;
+
+        int Evaluate(int nRow, int nCol);
+};",0,334 2000 58 439 2001 123 437 58 2002 42 2003 59 2004 646 2005 60 2004 646 2006 60 404 44 404 62 62 2007 59 439 58 376 2000 40 2002 42 2008 41 58 2003 40 2008 41 123 125 404 2009 40 404 2010 44 404 2011 44 404 2012 44 404 2013 44 2004 646 2014 60 2015 62 38 2016 41 431 59 404 2017 40 404 2018 44 404 2019 41 59 125 59 
+98640,C++,"class VRTAttribute final: public GDALAttribute
+{
+    GDALExtendedDataType m_dt;
+    std::vector<std::string> m_aosList{};
+    std::vector<std::shared_ptr<GDALDimension>> m_dims{};
+
+protected:
+
+    bool IRead(const GUInt64* arrayStartIdx,
+                      const size_t* count,
+                      const GInt64* arrayStep,
+                      const GPtrDiff_t* bufferStride,
+                      const GDALExtendedDataType& bufferDataType,
+                      void* pDstBuffer) const override;
+
+    bool IWrite(const GUInt64* arrayStartIdx,
+                      const size_t* count,
+                      const GInt64* arrayStep,
+                      const GPtrDiff_t* bufferStride,
+                      const GDALExtendedDataType& bufferDataType,
+                      const void* pSrcBuffer) override;
+
+
+public:
+    VRTAttribute(const std::string& osParentName,
+                 const std::string& osName,
+                 const GDALExtendedDataType& dt,
+                 std::vector<std::string>&& aosList):
+        GDALAbstractMDArray(osParentName, osName),
+        GDALAttribute(osParentName, osName),
+        m_dt(dt),
+        m_aosList(std::move(aosList))
+    {
+        if( m_aosList.size() > 1 )
+        {
+            m_dims.emplace_back(std::make_shared<GDALDimension>(
+                std::string(), ""dim"",
+                std::string(), std::string(), m_aosList.size()));
+        }
+    }
+
+    VRTAttribute(const std::string& osParentName,
+                 const std::string& osName,
+                 GUInt64 nDim,
+                 const GDALExtendedDataType& dt):
+        GDALAbstractMDArray(osParentName, osName),
+        GDALAttribute(osParentName, osName),
+        m_dt(dt)
+    {
+        if( nDim != 0 )
+        {
+            m_dims.emplace_back(std::make_shared<GDALDimension>(
+                std::string(), ""dim"",
+                std::string(), std::string(), nDim));
+        }
+    }
+
+    static bool CreationCommonChecks(const std::string& osName,
+                                     const std::vector<GUInt64>& anDimensions,
+                                     const std::map<std::string, std::shared_ptr<VRTAttribute>>& oMapAttributes);
+
+    static std::shared_ptr<VRTAttribute> Create(const std::string& osParentName,
+                                                const CPLXMLNode* psNode);
+
+    const std::vector<std::shared_ptr<GDALDimension>>& GetDimensions() const override { return m_dims; }
+
+    const GDALExtendedDataType &GetDataType() const override { return m_dt; }
+
+    void Serialize(CPLXMLNode* psParent) const;
+};",0,334 2000 381 58 439 2001 123 2002 2003 59 2004 646 2005 60 2004 646 461 62 2006 123 125 59 2004 646 2005 60 2004 646 2007 60 2008 640 2009 123 125 59 438 58 323 2010 40 341 2011 42 2012 44 341 2013 42 2014 44 341 2015 42 2016 44 341 2017 42 2018 44 341 2002 38 2019 44 492 42 2020 41 341 431 59 323 2021 40 341 2011 42 2012 44 341 2013 42 2014 44 341 2015 42 2016 44 341 2017 42 2018 44 341 2002 38 2019 44 341 492 42 2022 41 431 59 439 58 2000 40 341 2004 646 461 38 2023 44 341 2004 646 461 38 2024 44 341 2002 38 2025 44 2004 646 2005 60 2004 646 461 62 605 2026 41 58 2027 40 2023 44 2024 41 44 2001 40 2023 44 2024 41 44 2003 40 2025 41 44 2006 40 2004 646 2028 40 2026 41 41 123 392 40 2006 46 2029 40 41 62 1501 41 123 2009 46 2030 40 2004 646 2031 60 2008 62 40 2004 646 461 40 41 44 648 44 2004 646 461 40 41 44 2004 646 461 40 41 44 2006 46 2029 40 41 41 41 59 125 125 2000 40 341 2004 646 461 38 2023 44 341 2004 646 461 38 2024 44 2011 2032 44 341 2002 38 2025 41 58 2027 40 2023 44 2024 41 44 2001 40 2023 44 2024 41 44 2003 40 2025 41 123 392 40 2032 631 1500 41 123 2009 46 2033 40 2004 646 2034 60 2008 62 40 2004 646 461 40 41 44 648 44 2004 646 461 40 41 44 2004 646 461 40 41 44 2032 41 41 59 125 125 457 323 2035 40 341 2004 646 461 38 2024 44 341 2004 646 2005 60 2011 62 38 2036 44 341 2004 646 2037 60 2004 646 461 44 2004 646 2007 60 2000 640 38 2038 41 59 457 2004 646 2007 60 2000 62 2039 40 341 2004 646 461 38 2023 44 341 2040 42 2041 41 59 341 2004 646 2005 60 2004 646 2007 60 2008 640 38 2042 40 41 341 431 123 450 2009 59 125 341 2002 38 2043 40 41 341 431 123 450 2003 59 125 492 2044 40 2040 42 2045 41 341 59 125 59 
+99420,C++,"class TABMAPObjPoint: public TABMAPObjHdr
+{
+  public:
+    GInt32      m_nX;
+    GInt32      m_nY;
+    GByte       m_nSymbolId;
+
+    TABMAPObjPoint():
+        m_nX(0), m_nY(0), m_nSymbolId(0) {}
+    virtual ~TABMAPObjPoint() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override;
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override;
+};",0,334 2000 58 439 2001 123 439 58 2002 2003 59 2002 2004 59 2005 2006 59 2000 40 41 58 2003 40 1500 41 44 2004 40 1500 41 44 2006 40 1500 41 123 125 491 126 2000 40 41 123 125 491 404 2007 40 2008 42 41 431 59 621 491 404 2009 40 2008 42 41 431 59 125 59 
+99421,C++,"class TABMAPObjRectEllipse final : public TABMAPObjHdr
+{
+  public:
+    GInt32      m_nCornerWidth;   /* For rounded rect only */
+    GInt32      m_nCornerHeight;
+    GByte       m_nPenId;
+    GByte       m_nBrushId;
+
+    TABMAPObjRectEllipse():
+        m_nCornerWidth(0),
+        m_nCornerHeight(0),
+        m_nPenId(0),
+        m_nBrushId(0)
+        {}
+    virtual ~TABMAPObjRectEllipse() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override;
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override;
+};",0,334 2000 381 58 439 2001 123 439 58 2002 2003 59 604 2002 2004 59 2005 2006 59 2005 2007 59 2000 40 41 58 2003 40 1500 41 44 2004 40 1500 41 44 2006 40 1500 41 44 2007 40 1500 41 123 125 491 126 2000 40 41 123 125 491 404 2008 40 2009 42 41 431 59 621 491 404 2010 40 2009 42 41 431 59 125 59 
+98666,C++,"class CPL_DLL VRTWarpedRasterBand final: public VRTRasterBand
+{
+  public:
+                   VRTWarpedRasterBand( GDALDataset *poDS, int nBand,
+                                        GDALDataType eType = GDT_Unknown );
+    virtual        ~VRTWarpedRasterBand();
+
+    virtual CPLXMLNode *   SerializeToXML( const char *pszVRTPath ) override;
+
+    virtual CPLErr IReadBlock( int, int, void * ) override;
+    virtual CPLErr IWriteBlock( int, int, void * ) override;
+
+    virtual int GetOverviewCount() override;
+    virtual GDALRasterBand *GetOverview(int) override;
+};",0,334 2000 2001 381 58 439 2002 123 439 58 2001 40 2003 42 2004 44 404 2005 44 2006 2007 61 2008 41 59 491 126 2001 40 41 59 491 2009 42 2010 40 341 330 42 2011 41 431 59 491 2012 2013 40 404 44 404 44 492 42 41 431 59 491 2012 2014 40 404 44 404 44 492 42 41 431 59 491 404 2015 40 41 431 59 491 2016 42 2017 40 404 41 431 59 125 59 
+99181,C++,"    class DatasetWithErrorInFlushCache: public GDALDataset
+    {
+            bool bHasFlushCache;
+        public:
+            DatasetWithErrorInFlushCache() : bHasFlushCache(false) { }
+           ~DatasetWithErrorInFlushCache() { FlushCache(true); }
+            virtual void FlushCache(bool bAtClosing) override
+            {
+                if( !bHasFlushCache)
+                    CPLError(CE_Failure, CPLE_AppDefined, ""some error"");
+                GDALDataset::FlushCache(bAtClosing);
+                bHasFlushCache = true;
+            }
+            virtual CPLErr _SetProjection(const char*) override { return CE_None; }
+            CPLErr SetSpatialRef(const OGRSpatialReference* poSRS) override {
+                return OldSetProjectionFromSetSpatialRef(poSRS);
+            }
+            virtual CPLErr SetGeoTransform(double*) override { return CE_None; }
+
+            static GDALDataset* CreateCopy(const char*, GDALDataset*,
+                                    int, char **,
+                                    GDALProgressFunc,
+                                    void *)
+            {
+                return new DatasetWithErrorInFlushCache();
+            }
+
+            static GDALDataset* Create(const char*, int nXSize, int nYSize, int, GDALDataType, char ** )
+            {
+                DatasetWithErrorInFlushCache* poDS = new DatasetWithErrorInFlushCache();
+                poDS->eAccess = GA_Update;
+                poDS->nRasterXSize = nXSize;
+                poDS->nRasterYSize = nYSize;
+                poDS->SetBand(1, new FakeBand(nXSize, nYSize));
+                return poDS;
+            }
+    };",0,334 2000 58 439 2001 123 323 2002 59 439 58 2000 40 41 58 2002 40 380 41 123 125 126 2000 40 41 123 2003 40 473 41 59 125 491 492 2004 40 323 2005 41 431 123 392 40 33 2002 41 2006 40 2007 44 2008 44 648 41 59 2001 646 2004 40 2005 41 59 2002 61 473 59 125 491 2009 2010 40 341 330 42 41 431 123 450 2011 59 125 2009 2012 40 341 2013 42 2014 41 431 123 450 2015 40 2014 41 59 125 491 2009 2016 40 356 42 41 431 123 450 2017 59 125 457 2001 42 2018 40 341 330 42 44 2001 42 44 404 44 330 42 42 44 2019 44 492 42 41 123 450 418 2000 40 41 59 125 457 2001 42 2020 40 341 330 42 44 404 2021 44 404 2022 44 404 44 2023 44 330 42 42 41 123 2000 42 2024 61 418 2000 40 41 59 2024 624 2025 61 2026 59 2024 624 2027 61 2021 59 2024 624 2028 61 2022 59 2024 624 2029 40 1501 44 418 2030 40 2021 44 2022 41 41 59 450 2024 59 125 125 59 
+99890,C++,"class OGRSimpleCurvePointIterator final: public OGRPointIterator
+{
+        CPL_DISALLOW_COPY_ASSIGN(OGRSimpleCurvePointIterator)
+
+        const OGRSimpleCurve* poSC = nullptr;
+        int                   iCurPoint = 0;
+
+    public:
+        explicit OGRSimpleCurvePointIterator(const OGRSimpleCurve* poSCIn) :
+            poSC(poSCIn) {}
+
+        OGRBoolean getNextPoint( OGRPoint* p ) override;
+};",0,334 2000 381 58 439 2001 123 2002 40 2000 41 341 2003 42 2004 61 425 59 404 2005 61 1500 59 439 58 376 2000 40 341 2003 42 2006 41 58 2004 40 2006 41 123 125 2007 2008 40 2009 42 2010 41 431 59 125 59 
+100191,C++,"class GDALPDFClippingDataset final: public GDALDataset
+{
+        GDALDataset* poSrcDS;
+        double adfGeoTransform[6];
+
+    public:
+        GDALPDFClippingDataset(GDALDataset* poSrcDSIn, double adfClippingExtent[4]) : poSrcDS(poSrcDSIn)
+        {
+            double adfSrcGeoTransform[6];
+            poSrcDS->GetGeoTransform(adfSrcGeoTransform);
+            adfGeoTransform[0] = adfClippingExtent[0];
+            adfGeoTransform[1] = adfSrcGeoTransform[1];
+            adfGeoTransform[2] = 0.0;
+            adfGeoTransform[3] = adfSrcGeoTransform[5] < 0 ? adfClippingExtent[3] : adfClippingExtent[1];
+            adfGeoTransform[4] = 0.0;
+            adfGeoTransform[5] = adfSrcGeoTransform[5];
+            nRasterXSize = (int)((adfClippingExtent[2] - adfClippingExtent[0]) / adfSrcGeoTransform[1]);
+            nRasterYSize = (int)((adfClippingExtent[3] - adfClippingExtent[1]) / fabs(adfSrcGeoTransform[5]));
+        }
+
+        virtual CPLErr GetGeoTransform( double * padfGeoTransform ) override
+        {
+            memcpy(padfGeoTransform, adfGeoTransform, 6 * sizeof(double));
+            return CE_None;
+        }
+
+        virtual const OGRSpatialReference* GetSpatialRef() const override
+        {
+            return poSrcDS->GetSpatialRef();
+        }
+};",0,334 2000 381 58 439 2001 123 2001 42 2002 59 356 2003 91 1502 93 59 439 58 2000 40 2001 42 2004 44 356 2005 91 1502 93 41 58 2002 40 2004 41 123 356 2006 91 1502 93 59 2002 624 2007 40 2006 41 59 2003 91 1500 93 61 2005 91 1500 93 59 2003 91 1501 93 61 2006 91 1501 93 59 2003 91 1502 93 61 1500 59 2003 91 1502 93 61 2006 91 1502 93 60 1500 63 2005 91 1502 93 58 2005 91 1501 93 59 2003 91 1502 93 61 1500 59 2003 91 1502 93 61 2006 91 1502 93 59 2008 61 40 404 41 40 40 2005 91 1502 93 45 2005 91 1500 93 41 47 2006 91 1501 93 41 59 2009 61 40 404 41 40 40 2005 91 1502 93 45 2005 91 1501 93 41 47 2010 40 2006 91 1502 93 41 41 59 125 491 2011 2012 40 356 42 2013 41 431 123 2014 40 2013 44 2003 44 1502 42 455 40 356 41 41 59 450 2015 59 125 491 341 2016 42 2017 40 41 341 431 123 450 2002 624 2017 40 41 59 125 125 59 
+99470,C++,"class TABMAPObjHdrWithCoord : public TABMAPObjHdr
+{
+  public:
+    GInt32      m_nCoordBlockPtr = 0;
+    GInt32      m_nCoordDataSize = 0;
+
+    /* Eventually this class may have methods to help maintaining refs to
+     * coord. blocks when splitting object blocks.
+     */
+};",0,334 2000 58 439 2001 123 439 58 2002 2003 61 1500 59 2002 2004 61 1500 59 604 125 59 
+99514,C++,"    class MDIAsAttribute: public GDALAttribute
+    {
+        std::vector<std::shared_ptr<GDALDimension>> m_dims{};
+        const GDALExtendedDataType m_dt = GDALExtendedDataType::CreateString();
+        std::string m_osValue;
+
+    public:
+        MDIAsAttribute(const std::string& name, const std::string& value):
+            GDALAbstractMDArray(std::string(), name),
+            GDALAttribute(std::string(), name),
+            m_osValue(value)
+        {
+        }
+
+        const std::vector<std::shared_ptr<GDALDimension>>& GetDimensions() const override { return m_dims; }
+
+        const GDALExtendedDataType &GetDataType() const override { return m_dt; }
+
+        bool IRead(const GUInt64*, const size_t*,
+                   const GInt64*, const GPtrDiff_t*,
+                   const GDALExtendedDataType& bufferDataType,
+                   void* pDstBuffer) const override
+        {
+            const char* pszStr = m_osValue.c_str();
+            GDALExtendedDataType::CopyValue(&pszStr, m_dt,
+                                            pDstBuffer, bufferDataType);
+            return true;
+        }
+    };",0,334 2000 58 439 2001 123 2002 646 2003 60 2002 646 2004 60 2005 640 2006 123 125 59 341 2007 2008 61 2007 646 2009 40 41 59 2002 646 461 2010 59 439 58 2000 40 341 2002 646 461 38 2011 44 341 2002 646 461 38 2012 41 58 2013 40 2002 646 461 40 41 44 2011 41 44 2001 40 2002 646 461 40 41 44 2011 41 44 2010 40 2012 41 123 125 341 2002 646 2003 60 2002 646 2004 60 2005 640 38 2014 40 41 341 431 123 450 2006 59 125 341 2007 38 2015 40 41 341 431 123 450 2008 59 125 323 2016 40 341 2017 42 44 341 2018 42 44 341 2019 42 44 341 2020 42 44 341 2007 38 2021 44 492 42 2022 41 341 431 123 341 330 42 2023 61 2010 46 2024 40 41 59 2007 646 2025 40 38 2023 44 2008 44 2022 44 2021 41 59 450 473 59 125 125 59 
+99412,C++,"class TABMAPObjArc final : public TABMAPObjHdr
+{
+  public:
+    GInt32      m_nStartAngle;
+    GInt32      m_nEndAngle;
+    GInt32      m_nArcEllipseMinX;  /* MBR of the arc defining ellipse */
+    GInt32      m_nArcEllipseMinY;  /* Only present in arcs            */
+    GInt32      m_nArcEllipseMaxX;
+    GInt32      m_nArcEllipseMaxY;
+    GByte       m_nPenId;
+
+    TABMAPObjArc():
+        m_nStartAngle(0),
+        m_nEndAngle(0),
+        m_nArcEllipseMinX(0),
+        m_nArcEllipseMinY(0),
+        m_nArcEllipseMaxX(0),
+        m_nArcEllipseMaxY(0),
+        m_nPenId(0)
+        {}
+    virtual ~TABMAPObjArc() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override;
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override;
+};",0,334 2000 381 58 439 2001 123 439 58 2002 2003 59 2002 2004 59 2002 2005 59 604 2002 2006 59 604 2002 2007 59 2002 2008 59 2009 2010 59 2000 40 41 58 2003 40 1500 41 44 2004 40 1500 41 44 2005 40 1500 41 44 2006 40 1500 41 44 2007 40 1500 41 44 2008 40 1500 41 44 2010 40 1500 41 123 125 491 126 2000 40 41 123 125 491 404 2011 40 2012 42 41 431 59 621 491 404 2013 40 2012 42 41 431 59 125 59 
+99416,C++,"class TABMAPObjLine final : public TABMAPObjHdr
+{
+  public:
+    GInt32      m_nX1;
+    GInt32      m_nY1;
+    GInt32      m_nX2;
+    GInt32      m_nY2;
+    GByte       m_nPenId;
+
+    TABMAPObjLine():
+        m_nX1(0),
+        m_nY1(0),
+        m_nX2(0),
+        m_nY2(0),
+        m_nPenId(0)
+        {}
+    virtual ~TABMAPObjLine() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override;
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override;
+};",0,334 2000 381 58 439 2001 123 439 58 2002 2003 59 2002 2004 59 2002 2005 59 2002 2006 59 2007 2008 59 2000 40 41 58 2003 40 1500 41 44 2004 40 1500 41 44 2005 40 1500 41 44 2006 40 1500 41 44 2008 40 1500 41 123 125 491 126 2000 40 41 123 125 491 404 2009 40 2010 42 41 431 59 621 491 404 2011 40 2010 42 41 431 59 125 59 
+99878,C++,"    class PjPtr
+    {
+        PJ* m_pj = nullptr;
+        void reset()
+        {
+            if( m_pj )
+            {
+                proj_assign_context(m_pj, OSRGetProjTLSContext());
+                proj_destroy(m_pj);
+            }
+        }
+    public:
+        PjPtr() : m_pj(nullptr){}
+        explicit PjPtr(PJ* pjIn) : m_pj(pjIn){}
+        ~PjPtr()
+        {
+            reset();
+        }
+        PjPtr(const PjPtr& other) :
+            m_pj((other.m_pj != nullptr) ?
+                 (proj_clone(OSRGetProjTLSContext(), other.m_pj)) :
+                 (nullptr))
+        {}
+        PjPtr(PjPtr&& other) :
+            m_pj(other.m_pj)
+        {
+            other.m_pj = nullptr;
+        }
+        PjPtr& operator=(const PjPtr& other)
+        {
+            if(this != &other)
+            {
+                reset();
+                m_pj = (other.m_pj != nullptr) ?
+                       (proj_clone(OSRGetProjTLSContext(), other.m_pj)) :
+                       (nullptr);
+            }
+            return *this;
+        }
+        PjPtr& operator=(PJ* pjIn)
+        {
+            if(m_pj != pjIn)
+            {
+                reset();
+                m_pj = pjIn;
+            }
+            return *this;
+        }
+        operator PJ* () { return m_pj; }
+        operator const PJ* () const{ return m_pj; }
+    };",0,334 2000 123 2001 42 2002 61 425 59 492 2003 40 41 123 392 40 2002 41 123 2004 40 2002 44 2005 40 41 41 59 2006 40 2002 41 59 125 125 439 58 2000 40 41 58 2002 40 425 41 123 125 376 2000 40 2001 42 2007 41 58 2002 40 2007 41 123 125 126 2000 40 41 123 2003 40 41 59 125 2000 40 341 2000 38 2008 41 58 2002 40 40 2008 46 2002 631 425 41 63 40 2009 40 2010 40 41 44 2008 46 2002 41 41 58 40 425 41 41 123 125 2000 40 2000 605 2008 41 58 2002 40 2008 46 2002 41 123 2008 46 2002 61 425 59 125 2000 38 427 61 40 341 2000 38 2008 41 123 392 40 467 631 38 2008 41 123 2003 40 41 59 2002 61 40 2008 46 2002 631 425 41 63 40 2009 40 2010 40 41 44 2008 46 2002 41 41 58 40 425 41 59 125 450 42 467 59 125 2000 38 427 61 40 2001 42 2007 41 123 392 40 2002 631 2007 41 123 2003 40 41 59 2002 61 2007 59 125 450 42 467 59 125 427 2001 42 40 41 123 450 2002 59 125 427 341 2001 42 40 41 341 123 450 2002 59 125 125 59 
+99454,C++,"       class SWIG_Python_Thread_Allow {
+         bool status;
+         PyThreadState *save;
+       public:
+         void end() { if (status) { PyEval_RestoreThread(save); status = false; }}
+         SWIG_Python_Thread_Allow() : status(true), save(PyEval_SaveThread()) {}
+         ~SWIG_Python_Thread_Allow() { end(); }
+       };",0,334 2000 123 323 2001 59 2002 42 2003 59 439 58 492 2004 40 41 123 392 40 2001 41 123 2005 40 2003 41 59 2001 61 380 59 125 125 2000 40 41 58 2001 40 473 41 44 2003 40 2006 40 41 41 123 125 126 2000 40 41 123 2004 40 41 59 125 125 59 
+99456,C++,"template<typename T> class SwigValueWrapper {
+  struct SwigMovePointer {
+    T *ptr;
+    SwigMovePointer(T *p) : ptr(p) { }
+    ~SwigMovePointer() { delete ptr; }
+    SwigMovePointer& operator=(SwigMovePointer& rhs) { T* oldptr = ptr; ptr = 0; delete oldptr; ptr = rhs.ptr; rhs.ptr = 0; return *this; }
+  } pointer;
+  SwigValueWrapper& operator=(const SwigValueWrapper<T>& rhs);
+  SwigValueWrapper(const SwigValueWrapper<T>& rhs);
+public:
+  SwigValueWrapper() : pointer(0) { }
+  SwigValueWrapper& operator=(const T& t) { SwigMovePointer tmp(new T(t)); pointer = tmp; return *this; }
+  operator T&() const { return *pointer.ptr; }
+  T *operator&() { return pointer.ptr; }
+};",0,466 60 477 2000 62 334 2001 123 462 2002 123 2000 42 2003 59 2002 40 2000 42 2004 41 58 2003 40 2004 41 123 125 126 2002 40 41 123 353 2003 59 125 2002 38 427 61 40 2002 38 2005 41 123 2000 42 2006 61 2003 59 2003 61 1500 59 353 2006 59 2003 61 2005 46 2003 59 2005 46 2003 61 1500 59 450 42 467 59 125 125 2007 59 2001 38 427 61 40 341 2001 60 2000 62 38 2008 41 59 2001 40 341 2001 60 2000 62 38 2008 41 59 439 58 2001 40 41 58 2007 40 1500 41 123 125 2001 38 427 61 40 341 2000 38 2009 41 123 2002 2010 40 418 2000 40 2009 41 41 59 2007 61 2010 59 450 42 467 59 125 427 2000 38 40 41 341 123 450 42 2007 46 2011 59 125 2000 42 427 38 40 41 123 450 2007 46 2012 59 125 125 59 
+99457,C++,"  class SwigPtr_PyObject {
+  protected:
+    PyObject *_obj;
+
+  public:
+    SwigPtr_PyObject() :_obj(0)
+    {
+    }
+
+    SwigPtr_PyObject(const SwigPtr_PyObject& item) : _obj(item._obj)
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XINCREF(_obj);      
+      SWIG_PYTHON_THREAD_END_BLOCK;
+    }
+    
+    SwigPtr_PyObject(PyObject *obj, bool initial_ref = true) :_obj(obj)
+    {
+      if (initial_ref) {
+        SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+        Py_XINCREF(_obj);
+        SWIG_PYTHON_THREAD_END_BLOCK;
+      }
+    }
+    
+    SwigPtr_PyObject & operator=(const SwigPtr_PyObject& item) 
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XINCREF(item._obj);
+      Py_XDECREF(_obj);
+      _obj = item._obj;
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return *this;      
+    }
+    
+    ~SwigPtr_PyObject() 
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XDECREF(_obj);
+      SWIG_PYTHON_THREAD_END_BLOCK;
+    }
+    
+    operator PyObject *() const
+    {
+      return _obj;
+    }
+
+    PyObject *operator->() const
+    {
+      return _obj;
+    }
+  };",0,334 2000 123 438 58 2001 42 2002 59 439 58 2000 40 41 58 2002 40 1500 41 123 125 2000 40 341 2000 38 2003 41 58 2002 40 2003 46 2002 41 123 2004 59 2005 40 2002 41 59 2006 59 125 2000 40 2001 42 2007 44 323 2008 61 473 41 58 2002 40 2007 41 123 392 40 2008 41 123 2009 59 2010 40 2002 41 59 2011 59 125 125 2000 38 427 61 40 341 2000 38 2003 41 123 2012 59 2013 40 2003 46 2002 41 59 2014 40 2002 41 59 2002 61 2003 46 2002 59 2015 59 450 42 467 59 125 126 2000 40 41 123 2016 59 2017 40 2002 41 59 2018 59 125 427 2001 42 40 41 341 123 450 2002 59 125 2001 42 427 624 40 41 341 123 450 2002 59 125 125 59 
+99442,C++,"       class SWIG_Python_Thread_Allow {
+         bool status;
+         PyThreadState *save;
+       public:
+         void end() { if (status) { PyEval_RestoreThread(save); status = false; }}
+         SWIG_Python_Thread_Allow() : status(true), save(PyEval_SaveThread()) {}
+         ~SWIG_Python_Thread_Allow() { end(); }
+       };",0,334 2000 123 323 2001 59 2002 42 2003 59 439 58 492 2004 40 41 123 392 40 2001 41 123 2005 40 2003 41 59 2001 61 380 59 125 125 2000 40 41 58 2001 40 473 41 44 2003 40 2006 40 41 41 123 125 126 2000 40 41 123 2004 40 41 59 125 125 59 
+98902,C++,"class ErrorStruct
+{
+  public:
+    CPLErr type;
+    CPLErrorNum no;
+    char* msg;
+
+    ErrorStruct() = delete;
+    ErrorStruct(CPLErr eErrIn, CPLErrorNum noIn, const char* msgIn) :
+        type(eErrIn), no(noIn), msg(msgIn ? CPLStrdup(msgIn) : nullptr) {}
+    ErrorStruct(const ErrorStruct& other):
+        type(other.type), no(other.no),
+        msg(other.msg ? CPLStrdup(other.msg) : nullptr) {}
+    ~ErrorStruct() { CPLFree(msg); }
+};",0,334 2000 123 439 58 2001 2002 59 2003 2004 59 330 42 2005 59 2000 40 41 61 353 59 2000 40 2001 2006 44 2003 2007 44 341 330 42 2008 41 58 2002 40 2006 41 44 2004 40 2007 41 44 2005 40 2008 63 2009 40 2008 41 58 425 41 123 125 2000 40 341 2000 38 2010 41 58 2002 40 2010 46 2002 41 44 2004 40 2010 46 2004 41 44 2005 40 2010 46 2005 63 2009 40 2010 46 2005 41 58 425 41 123 125 126 2000 40 41 123 2011 40 2005 41 59 125 125 59 
+99443,C++,"       class SWIG_Python_Thread_Block {
+         bool status;
+         PyGILState_STATE state;
+       public:
+         void end() { if (status) { PyGILState_Release(state); status = false;} }
+         SWIG_Python_Thread_Block() : status(true), state(PyGILState_Ensure()) {}
+         ~SWIG_Python_Thread_Block() { end(); }
+       };",0,334 2000 123 323 2001 59 2002 2003 59 439 58 492 2004 40 41 123 392 40 2001 41 123 2005 40 2003 41 59 2001 61 380 59 125 125 2000 40 41 58 2001 40 473 41 44 2003 40 2006 40 41 41 123 125 126 2000 40 41 123 2004 40 41 59 125 125 59 
+99444,C++,"template<typename T> class SwigValueWrapper {
+  struct SwigMovePointer {
+    T *ptr;
+    SwigMovePointer(T *p) : ptr(p) { }
+    ~SwigMovePointer() { delete ptr; }
+    SwigMovePointer& operator=(SwigMovePointer& rhs) { T* oldptr = ptr; ptr = 0; delete oldptr; ptr = rhs.ptr; rhs.ptr = 0; return *this; }
+  } pointer;
+  SwigValueWrapper& operator=(const SwigValueWrapper<T>& rhs);
+  SwigValueWrapper(const SwigValueWrapper<T>& rhs);
+public:
+  SwigValueWrapper() : pointer(0) { }
+  SwigValueWrapper& operator=(const T& t) { SwigMovePointer tmp(new T(t)); pointer = tmp; return *this; }
+  operator T&() const { return *pointer.ptr; }
+  T *operator&() { return pointer.ptr; }
+};",0,466 60 477 2000 62 334 2001 123 462 2002 123 2000 42 2003 59 2002 40 2000 42 2004 41 58 2003 40 2004 41 123 125 126 2002 40 41 123 353 2003 59 125 2002 38 427 61 40 2002 38 2005 41 123 2000 42 2006 61 2003 59 2003 61 1500 59 353 2006 59 2003 61 2005 46 2003 59 2005 46 2003 61 1500 59 450 42 467 59 125 125 2007 59 2001 38 427 61 40 341 2001 60 2000 62 38 2008 41 59 2001 40 341 2001 60 2000 62 38 2008 41 59 439 58 2001 40 41 58 2007 40 1500 41 123 125 2001 38 427 61 40 341 2000 38 2009 41 123 2002 2010 40 418 2000 40 2009 41 41 59 2007 61 2010 59 450 42 467 59 125 427 2000 38 40 41 341 123 450 42 2007 46 2011 59 125 2000 42 427 38 40 41 123 450 2007 46 2012 59 125 125 59 
+98903,C++,"       class SWIG_Python_Thread_Allow {
+         bool status;
+         PyThreadState *save;
+       public:
+         void end() { if (status) { PyEval_RestoreThread(save); status = false; }}
+         SWIG_Python_Thread_Allow() : status(true), save(PyEval_SaveThread()) {}
+         ~SWIG_Python_Thread_Allow() { end(); }
+       };",0,334 2000 123 323 2001 59 2002 42 2003 59 439 58 492 2004 40 41 123 392 40 2001 41 123 2005 40 2003 41 59 2001 61 380 59 125 125 2000 40 41 58 2001 40 473 41 44 2003 40 2006 40 41 41 123 125 126 2000 40 41 123 2004 40 41 59 125 125 59 
+100296,C++,"       class SWIG_Python_Thread_Allow {
+         bool status;
+         PyThreadState *save;
+       public:
+         void end() { if (status) { PyEval_RestoreThread(save); status = false; }}
+         SWIG_Python_Thread_Allow() : status(true), save(PyEval_SaveThread()) {}
+         ~SWIG_Python_Thread_Allow() { end(); }
+       };",0,334 2000 123 323 2001 59 2002 42 2003 59 439 58 492 2004 40 41 123 392 40 2001 41 123 2005 40 2003 41 59 2001 61 380 59 125 125 2000 40 41 58 2001 40 473 41 44 2003 40 2006 40 41 41 123 125 126 2000 40 41 123 2004 40 41 59 125 125 59 
+100299,C++,"  class SwigPtr_PyObject {
+  protected:
+    PyObject *_obj;
+
+  public:
+    SwigPtr_PyObject() :_obj(0)
+    {
+    }
+
+    SwigPtr_PyObject(const SwigPtr_PyObject& item) : _obj(item._obj)
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XINCREF(_obj);      
+      SWIG_PYTHON_THREAD_END_BLOCK;
+    }
+    
+    SwigPtr_PyObject(PyObject *obj, bool initial_ref = true) :_obj(obj)
+    {
+      if (initial_ref) {
+        SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+        Py_XINCREF(_obj);
+        SWIG_PYTHON_THREAD_END_BLOCK;
+      }
+    }
+    
+    SwigPtr_PyObject & operator=(const SwigPtr_PyObject& item) 
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XINCREF(item._obj);
+      Py_XDECREF(_obj);
+      _obj = item._obj;
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return *this;      
+    }
+    
+    ~SwigPtr_PyObject() 
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XDECREF(_obj);
+      SWIG_PYTHON_THREAD_END_BLOCK;
+    }
+    
+    operator PyObject *() const
+    {
+      return _obj;
+    }
+
+    PyObject *operator->() const
+    {
+      return _obj;
+    }
+  };",0,334 2000 123 438 58 2001 42 2002 59 439 58 2000 40 41 58 2002 40 1500 41 123 125 2000 40 341 2000 38 2003 41 58 2002 40 2003 46 2002 41 123 2004 59 2005 40 2002 41 59 2006 59 125 2000 40 2001 42 2007 44 323 2008 61 473 41 58 2002 40 2007 41 123 392 40 2008 41 123 2009 59 2010 40 2002 41 59 2011 59 125 125 2000 38 427 61 40 341 2000 38 2003 41 123 2012 59 2013 40 2003 46 2002 41 59 2014 40 2002 41 59 2002 61 2003 46 2002 59 2015 59 450 42 467 59 125 126 2000 40 41 123 2016 59 2017 40 2002 41 59 2018 59 125 427 2001 42 40 41 341 123 450 2002 59 125 2001 42 427 624 40 41 341 123 450 2002 59 125 125 59 
+100298,C++,"template<typename T> class SwigValueWrapper {
+  struct SwigMovePointer {
+    T *ptr;
+    SwigMovePointer(T *p) : ptr(p) { }
+    ~SwigMovePointer() { delete ptr; }
+    SwigMovePointer& operator=(SwigMovePointer& rhs) { T* oldptr = ptr; ptr = 0; delete oldptr; ptr = rhs.ptr; rhs.ptr = 0; return *this; }
+  } pointer;
+  SwigValueWrapper& operator=(const SwigValueWrapper<T>& rhs);
+  SwigValueWrapper(const SwigValueWrapper<T>& rhs);
+public:
+  SwigValueWrapper() : pointer(0) { }
+  SwigValueWrapper& operator=(const T& t) { SwigMovePointer tmp(new T(t)); pointer = tmp; return *this; }
+  operator T&() const { return *pointer.ptr; }
+  T *operator&() { return pointer.ptr; }
+};",0,466 60 477 2000 62 334 2001 123 462 2002 123 2000 42 2003 59 2002 40 2000 42 2004 41 58 2003 40 2004 41 123 125 126 2002 40 41 123 353 2003 59 125 2002 38 427 61 40 2002 38 2005 41 123 2000 42 2006 61 2003 59 2003 61 1500 59 353 2006 59 2003 61 2005 46 2003 59 2005 46 2003 61 1500 59 450 42 467 59 125 125 2007 59 2001 38 427 61 40 341 2001 60 2000 62 38 2008 41 59 2001 40 341 2001 60 2000 62 38 2008 41 59 439 58 2001 40 41 58 2007 40 1500 41 123 125 2001 38 427 61 40 341 2000 38 2009 41 123 2002 2010 40 418 2000 40 2009 41 41 59 2007 61 2010 59 450 42 467 59 125 427 2000 38 40 41 341 123 450 42 2007 46 2011 59 125 2000 42 427 38 40 41 123 450 2007 46 2012 59 125 125 59 
+100302,C++,"       class SWIG_Python_Thread_Allow {
+         bool status;
+         PyThreadState *save;
+       public:
+         void end() { if (status) { PyEval_RestoreThread(save); status = false; }}
+         SWIG_Python_Thread_Allow() : status(true), save(PyEval_SaveThread()) {}
+         ~SWIG_Python_Thread_Allow() { end(); }
+       };",0,334 2000 123 323 2001 59 2002 42 2003 59 439 58 492 2004 40 41 123 392 40 2001 41 123 2005 40 2003 41 59 2001 61 380 59 125 125 2000 40 41 58 2001 40 473 41 44 2003 40 2006 40 41 41 123 125 126 2000 40 41 123 2004 40 41 59 125 125 59 
+99455,C++,"       class SWIG_Python_Thread_Block {
+         bool status;
+         PyGILState_STATE state;
+       public:
+         void end() { if (status) { PyGILState_Release(state); status = false;} }
+         SWIG_Python_Thread_Block() : status(true), state(PyGILState_Ensure()) {}
+         ~SWIG_Python_Thread_Block() { end(); }
+       };",0,334 2000 123 323 2001 59 2002 2003 59 439 58 492 2004 40 41 123 392 40 2001 41 123 2005 40 2003 41 59 2001 61 380 59 125 125 2000 40 41 58 2001 40 473 41 44 2003 40 2006 40 41 41 123 125 126 2000 40 41 123 2004 40 41 59 125 125 59 
+100304,C++,"template<typename T> class SwigValueWrapper {
+  struct SwigMovePointer {
+    T *ptr;
+    SwigMovePointer(T *p) : ptr(p) { }
+    ~SwigMovePointer() { delete ptr; }
+    SwigMovePointer& operator=(SwigMovePointer& rhs) { T* oldptr = ptr; ptr = 0; delete oldptr; ptr = rhs.ptr; rhs.ptr = 0; return *this; }
+  } pointer;
+  SwigValueWrapper& operator=(const SwigValueWrapper<T>& rhs);
+  SwigValueWrapper(const SwigValueWrapper<T>& rhs);
+public:
+  SwigValueWrapper() : pointer(0) { }
+  SwigValueWrapper& operator=(const T& t) { SwigMovePointer tmp(new T(t)); pointer = tmp; return *this; }
+  operator T&() const { return *pointer.ptr; }
+  T *operator&() { return pointer.ptr; }
+};",0,466 60 477 2000 62 334 2001 123 462 2002 123 2000 42 2003 59 2002 40 2000 42 2004 41 58 2003 40 2004 41 123 125 126 2002 40 41 123 353 2003 59 125 2002 38 427 61 40 2002 38 2005 41 123 2000 42 2006 61 2003 59 2003 61 1500 59 353 2006 59 2003 61 2005 46 2003 59 2005 46 2003 61 1500 59 450 42 467 59 125 125 2007 59 2001 38 427 61 40 341 2001 60 2000 62 38 2008 41 59 2001 40 341 2001 60 2000 62 38 2008 41 59 439 58 2001 40 41 58 2007 40 1500 41 123 125 2001 38 427 61 40 341 2000 38 2009 41 123 2002 2010 40 418 2000 40 2009 41 41 59 2007 61 2010 59 450 42 467 59 125 427 2000 38 40 41 341 123 450 42 2007 46 2011 59 125 2000 42 427 38 40 41 123 450 2007 46 2012 59 125 125 59 
+100305,C++,"  class SwigPtr_PyObject {
+  protected:
+    PyObject *_obj;
+
+  public:
+    SwigPtr_PyObject() :_obj(0)
+    {
+    }
+
+    SwigPtr_PyObject(const SwigPtr_PyObject& item) : _obj(item._obj)
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XINCREF(_obj);      
+      SWIG_PYTHON_THREAD_END_BLOCK;
+    }
+    
+    SwigPtr_PyObject(PyObject *obj, bool initial_ref = true) :_obj(obj)
+    {
+      if (initial_ref) {
+        SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+        Py_XINCREF(_obj);
+        SWIG_PYTHON_THREAD_END_BLOCK;
+      }
+    }
+    
+    SwigPtr_PyObject & operator=(const SwigPtr_PyObject& item) 
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XINCREF(item._obj);
+      Py_XDECREF(_obj);
+      _obj = item._obj;
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return *this;      
+    }
+    
+    ~SwigPtr_PyObject() 
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XDECREF(_obj);
+      SWIG_PYTHON_THREAD_END_BLOCK;
+    }
+    
+    operator PyObject *() const
+    {
+      return _obj;
+    }
+
+    PyObject *operator->() const
+    {
+      return _obj;
+    }
+  };",0,334 2000 123 438 58 2001 42 2002 59 439 58 2000 40 41 58 2002 40 1500 41 123 125 2000 40 341 2000 38 2003 41 58 2002 40 2003 46 2002 41 123 2004 59 2005 40 2002 41 59 2006 59 125 2000 40 2001 42 2007 44 323 2008 61 473 41 58 2002 40 2007 41 123 392 40 2008 41 123 2009 59 2010 40 2002 41 59 2011 59 125 125 2000 38 427 61 40 341 2000 38 2003 41 123 2012 59 2013 40 2003 46 2002 41 59 2014 40 2002 41 59 2002 61 2003 46 2002 59 2015 59 450 42 467 59 125 126 2000 40 41 123 2016 59 2017 40 2002 41 59 2018 59 125 427 2001 42 40 41 341 123 450 2002 59 125 2001 42 427 624 40 41 341 123 450 2002 59 125 125 59 
+98905,C++,"template<typename T> class SwigValueWrapper {
+  struct SwigMovePointer {
+    T *ptr;
+    SwigMovePointer(T *p) : ptr(p) { }
+    ~SwigMovePointer() { delete ptr; }
+    SwigMovePointer& operator=(SwigMovePointer& rhs) { T* oldptr = ptr; ptr = 0; delete oldptr; ptr = rhs.ptr; rhs.ptr = 0; return *this; }
+  } pointer;
+  SwigValueWrapper& operator=(const SwigValueWrapper<T>& rhs);
+  SwigValueWrapper(const SwigValueWrapper<T>& rhs);
+public:
+  SwigValueWrapper() : pointer(0) { }
+  SwigValueWrapper& operator=(const T& t) { SwigMovePointer tmp(new T(t)); pointer = tmp; return *this; }
+  operator T&() const { return *pointer.ptr; }
+  T *operator&() { return pointer.ptr; }
+};",0,466 60 477 2000 62 334 2001 123 462 2002 123 2000 42 2003 59 2002 40 2000 42 2004 41 58 2003 40 2004 41 123 125 126 2002 40 41 123 353 2003 59 125 2002 38 427 61 40 2002 38 2005 41 123 2000 42 2006 61 2003 59 2003 61 1500 59 353 2006 59 2003 61 2005 46 2003 59 2005 46 2003 61 1500 59 450 42 467 59 125 125 2007 59 2001 38 427 61 40 341 2001 60 2000 62 38 2008 41 59 2001 40 341 2001 60 2000 62 38 2008 41 59 439 58 2001 40 41 58 2007 40 1500 41 123 125 2001 38 427 61 40 341 2000 38 2009 41 123 2002 2010 40 418 2000 40 2009 41 41 59 2007 61 2010 59 450 42 467 59 125 427 2000 38 40 41 341 123 450 42 2007 46 2011 59 125 2000 42 427 38 40 41 123 450 2007 46 2012 59 125 125 59 
+100295,C++,"class NUMPYMultiDimensionalDataset : public GDALDataset
+{
+    PyArrayObject *psArray = nullptr;
+    std::unique_ptr<GDALDataset> poMEMDS{};
+
+    NUMPYMultiDimensionalDataset();
+    ~NUMPYMultiDimensionalDataset();
+
+public:
+    static GDALDataset *Open( PyArrayObject *psArray );
+
+    std::shared_ptr<GDALGroup> GetRootGroup() const override { return poMEMDS->GetRootGroup(); }
+};",0,334 2000 58 439 2001 123 2002 42 2003 61 425 59 2004 646 2005 60 2001 62 2006 123 125 59 2000 40 41 59 126 2000 40 41 59 439 58 457 2001 42 2007 40 2002 42 2003 41 59 2004 646 2008 60 2009 62 2010 40 41 341 431 123 450 2006 624 2010 40 41 59 125 125 59 
+98904,C++,"       class SWIG_Python_Thread_Block {
+         bool status;
+         PyGILState_STATE state;
+       public:
+         void end() { if (status) { PyGILState_Release(state); status = false;} }
+         SWIG_Python_Thread_Block() : status(true), state(PyGILState_Ensure()) {}
+         ~SWIG_Python_Thread_Block() { end(); }
+       };",0,334 2000 123 323 2001 59 2002 2003 59 439 58 492 2004 40 41 123 392 40 2001 41 123 2005 40 2003 41 59 2001 61 380 59 125 125 2000 40 41 58 2001 40 473 41 44 2003 40 2006 40 41 41 123 125 126 2000 40 41 123 2004 40 41 59 125 125 59 
+99055,C++,    RegisterMinidriver(WMS);,0,2000 40 2001 41 59 
+99819,C++,"class GTiffBitmapBand : public GTiffOddBitsBand
+{
+    friend class GTiffDataset;
+
+    GDALColorTable *m_poColorTable = nullptr;
+
+    CPL_DISALLOW_COPY_ASSIGN(GTiffBitmapBand)
+
+  public:
+
+                   GTiffBitmapBand( GTiffDataset *, int );
+    virtual       ~GTiffBitmapBand();
+
+    virtual GDALColorInterp GetColorInterpretation() override;
+    virtual GDALColorTable *GetColorTable() override;
+};",0,334 2000 58 439 2001 123 387 334 2002 59 2003 42 2004 61 425 59 2005 40 2000 41 439 58 2000 40 2002 42 44 404 41 59 491 126 2000 40 41 59 491 2006 2007 40 41 431 59 491 2003 42 2008 40 41 431 59 125 59 
+98833,C++,"class CPL_DLL OGRCoordinateTransformation
+{
+public:
+    virtual ~OGRCoordinateTransformation() {}
+
+    static void DestroyCT(OGRCoordinateTransformation* poCT);
+
+    // From CT_CoordinateTransformation
+
+    /** Fetch internal source coordinate system. */
+    virtual OGRSpatialReference *GetSourceCS() = 0;
+
+    /** Fetch internal target coordinate system. */
+    virtual OGRSpatialReference *GetTargetCS() = 0;
+
+    /** Whether the transformer will emit CPLError */
+    virtual bool GetEmitErrors() const { return false; }
+
+    /** Set if the transformer must emit CPLError */
+    virtual void SetEmitErrors(bool /*bEmitErrors*/) {}
+
+    // From CT_MathTransform
+
+    /**
+     * Transform points from source to destination space.
+     *
+     * This method is the same as the C function OCTTransformEx().
+     *
+     * @param nCount number of points to transform.
+     * @param x array of nCount X vertices, modified in place. Should not be NULL.
+     * @param y array of nCount Y vertices, modified in place. Should not be NULL.
+     * @param z array of nCount Z vertices, modified in place. Might be NULL.
+     * @param pabSuccess array of per-point flags set to TRUE if that point
+     * transforms, or FALSE if it does not. Might be NULL.
+     *
+     * @return TRUE if some or all points transform successfully, or FALSE if
+     * if none transform.
+     */
+    int Transform( int nCount,
+                   double *x, double *y, double *z = nullptr,
+                   int *pabSuccess = nullptr );
+
+    /**
+     * Transform points from source to destination space.
+     *
+     * This method is the same as the C function OCTTransform4D().
+     *
+     * @param nCount number of points to transform.
+     * @param x array of nCount X vertices, modified in place. Should not be NULL.
+     * @param y array of nCount Y vertices, modified in place. Should not be NULL.
+     * @param z array of nCount Z vertices, modified in place. Might be NULL.
+     * @param t array of nCount time values, modified in place. Might be NULL.
+     * @param pabSuccess array of per-point flags set to TRUE if that point
+     * transforms, or FALSE if it does not. Might be NULL.
+     *
+     * @return TRUE if some or all points transform successfully, or FALSE if
+     * if none transform.
+     */
+    virtual int Transform( int nCount,
+                           double *x, double *y,
+                           double *z, double *t,
+                           int *pabSuccess ) = 0;
+
+    /**
+     * Transform points from source to destination space.
+     *
+     * This method is the same as the C function OCTTransform4DWithErrorCodes().
+     *
+     * @param nCount number of points to transform.
+     * @param x array of nCount X vertices, modified in place. Should not be NULL.
+     * @param y array of nCount Y vertices, modified in place. Should not be NULL.
+     * @param z array of nCount Z vertices, modified in place. Might be NULL.
+     * @param t array of nCount time values, modified in place. Might be NULL.
+     * @param panErrorCodes Output array of nCount value that will be set to 0 for
+     *                      success, or a non-zero value for failure. Refer to
+     *                      PROJ 8 public error codes. Might be NULL
+     * @return TRUE if some or all points transform successfully, or FALSE if
+     * if none transform.
+     * @since GDAL 3.3, and PROJ 8 to be able to use PROJ public error codes
+     */
+    virtual int TransformWithErrorCodes( int nCount,
+                                         double *x, double *y,
+                                         double *z, double *t,
+                                         int *panErrorCodes );
+
+    /** \brief Transform boundary.
+     *
+     * This method is the same as the C function OCTTransformBounds().
+     *
+     * Transform boundary densifying the edges to account for nonlinear
+     * transformations along these edges and extracting the outermost bounds.
+     *
+     * If the destination CRS is geographic, the first axis is longitude,
+     * and xmax < xmin then the bounds crossed the antimeridian.
+     * In this scenario there are two polygons, one on each side of the antimeridian.
+     * The first polygon should be constructed with (xmin, ymin, 180, ymax)
+     * and the second with (-180, ymin, xmax, ymax).
+     *
+     * If the destination CRS is geographic, the first axis is latitude,
+     * and ymax < ymin then the bounds crossed the antimeridian.
+     * In this scenario there are two polygons, one on each side of the antimeridian.
+     * The first polygon should be constructed with (ymin, xmin, ymax, 180)
+     * and the second with (ymin, -180, ymax, xmax).
+     *
+     * @param xmin Minimum bounding coordinate of the first axis in source CRS.
+     * @param ymin Minimum bounding coordinate of the second axis in source CRS.
+     * @param xmax Maximum bounding coordinate of the first axis in source CRS.
+     * @param ymax Maximum bounding coordinate of the second axis in source CRS.
+     * @param out_xmin Minimum bounding coordinate of the first axis in target CRS
+     * @param out_ymin Minimum bounding coordinate of the second axis in target CRS.
+     * @param out_xmax Maximum bounding coordinate of the first axis in target CRS.
+     * @param out_ymax Maximum bounding coordinate of the second axis in target CRS.
+     * @param densify_pts Recommended to use 21. This is the number of points
+     *     to use to densify the bounding polygon in the transformation.
+     * @return TRUE if successful. FALSE if failures encountered.
+     * @since 3.4
+     */
+    virtual int TransformBounds( const double xmin,
+                                 const double ymin,
+                                 const double xmax,
+                                 const double ymax,
+                                 double* out_xmin,
+                                 double* out_ymin,
+                                 double* out_xmax,
+                                 double* out_ymax,
+                                 const int densify_pts )
+    {
+        (void)xmin;
+        (void)xmax;
+        (void)ymin;
+        (void)ymax;
+        (void)densify_pts;
+        *out_xmin = HUGE_VAL;
+        *out_ymin = HUGE_VAL;
+        *out_xmax = HUGE_VAL;
+        *out_ymax = HUGE_VAL;
+        CPLError(CE_Failure, CPLE_AppDefined, ""TransformBounds not implemented."");
+        return false;
+    }
+
+    /** Convert a OGRCoordinateTransformation* to a OGRCoordinateTransformationH.
+     * @since GDAL 2.3
+     */
+    static inline OGRCoordinateTransformationH ToHandle(OGRCoordinateTransformation* poCT)
+        { return reinterpret_cast<OGRCoordinateTransformationH>(poCT); }
+
+    /** Convert a OGRCoordinateTransformationH to a OGRCoordinateTransformation*.
+     * @since GDAL 2.3
+     */
+    static inline OGRCoordinateTransformation* FromHandle(OGRCoordinateTransformationH hCT)
+        { return reinterpret_cast<OGRCoordinateTransformation*>(hCT); }
+
+    /** Clone
+     * @since GDAL 3.1
+     */
+    virtual OGRCoordinateTransformation* Clone() const = 0;
+
+    /** Return a coordinate transformation that performs the inverse transformation
+     * of the current one.
+     *
+     * In some cases, this is not possible, and this method might return nullptr,
+     * or fail to perform the transformations.
+     *
+     * @return the new coordinate transformation, or nullptr in case of error.
+     * @since GDAL 3.3
+     */
+    virtual OGRCoordinateTransformation* GetInverse() const = 0;
+};",0,334 2000 2001 123 439 58 491 126 2001 40 41 123 125 457 492 2002 40 2001 42 2003 41 59 621 618 491 2004 42 2005 40 41 61 1500 59 618 491 2004 42 2006 40 41 61 1500 59 618 491 323 2007 40 41 341 123 450 380 59 125 618 491 492 2008 40 323 604 41 123 125 621 618 404 2009 40 404 2010 44 356 42 2011 44 356 42 2012 44 356 42 2013 61 425 44 404 42 2014 61 425 41 59 618 491 404 2009 40 404 2010 44 356 42 2011 44 356 42 2012 44 356 42 2013 44 356 42 2015 44 404 42 2014 41 61 1500 59 618 491 404 2016 40 404 2010 44 356 42 2011 44 356 42 2012 44 356 42 2013 44 356 42 2015 44 404 42 2017 41 59 618 491 404 2018 40 341 356 2019 44 341 356 2020 44 341 356 2021 44 341 356 2022 44 356 42 2023 44 356 42 2024 44 356 42 2025 44 356 42 2026 44 341 404 2027 41 123 40 492 41 2019 59 40 492 41 2021 59 40 492 41 2020 59 40 492 41 2022 59 40 492 41 2027 59 42 2023 61 2028 59 42 2024 61 2028 59 42 2025 61 2028 59 42 2026 61 2028 59 2029 40 2030 44 2031 44 648 41 59 450 380 59 125 618 457 401 2032 2033 40 2001 42 2003 41 123 450 445 60 2032 62 40 2003 41 59 125 618 457 401 2001 42 2034 40 2032 2035 41 123 450 445 60 2001 42 62 40 2035 41 59 125 618 491 2001 42 2036 40 41 341 61 1500 59 618 491 2001 42 2037 40 41 341 61 1500 59 125 59 
+99408,C++,"class CutlineTransformer : public OGRCoordinateTransformation
+{
+public:
+    void         *hSrcImageTransformer = nullptr;
+
+    explicit CutlineTransformer(void* hTransformArg): hSrcImageTransformer(hTransformArg) {}
+
+    virtual OGRSpatialReference *GetSourceCS() override { return nullptr; }
+    virtual OGRSpatialReference *GetTargetCS() override { return nullptr; }
+
+    virtual ~CutlineTransformer()
+    {
+        GDALDestroyTransformer(hSrcImageTransformer);
+    }
+
+    virtual int Transform( int nCount,
+                           double *x, double *y, double *z, double* /* t */,
+                           int *pabSuccess ) override {
+        return GDALGenImgProjTransform( hSrcImageTransformer, TRUE,
+                                        nCount, x, y, z, pabSuccess );
+    }
+
+    virtual OGRCoordinateTransformation *Clone() const override
+    {
+        return new CutlineTransformer(
+            GDALCloneTransformer(hSrcImageTransformer));
+    }
+
+    virtual OGRCoordinateTransformation* GetInverse() const override { return nullptr; }
+};",0,334 2000 58 439 2001 123 439 58 492 42 2002 61 425 59 376 2000 40 492 42 2003 41 58 2002 40 2003 41 123 125 491 2004 42 2005 40 41 431 123 450 425 59 125 491 2004 42 2006 40 41 431 123 450 425 59 125 491 126 2000 40 41 123 2007 40 2002 41 59 125 491 404 2008 40 404 2009 44 356 42 2010 44 356 42 2011 44 356 42 2012 44 356 42 604 44 404 42 2013 41 431 123 450 2014 40 2002 44 2015 44 2009 44 2010 44 2011 44 2012 44 2013 41 59 125 491 2001 42 2016 40 41 341 431 123 450 418 2000 40 2017 40 2002 41 41 59 125 491 2001 42 2018 40 41 341 431 123 450 425 59 125 125 59 
+99431,C++,"class GMLASTopElementParser : public DefaultHandler
+{
+            std::vector<PairURIFilename>  m_aoFilenames;
+            int         m_nStartElementCounter;
+            bool        m_bFinish;
+            bool        m_bFoundSWE;
+            std::map<CPLString,CPLString> m_oMapDocNSURIToPrefix;
+
+    public:
+                        GMLASTopElementParser();
+
+                        virtual ~GMLASTopElementParser() {}
+
+        void Parse(const CPLString& osFilename, VSILFILE* fp);
+
+        const std::vector<PairURIFilename>& GetXSDs() const
+                                            { return m_aoFilenames; }
+        bool GetSWE() const { return m_bFoundSWE; }
+        const std::map<CPLString,CPLString>& GetMapDocNSURIToPrefix() const
+                                            { return m_oMapDocNSURIToPrefix; }
+
+        virtual void startElement(
+            const   XMLCh* const    uri,
+            const   XMLCh* const    localname,
+            const   XMLCh* const    qname,
+            const   Attributes& attrs
+        ) override;
+};",0,334 2000 58 439 2001 123 2002 646 2003 60 2004 62 2005 59 404 2006 59 323 2007 59 323 2008 59 2002 646 2009 60 2010 44 2010 62 2011 59 439 58 2000 40 41 59 491 126 2000 40 41 123 125 492 2012 40 341 2010 38 2013 44 2014 42 2015 41 59 341 2002 646 2003 60 2004 62 38 2016 40 41 341 123 450 2005 59 125 323 2017 40 41 341 123 450 2008 59 125 341 2002 646 2009 60 2010 44 2010 62 38 2018 40 41 341 123 450 2011 59 125 491 492 2019 40 341 2020 42 341 2021 44 341 2020 42 341 2022 44 341 2020 42 341 2023 44 341 2024 38 2025 41 431 59 125 59 
+117496,C++,"class DistributedTests : public testing::Test {
+ protected:
+  void SetUp() override {
+    platformSetup();
+    registryAndPluginInit();
+    initDatabasePluginForTesting();
+  }
+
+ protected:
+  void TearDown() override {
+    if (server_started_) {
+      TLSServerRunner::stop();
+      TLSServerRunner::unsetClientConfig();
+      clearNodeKey();
+
+      Flag::updateValue(""distributed_tls_read_endpoint"",
+                        distributed_tls_read_endpoint_);
+      Flag::updateValue(""distributed_tls_write_endpoint"",
+                        distributed_tls_write_endpoint_);
+    }
+  }
+
+  bool startServer() {
+    if (!TLSServerRunner::start()) {
+      return false;
+    }
+
+    TLSServerRunner::setClientConfig();
+    clearNodeKey();
+
+    distributed_tls_read_endpoint_ =
+        Flag::getValue(""distributed_tls_read_endpoint"");
+    Flag::updateValue(""distributed_tls_read_endpoint"", ""/distributed_read"");
+
+    distributed_tls_write_endpoint_ =
+        Flag::getValue(""distributed_tls_write_endpoint"");
+    Flag::updateValue(""distributed_tls_write_endpoint"", ""/distributed_write"");
+
+    Registry::get().setActive(""distributed"", ""tls"");
+    server_started_ = true;
+    return true;
+  }
+
+ protected:
+  std::string distributed_tls_read_endpoint_;
+  std::string distributed_tls_write_endpoint_;
+
+ private:
+  bool server_started_{false};
+};",0,334 2000 58 439 2001 646 2002 123 438 58 492 2003 40 41 431 123 2004 40 41 59 2005 40 41 59 2006 40 41 59 125 438 58 492 2007 40 41 431 123 392 40 2008 41 123 2009 646 2010 40 41 59 2009 646 2011 40 41 59 2012 40 41 59 2013 646 2014 40 648 44 2015 41 59 2013 646 2014 40 648 44 2016 41 59 125 125 323 2017 40 41 123 392 40 33 2018 646 2019 40 41 41 123 450 380 59 125 2018 646 2020 40 41 59 2021 40 41 59 2022 61 2023 646 2024 40 648 41 59 2023 646 2025 40 648 44 648 41 59 2026 61 2023 646 2024 40 648 41 59 2023 646 2025 40 648 44 648 41 59 2027 646 2028 40 41 46 2029 40 648 44 648 41 59 2030 61 473 59 450 473 59 125 438 58 2031 646 461 2032 59 2031 646 461 2033 59 437 58 323 2034 123 380 125 59 125 59 
+99418,C++,"class TABMAPObjNone final : public TABMAPObjHdr
+{
+  public:
+
+    TABMAPObjNone() {}
+    virtual ~TABMAPObjNone() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override {return 0;}
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override {return 0;}
+};",0,334 2000 381 58 439 2001 123 439 58 2000 40 41 123 125 491 126 2000 40 41 123 125 491 404 2002 40 2003 42 41 431 123 450 1500 59 125 621 491 404 2004 40 2003 42 41 431 123 450 1500 59 125 125 59 
+99653,C++,"class ITABFeatureFont
+{
+  protected:
+    int         m_nFontDefIndex;
+    TABFontDef  m_sFontDef;
+  public:
+    ITABFeatureFont();
+    virtual ~ITABFeatureFont() {}
+    int         GetFontDefIndex() const {return m_nFontDefIndex;}
+    TABFontDef *GetFontDefRef() {return &m_sFontDef;}
+    const TABFontDef *GetFontDefRef() const {return &m_sFontDef;}
+
+    const char *GetFontNameRef() const {return m_sFontDef.szFontName;}
+
+    void        SetFontName(const char *pszName);
+
+    void        DumpFontDef(FILE *fpOut = nullptr);
+};",0,334 2000 123 438 58 404 2001 59 2002 2003 59 439 58 2000 40 41 59 491 126 2000 40 41 123 125 404 2004 40 41 341 123 450 2001 59 125 2002 42 2005 40 41 123 450 38 2003 59 125 341 2002 42 2005 40 41 341 123 450 38 2003 59 125 341 330 42 2006 40 41 341 123 450 2003 46 2007 59 125 492 2008 40 341 330 42 2009 41 59 492 2010 40 2011 42 2012 61 425 41 59 125 59 
+99659,C++,"class TABDebugFeature final : public TABFeature
+{
+  private:
+    GByte       m_abyBuf[512];
+    int         m_nSize;
+    int         m_nCoordDataPtr;  // -1 if none
+    int         m_nCoordDataSize;
+
+  public:
+    explicit TABDebugFeature(OGRFeatureDefn *poDefnIn);
+    virtual ~TABDebugFeature();
+
+    virtual TABFeatureClass GetFeatureClass() override { return TABFCDebugFeature; }
+
+    virtual int ReadGeometryFromMAPFile(TABMAPFile *poMapFile, TABMAPObjHdr *,
+                                        GBool bCoordDataOnly=FALSE,
+                                        TABMAPCoordBlock **ppoCoordBlock=nullptr) override;
+    virtual int WriteGeometryToMAPFile(TABMAPFile *poMapFile, TABMAPObjHdr *,
+                                       GBool bCoordDataOnly=FALSE,
+                                       TABMAPCoordBlock **ppoCoordBlock=nullptr) override;
+
+    virtual int ReadGeometryFromMIFFile(MIDDATAFile *fp) override;
+    virtual int WriteGeometryToMIFFile(MIDDATAFile *fp) override;
+
+    virtual void DumpMIF(FILE *fpOut = nullptr) override;
+};",0,334 2000 381 58 439 2001 123 437 58 2002 2003 91 1504 93 59 404 2004 59 404 2005 59 621 404 2006 59 439 58 376 2000 40 2007 42 2008 41 59 491 126 2000 40 41 59 491 2009 2010 40 41 431 123 450 2011 59 125 491 404 2012 40 2013 42 2014 44 2015 42 44 2016 2017 61 2018 44 2019 42 42 2020 61 425 41 431 59 491 404 2021 40 2013 42 2014 44 2015 42 44 2016 2017 61 2018 44 2019 42 42 2020 61 425 41 431 59 491 404 2022 40 2023 42 2024 41 431 59 491 404 2025 40 2023 42 2024 41 431 59 491 492 2026 40 2027 42 2028 61 425 41 431 59 125 59 
+99663,C++,"class TABPoint: public TABFeature,
+                public ITABFeatureSymbol
+{
+    CPL_DISALLOW_COPY_ASSIGN(TABPoint)
+
+  public:
+    explicit TABPoint(OGRFeatureDefn *poDefnIn);
+    virtual ~TABPoint();
+
+    virtual TABFeatureClass GetFeatureClass() override { return TABFCPoint; }
+    virtual TABGeomType     ValidateMapInfoType(TABMAPFile *poMapFile = nullptr) override;
+
+    virtual TABFeature *CloneTABFeature(OGRFeatureDefn *poNewDefn = nullptr ) override;
+
+    double      GetX();
+    double      GetY();
+
+    virtual int ReadGeometryFromMAPFile(TABMAPFile *poMapFile, TABMAPObjHdr *,
+                                        GBool bCoordDataOnly=FALSE,
+                                        TABMAPCoordBlock **ppoCoordBlock=nullptr) override;
+    virtual int WriteGeometryToMAPFile(TABMAPFile *poMapFile, TABMAPObjHdr *,
+                                       GBool bCoordDataOnly=FALSE,
+                                       TABMAPCoordBlock **ppoCoordBlock=nullptr) override;
+
+    virtual int ReadGeometryFromMIFFile(MIDDATAFile *fp) override;
+    virtual int WriteGeometryToMIFFile(MIDDATAFile *fp) override;
+
+    virtual const char *GetStyleString() const override;
+
+    virtual void DumpMIF(FILE *fpOut = nullptr) override;
+};",0,334 2000 58 439 2001 44 439 2002 123 2003 40 2000 41 439 58 376 2000 40 2004 42 2005 41 59 491 126 2000 40 41 59 491 2006 2007 40 41 431 123 450 2008 59 125 491 2009 2010 40 2011 42 2012 61 425 41 431 59 491 2001 42 2013 40 2004 42 2014 61 425 41 431 59 356 2015 40 41 59 356 2016 40 41 59 491 404 2017 40 2011 42 2012 44 2018 42 44 2019 2020 61 2021 44 2022 42 42 2023 61 425 41 431 59 491 404 2024 40 2011 42 2012 44 2018 42 44 2019 2020 61 2021 44 2022 42 42 2023 61 425 41 431 59 491 404 2025 40 2026 42 2027 41 431 59 491 404 2028 40 2026 42 2027 41 431 59 491 341 330 42 2029 40 41 341 431 59 491 492 2030 40 2031 42 2032 61 425 41 431 59 125 59 
+98754,C++,"class ISCERasterBand final: public RawRasterBand
+{
+        CPL_DISALLOW_COPY_ASSIGN(ISCERasterBand)
+
+    public:
+                ISCERasterBand( GDALDataset *poDS, int nBand, VSILFILE *fpRaw,
+                                  vsi_l_offset nImgOffset, int nPixelOffset,
+                                  int nLineOffset,
+                                  GDALDataType eDataType, int bNativeOrder );
+};",0,334 2000 381 58 439 2001 123 2002 40 2000 41 439 58 2000 40 2003 42 2004 44 404 2005 44 2006 42 2007 44 2008 2009 44 404 2010 44 404 2011 44 2012 2013 44 404 2014 41 59 125 59 
+102122,C++,"    class Health
+    {
+    public:
+        struct Item
+        {
+            QPointer<Group> group;
+            QPointer<Entry> entry;
+            QSharedPointer<PasswordHealth> health;
+            bool exclude = false;
+
+            Item(Group* g, Entry* e, QSharedPointer<PasswordHealth> h)
+                : group(g)
+                , entry(e)
+                , health(h)
+                , exclude(e->excludeFromReports())
+            {
+            }
+
+            bool operator<(const Item& rhs) const
+            {
+                return health->score() < rhs.health->score();
+            }
+        };
+
+        explicit Health(QSharedPointer<Database>);
+
+        const QList<QSharedPointer<Item>>& items() const
+        {
+            return m_items;
+        }
+
+        bool anyKnownBad() const
+        {
+            return m_anyKnownBad;
+        }
+
+    private:
+        QSharedPointer<Database> m_db;
+        HealthChecker m_checker;
+        QList<QSharedPointer<Item>> m_items;
+        bool m_anyKnownBad = false;
+    };",0,334 2000 123 439 58 462 2001 123 2002 60 2003 62 2004 59 2002 60 2005 62 2006 59 2007 60 2008 62 2009 59 323 2010 61 380 59 2001 40 2003 42 2011 44 2005 42 2012 44 2007 60 2008 62 2013 41 58 2004 40 2011 41 44 2006 40 2012 41 44 2009 40 2013 41 44 2010 40 2012 624 2014 40 41 41 123 125 323 427 60 40 341 2001 38 2015 41 341 123 450 2009 624 2016 40 41 60 2015 46 2009 624 2016 40 41 59 125 125 59 376 2000 40 2017 60 2018 62 41 59 341 2019 60 2017 60 2001 640 38 2020 40 41 341 123 450 2021 59 125 323 2022 40 41 341 123 450 2023 59 125 437 58 2017 60 2018 62 2024 59 2025 2026 59 2019 60 2017 60 2001 640 2027 59 323 2028 61 380 59 125 59 
+99260,C++,"class TABBinBlockManager
+{
+    CPL_DISALLOW_COPY_ASSIGN(TABBinBlockManager)
+
+  protected:
+    int         m_nBlockSize;
+    GInt32      m_nLastAllocatedBlock;
+    TABBlockRef *m_psGarbageBlocksFirst;
+    TABBlockRef *m_psGarbageBlocksLast;
+    char        m_szName[32]; /* for debug purposes */
+
+  public:
+    TABBinBlockManager();
+    ~TABBinBlockManager();
+
+    void        SetBlockSize(int nBlockSize);
+    int         GetBlockSize() const { return m_nBlockSize; }
+
+    GInt32      AllocNewBlock(const char* pszReason = """");
+    void        Reset();
+    void        SetLastPtr(int nBlockPtr) {m_nLastAllocatedBlock=nBlockPtr; }
+
+    void        PushGarbageBlockAsFirst(GInt32 nBlockPtr);
+    void        PushGarbageBlockAsLast(GInt32 nBlockPtr);
+    GInt32      GetFirstGarbageBlock();
+    GInt32      PopGarbageBlock();
+
+    void        SetName(const char* pszName);
+};",0,334 2000 123 2001 40 2000 41 438 58 404 2002 59 2003 2004 59 2005 42 2006 59 2005 42 2007 59 330 2008 91 1503 93 59 604 439 58 2000 40 41 59 126 2000 40 41 59 492 2009 40 404 2010 41 59 404 2011 40 41 341 123 450 2002 59 125 2003 2012 40 341 330 42 2013 61 648 41 59 492 2014 40 41 59 492 2015 40 404 2016 41 123 2004 61 2016 59 125 492 2017 40 2003 2016 41 59 492 2018 40 2003 2016 41 59 2003 2019 40 41 59 2003 2020 40 41 59 492 2021 40 341 330 42 2022 41 59 125 59 
+99422,C++,"class TABMAPObjText final : public TABMAPObjHdrWithCoord
+{
+  public:
+    /* String and its len stored in the nCoordPtr and nCoordSize */
+
+    GInt16      m_nTextAlignment;
+    GInt32      m_nAngle;
+    GInt16      m_nFontStyle;
+
+    GByte       m_nFGColorR;
+    GByte       m_nFGColorG;
+    GByte       m_nFGColorB;
+    GByte       m_nBGColorR;
+    GByte       m_nBGColorG;
+    GByte       m_nBGColorB;
+
+    GInt32      m_nLineEndX;
+    GInt32      m_nLineEndY;
+
+    GInt32      m_nHeight;
+    GByte       m_nFontId;
+
+    GByte       m_nPenId;
+
+    TABMAPObjText():
+        m_nTextAlignment(0),
+        m_nAngle(0),
+        m_nFontStyle(0),
+        m_nFGColorR(0),
+        m_nFGColorG(0),
+        m_nFGColorB(0),
+        m_nBGColorR(0),
+        m_nBGColorG(0),
+        m_nBGColorB(0),
+        m_nLineEndX(0),
+        m_nLineEndY(0),
+        m_nHeight(0),
+        m_nFontId(0),
+        m_nPenId(0)
+        {}
+    virtual ~TABMAPObjText() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override;
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override;
+};",0,334 2000 381 58 439 2001 123 439 58 604 2002 2003 59 2004 2005 59 2002 2006 59 2007 2008 59 2007 2009 59 2007 2010 59 2007 2011 59 2007 2012 59 2007 2013 59 2004 2014 59 2004 2015 59 2004 2016 59 2007 2017 59 2007 2018 59 2000 40 41 58 2003 40 1500 41 44 2005 40 1500 41 44 2006 40 1500 41 44 2008 40 1500 41 44 2009 40 1500 41 44 2010 40 1500 41 44 2011 40 1500 41 44 2012 40 1500 41 44 2013 40 1500 41 44 2014 40 1500 41 44 2015 40 1500 41 44 2016 40 1500 41 44 2017 40 1500 41 44 2018 40 1500 41 123 125 491 126 2000 40 41 123 125 491 404 2019 40 2020 42 41 431 59 621 491 404 2021 40 2020 42 41 431 59 125 59 
+100081,C++,"class OGRPGNoResetResultLayer final: public OGRPGLayer
+{
+  public:
+                        OGRPGNoResetResultLayer(OGRPGDataSource *poDSIn,
+                                                PGresult *hResultIn);
+
+    virtual             ~OGRPGNoResetResultLayer();
+
+    virtual void        ResetReading() override;
+
+    virtual int         TestCapability( const char * ) override { return FALSE; }
+
+    virtual OGRFeature *GetNextFeature() override;
+
+    virtual CPLString   GetFromClauseForGetExtent() override { CPLAssert(false); return """"; }
+    virtual void        ResolveSRID(const OGRPGGeomFieldDefn* poGFldDefn) override { poGFldDefn->nSRSId = -1; }
+};",0,334 2000 381 58 439 2001 123 439 58 2000 40 2002 42 2003 44 2004 42 2005 41 59 491 126 2000 40 41 59 491 492 2006 40 41 431 59 491 404 2007 40 341 330 42 41 431 123 450 2008 59 125 491 2009 42 2010 40 41 431 59 491 2011 2012 40 41 431 123 2013 40 380 41 59 450 648 59 125 491 492 2014 40 341 2015 42 2016 41 431 123 2016 624 2017 61 45 1501 59 125 125 59 
+98906,C++,"  class SwigPtr_PyObject {
+  protected:
+    PyObject *_obj;
+
+  public:
+    SwigPtr_PyObject() :_obj(0)
+    {
+    }
+
+    SwigPtr_PyObject(const SwigPtr_PyObject& item) : _obj(item._obj)
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XINCREF(_obj);      
+      SWIG_PYTHON_THREAD_END_BLOCK;
+    }
+    
+    SwigPtr_PyObject(PyObject *obj, bool initial_ref = true) :_obj(obj)
+    {
+      if (initial_ref) {
+        SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+        Py_XINCREF(_obj);
+        SWIG_PYTHON_THREAD_END_BLOCK;
+      }
+    }
+    
+    SwigPtr_PyObject & operator=(const SwigPtr_PyObject& item) 
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XINCREF(item._obj);
+      Py_XDECREF(_obj);
+      _obj = item._obj;
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return *this;      
+    }
+    
+    ~SwigPtr_PyObject() 
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      Py_XDECREF(_obj);
+      SWIG_PYTHON_THREAD_END_BLOCK;
+    }
+    
+    operator PyObject *() const
+    {
+      return _obj;
+    }
+
+    PyObject *operator->() const
+    {
+      return _obj;
+    }
+  };",0,334 2000 123 438 58 2001 42 2002 59 439 58 2000 40 41 58 2002 40 1500 41 123 125 2000 40 341 2000 38 2003 41 58 2002 40 2003 46 2002 41 123 2004 59 2005 40 2002 41 59 2006 59 125 2000 40 2001 42 2007 44 323 2008 61 473 41 58 2002 40 2007 41 123 392 40 2008 41 123 2009 59 2010 40 2002 41 59 2011 59 125 125 2000 38 427 61 40 341 2000 38 2003 41 123 2012 59 2013 40 2003 46 2002 41 59 2014 40 2002 41 59 2002 61 2003 46 2002 59 2015 59 450 42 467 59 125 126 2000 40 41 123 2016 59 2017 40 2002 41 59 2018 59 125 427 2001 42 40 41 341 123 450 2002 59 125 2001 42 427 624 40 41 341 123 450 2002 59 125 125 59 
+100050,C++,"class GDALWarpCoordRescaler: public OGRCoordinateTransformation
+{
+    double m_dfRatioX;
+    double m_dfRatioY;
+
+public:
+    GDALWarpCoordRescaler(double dfRatioX, double dfRatioY) :
+        m_dfRatioX(dfRatioX), m_dfRatioY(dfRatioY) {}
+
+    virtual ~GDALWarpCoordRescaler() {}
+
+    virtual OGRSpatialReference *GetSourceCS() override { return nullptr; }
+
+    virtual OGRSpatialReference *GetTargetCS() override { return nullptr; }
+
+
+    virtual int Transform( int nCount, double *x, double *y,
+                           double * /*z*/, double * /*t*/,
+                           int *pabSuccess ) override
+    {
+        for( int i = 0; i < nCount; i++ )
+        {
+            x[i] *= m_dfRatioX;
+            y[i] *= m_dfRatioY;
+            if( pabSuccess )
+                pabSuccess[i] = TRUE;
+        }
+        return TRUE;
+    }
+
+    virtual OGRCoordinateTransformation* Clone() const override {
+        return new GDALWarpCoordRescaler(*this); }
+
+    virtual OGRCoordinateTransformation* GetInverse() const override { return nullptr; }
+};",0,334 2000 58 439 2001 123 356 2002 59 356 2003 59 439 58 2000 40 356 2004 44 356 2005 41 58 2002 40 2004 41 44 2003 40 2005 41 123 125 491 126 2000 40 41 123 125 491 2006 42 2007 40 41 431 123 450 425 59 125 491 2006 42 2008 40 41 431 123 450 425 59 125 491 404 2009 40 404 2010 44 356 42 2011 44 356 42 2012 44 356 42 604 44 356 42 604 44 404 42 2013 41 431 123 385 40 404 2014 61 1500 59 2014 60 2010 59 2014 637 41 123 2011 91 2014 93 649 2002 59 2012 91 2014 93 649 2003 59 392 40 2013 41 2013 91 2014 93 61 2015 59 125 450 2016 59 125 491 2001 42 2017 40 41 341 431 123 450 418 2000 40 42 467 41 59 125 491 2001 42 2018 40 41 341 431 123 450 425 59 125 125 59 
+98649,C++,"class VRTFuncSource final: public VRTSource
+{
+    CPL_DISALLOW_COPY_ASSIGN(VRTFuncSource)
+
+public:
+            VRTFuncSource();
+    virtual ~VRTFuncSource();
+
+    virtual CPLErr  XMLInit( CPLXMLNode *, const char *,
+                             std::map<CPLString, GDALDataset*>& ) override { return CE_Failure; }
+    virtual CPLXMLNode *SerializeToXML( const char *pszVRTPath ) override;
+
+    virtual CPLErr  RasterIO( GDALDataType eBandDataType,
+                              int nXOff, int nYOff, int nXSize, int nYSize,
+                              void *pData, int nBufXSize, int nBufYSize,
+                              GDALDataType eBufType,
+                              GSpacing nPixelSpace, GSpacing nLineSpace,
+                              GDALRasterIOExtraArg* psExtraArg ) override;
+
+    virtual double GetMinimum( int nXSize, int nYSize, int *pbSuccess ) override;
+    virtual double GetMaximum( int nXSize, int nYSize, int *pbSuccess ) override;
+    virtual CPLErr ComputeRasterMinMax( int nXSize, int nYSize, int bApproxOK,
+                                        double* adfMinMax ) override;
+    virtual CPLErr ComputeStatistics( int nXSize, int nYSize,
+                                      int bApproxOK,
+                                      double *pdfMin, double *pdfMax,
+                                      double *pdfMean, double *pdfStdDev,
+                                      GDALProgressFunc pfnProgress,
+                                      void *pProgressData ) override;
+    virtual CPLErr  GetHistogram( int nXSize, int nYSize,
+                                  double dfMin, double dfMax,
+                                  int nBuckets, GUIntBig * panHistogram,
+                                  int bIncludeOutOfRange, int bApproxOK,
+                                  GDALProgressFunc pfnProgress,
+                                  void *pProgressData ) override;
+
+    VRTImageReadFunc    pfnReadFunc;
+    void               *pCBData;
+    GDALDataType        eType;
+
+    float               fNoDataValue;
+};",0,334 2000 381 58 439 2001 123 2002 40 2000 41 439 58 2000 40 41 59 491 126 2000 40 41 59 491 2003 2004 40 2005 42 44 341 330 42 44 2006 646 2007 60 2008 44 2009 42 62 38 41 431 123 450 2010 59 125 491 2005 42 2011 40 341 330 42 2012 41 431 59 491 2003 2013 40 2014 2015 44 404 2016 44 404 2017 44 404 2018 44 404 2019 44 492 42 2020 44 404 2021 44 404 2022 44 2014 2023 44 2024 2025 44 2024 2026 44 2027 42 2028 41 431 59 491 356 2029 40 404 2018 44 404 2019 44 404 42 2030 41 431 59 491 356 2031 40 404 2018 44 404 2019 44 404 42 2030 41 431 59 491 2003 2032 40 404 2018 44 404 2019 44 404 2033 44 356 42 2034 41 431 59 491 2003 2035 40 404 2018 44 404 2019 44 404 2033 44 356 42 2036 44 356 42 2037 44 356 42 2038 44 356 42 2039 44 2040 2041 44 492 42 2042 41 431 59 491 2003 2043 40 404 2018 44 404 2019 44 356 2044 44 356 2045 44 404 2046 44 2047 42 2048 44 404 2049 44 404 2033 44 2040 2041 44 492 42 2042 41 431 59 2050 2051 59 492 42 2052 59 2014 2053 59 384 2054 59 125 59 
+98647,C++,"class VRTDriver final: public GDALDriver
+{
+    CPL_DISALLOW_COPY_ASSIGN(VRTDriver)
+
+  public:
+                 VRTDriver();
+    virtual ~VRTDriver();
+
+    char         **papszSourceParsers;
+
+    virtual char      **GetMetadataDomainList() override;
+    virtual char      **GetMetadata( const char * pszDomain = """" ) override;
+    virtual CPLErr      SetMetadata( char ** papszMetadata,
+                                     const char * pszDomain = """" ) override;
+
+    VRTSource   *ParseSource( CPLXMLNode *psSrc, const char *pszVRTPath,
+                              std::map<CPLString, GDALDataset*>& oMapSharedSources );
+    void         AddSourceParser( const char *pszElementName,
+                                  VRTSourceParser pfnParser );
+};",0,334 2000 381 58 439 2001 123 2002 40 2000 41 439 58 2000 40 41 59 491 126 2000 40 41 59 330 42 42 2003 59 491 330 42 42 2004 40 41 431 59 491 330 42 42 2005 40 341 330 42 2006 61 648 41 431 59 491 2007 2008 40 330 42 42 2009 44 341 330 42 2006 61 648 41 431 59 2010 42 2011 40 2012 42 2013 44 341 330 42 2014 44 2015 646 2016 60 2017 44 2018 42 62 38 2019 41 59 492 2020 40 341 330 42 2021 44 2022 2023 41 59 125 59 
+98663,C++,"class CPL_DLL VRTSource
+{
+public:
+    virtual ~VRTSource();
+
+    virtual CPLErr  RasterIO( GDALDataType eBandDataType,
+                              int nXOff, int nYOff, int nXSize, int nYSize,
+                              void *pData, int nBufXSize, int nBufYSize,
+                              GDALDataType eBufType,
+                              GSpacing nPixelSpace, GSpacing nLineSpace,
+                              GDALRasterIOExtraArg* psExtraArg ) = 0;
+
+    virtual double GetMinimum( int nXSize, int nYSize, int *pbSuccess ) = 0;
+    virtual double GetMaximum( int nXSize, int nYSize, int *pbSuccess ) = 0;
+    virtual CPLErr ComputeRasterMinMax( int nXSize, int nYSize, int bApproxOK,
+                                        double* adfMinMax ) = 0;
+    virtual CPLErr ComputeStatistics( int nXSize, int nYSize,
+                                      int bApproxOK,
+                                      double *pdfMin, double *pdfMax,
+                                      double *pdfMean, double *pdfStdDev,
+                                      GDALProgressFunc pfnProgress,
+                                      void *pProgressData ) = 0;
+    virtual CPLErr  GetHistogram( int nXSize, int nYSize,
+                                  double dfMin, double dfMax,
+                                  int nBuckets, GUIntBig * panHistogram,
+                                  int bIncludeOutOfRange, int bApproxOK,
+                                  GDALProgressFunc pfnProgress,
+                                  void *pProgressData ) = 0;
+
+    virtual CPLErr  XMLInit( CPLXMLNode *psTree, const char *,
+                             std::map<CPLString, GDALDataset*>& ) = 0;
+    virtual CPLXMLNode *SerializeToXML( const char *pszVRTPath ) = 0;
+
+    virtual void   GetFileList(char*** ppapszFileList, int *pnSize,
+                               int *pnMaxSize, CPLHashSet* hSetFiles);
+
+    virtual int    IsSimpleSource() { return FALSE; }
+    virtual CPLErr FlushCache(bool /*bAtClosing*/) { return CE_None; }
+};",0,334 2000 2001 123 439 58 491 126 2001 40 41 59 491 2002 2003 40 2004 2005 44 404 2006 44 404 2007 44 404 2008 44 404 2009 44 492 42 2010 44 404 2011 44 404 2012 44 2004 2013 44 2014 2015 44 2014 2016 44 2017 42 2018 41 61 1500 59 491 356 2019 40 404 2008 44 404 2009 44 404 42 2020 41 61 1500 59 491 356 2021 40 404 2008 44 404 2009 44 404 42 2020 41 61 1500 59 491 2002 2022 40 404 2008 44 404 2009 44 404 2023 44 356 42 2024 41 61 1500 59 491 2002 2025 40 404 2008 44 404 2009 44 404 2023 44 356 42 2026 44 356 42 2027 44 356 42 2028 44 356 42 2029 44 2030 2031 44 492 42 2032 41 61 1500 59 491 2002 2033 40 404 2008 44 404 2009 44 356 2034 44 356 2035 44 404 2036 44 2037 42 2038 44 404 2039 44 404 2023 44 2030 2031 44 492 42 2032 41 61 1500 59 491 2002 2040 40 2041 42 2042 44 341 330 42 44 2043 646 2044 60 2045 44 2046 42 62 38 41 61 1500 59 491 2041 42 2047 40 341 330 42 2048 41 61 1500 59 491 492 2049 40 330 42 42 42 2050 44 404 42 2051 44 404 42 2052 44 2053 42 2054 41 59 491 404 2055 40 41 123 450 2056 59 125 491 2002 2057 40 323 604 41 123 450 2058 59 125 125 59 
+99316,C++,"class GDALApplyVSGDataset final: public GDALDataset
+{
+        friend class GDALApplyVSGRasterBand;
+
+        GDALDataset* m_poSrcDataset = nullptr;
+        GDALDataset* m_poReprojectedGrid = nullptr;
+        bool         m_bInverse = false;
+        double       m_dfSrcUnitToMeter = 0.0;
+        double       m_dfDstUnitToMeter = 0.0;
+
+        CPL_DISALLOW_COPY_ASSIGN(GDALApplyVSGDataset)
+
+    public:
+        GDALApplyVSGDataset( GDALDataset* poSrcDataset,
+                             GDALDataset* poReprojectedGrid,
+                             GDALDataType eDT,
+                             bool bInverse,
+                             double dfSrcUnitToMeter,
+                             double dfDstUnitToMeter,
+                             int nBlockSize );
+        virtual ~GDALApplyVSGDataset();
+
+        virtual int        CloseDependentDatasets() override;
+
+        virtual CPLErr GetGeoTransform(double* padfGeoTransform) override;
+        virtual const OGRSpatialReference* GetSpatialRef() const override;
+
+        bool    IsInitOK();
+};",0,334 2000 381 58 439 2001 123 387 334 2002 59 2001 42 2003 61 425 59 2001 42 2004 61 425 59 323 2005 61 380 59 356 2006 61 1500 59 356 2007 61 1500 59 2008 40 2000 41 439 58 2000 40 2001 42 2009 44 2001 42 2010 44 2011 2012 44 323 2013 44 356 2014 44 356 2015 44 404 2016 41 59 491 126 2000 40 41 59 491 404 2017 40 41 431 59 491 2018 2019 40 356 42 2020 41 431 59 491 341 2021 42 2022 40 41 341 431 59 323 2023 40 41 59 125 59 
+99822,C++,"class GTiffJPEGOverviewDS final : public GDALDataset
+{
+    CPL_DISALLOW_COPY_ASSIGN(GTiffJPEGOverviewDS)
+
+    friend class GTiffJPEGOverviewBand;
+    GTiffDataset* m_poParentDS = nullptr;
+    int           m_nOverviewLevel = 0;
+
+    int        m_nJPEGTableSize = 0;
+    GByte     *m_pabyJPEGTable = nullptr;
+    CPLString  m_osTmpFilenameJPEGTable{};
+
+    CPLString    m_osTmpFilename{};
+    std::unique_ptr<GDALDataset> m_poJPEGDS{};
+    // Valid block id of the parent DS that match poJPEGDS.
+    int          m_nBlockId = -1;
+
+  public:
+    GTiffJPEGOverviewDS( GTiffDataset* poParentDS, int nOverviewLevel,
+                         const void* pJPEGTable, int nJPEGTableSize );
+    virtual ~GTiffJPEGOverviewDS();
+
+    virtual CPLErr IRasterIO( GDALRWFlag eRWFlag,
+                              int nXOff, int nYOff, int nXSize, int nYSize,
+                              void * pData, int nBufXSize, int nBufYSize,
+                              GDALDataType eBufType,
+                              int nBandCount, int *panBandMap,
+                              GSpacing nPixelSpace, GSpacing nLineSpace,
+                              GSpacing nBandSpace,
+                              GDALRasterIOExtraArg* psExtraArg ) override;
+};",0,334 2000 381 58 439 2001 123 2002 40 2000 41 387 334 2003 59 2004 42 2005 61 425 59 404 2006 61 1500 59 404 2007 61 1500 59 2008 42 2009 61 425 59 2010 2011 123 125 59 2010 2012 123 125 59 2013 646 2014 60 2001 62 2015 123 125 59 621 404 2016 61 45 1501 59 439 58 2000 40 2004 42 2017 44 404 2018 44 341 492 42 2019 44 404 2020 41 59 491 126 2000 40 41 59 491 2021 2022 40 2023 2024 44 404 2025 44 404 2026 44 404 2027 44 404 2028 44 492 42 2029 44 404 2030 44 404 2031 44 2032 2033 44 404 2034 44 404 42 2035 44 2036 2037 44 2036 2038 44 2036 2039 44 2040 42 2041 41 431 59 125 59 
+99359,C++,"class GMLJP2V2ExtensionDesc
+{
+    public:
+        CPLString osFile{};
+        int       bParentCoverageCollection = true;
+};",0,334 2000 123 439 58 2001 2002 123 125 59 404 2003 61 473 59 125 59 
+99358,C++,"class GMLJP2V2BoxDesc
+{
+    public:
+        CPLString osFile{};
+        CPLString osLabel{};
+};",0,334 2000 123 439 58 2001 2002 123 125 59 2001 2003 123 125 59 125 59 
+99175,C++,"class VSICacheChunk
+{
+    CPL_DISALLOW_COPY_ASSIGN(VSICacheChunk)
+
+public:
+    VSICacheChunk() = default;
+
+    virtual ~VSICacheChunk()
+    {
+        VSIFree( pabyData );
+    }
+
+    bool Allocate( size_t nChunkSize )
+    {
+        CPLAssert( pabyData == nullptr );
+        pabyData = static_cast<GByte *>(VSIMalloc( nChunkSize ));
+        return (pabyData != nullptr);
+    }
+
+    vsi_l_offset   iBlock = 0;
+
+    VSICacheChunk *poLRUPrev = nullptr;
+    VSICacheChunk *poLRUNext = nullptr;
+
+    size_t          nDataFilled = 0;
+    GByte          *pabyData = nullptr;
+};",0,334 2000 123 2001 40 2000 41 439 58 2000 40 41 61 349 59 491 126 2000 40 41 123 2002 40 2003 41 59 125 323 2004 40 2005 2006 41 123 2007 40 2008 614 425 41 59 2008 61 459 60 2009 42 62 40 2010 40 2006 41 41 59 450 40 2008 631 425 41 59 125 2011 2012 61 1500 59 2000 42 2013 61 425 59 2000 42 2014 61 425 59 2005 2015 61 1500 59 2016 42 2017 61 425 59 125 59 
+102123,C++,"    class ReportSortProxyModel : public QSortFilterProxyModel
+    {
+    public:
+        ReportSortProxyModel(QObject* parent)
+            : QSortFilterProxyModel(parent){};
+        ~ReportSortProxyModel() override = default;
+
+    protected:
+        bool lessThan(const QModelIndex& left, const QModelIndex& right) const override
+        {
+            // Check if the display data is a number, convert and compare if so
+            bool ok = false;
+            int leftInt = sourceModel()->data(left).toString().toInt(&ok);
+            if (ok) {
+                return leftInt < sourceModel()->data(right).toString().toInt();
+            }
+            // Otherwise use default sorting
+            return QSortFilterProxyModel::lessThan(left, right);
+        }
+    };",0,334 2000 58 439 2001 123 439 58 2000 40 2002 42 2003 41 58 2001 40 2003 41 123 125 59 126 2000 40 41 431 61 349 59 438 58 323 2004 40 341 2005 38 2006 44 341 2005 38 2007 41 341 431 123 621 323 2008 61 380 59 404 2009 61 2010 40 41 624 2011 40 2006 41 46 2012 40 41 46 2013 40 38 2008 41 59 392 40 2008 41 123 450 2009 60 2010 40 41 624 2011 40 2007 41 46 2012 40 41 46 2013 40 41 59 125 621 450 2001 646 2004 40 2006 44 2007 41 59 125 125 59 
+99225,C++,"class OGRDXFOCSTransformer final: public OGRCoordinateTransformation
+{
+private:
+    double adfN[3];
+    double adfAX[3];
+    double adfAY[3];
+
+    double dfDeterminant;
+    double aadfInverse[4][4];
+
+public:
+    explicit OGRDXFOCSTransformer( double adfNIn[3], bool bInverse = false );
+
+    OGRSpatialReference *GetSourceCS() override { return nullptr; }
+    OGRSpatialReference *GetTargetCS() override { return nullptr; }
+
+    int Transform( int nCount,
+        double *adfX, double *adfY, double *adfZ, double* adfT,
+        int *pabSuccess ) override;
+
+    int InverseTransform( int nCount,
+        double *adfX, double *adfY, double *adfZ );
+
+    void ComposeOnto( OGRDXFAffineTransform& poCT ) const;
+
+    OGRCoordinateTransformation* Clone() const override {
+        return new OGRDXFOCSTransformer(*this);
+    }
+
+    OGRCoordinateTransformation* GetInverse() const override { return nullptr; }
+};",0,334 2000 381 58 439 2001 123 437 58 356 2002 91 1502 93 59 356 2003 91 1502 93 59 356 2004 91 1502 93 59 356 2005 59 356 2006 91 1502 93 91 1502 93 59 439 58 376 2000 40 356 2007 91 1502 93 44 323 2008 61 380 41 59 2009 42 2010 40 41 431 123 450 425 59 125 2009 42 2011 40 41 431 123 450 425 59 125 404 2012 40 404 2013 44 356 42 2014 44 356 42 2015 44 356 42 2016 44 356 42 2017 44 404 42 2018 41 431 59 404 2019 40 404 2013 44 356 42 2014 44 356 42 2015 44 356 42 2016 41 59 492 2020 40 2021 38 2022 41 341 59 2001 42 2023 40 41 341 431 123 450 418 2000 40 42 467 41 59 125 2001 42 2024 40 41 341 431 123 450 425 59 125 125 59 
+100102,C++,"class OGRDXFFeatureQueue
+{
+        std::queue<OGRDXFFeature *> apoFeatures;
+
+    public:
+        OGRDXFFeatureQueue() {}
+
+        void                push( OGRDXFFeature* poFeature );
+
+        OGRDXFFeature*      front() const { return apoFeatures.front(); }
+
+        void                pop();
+
+        bool empty() const { return apoFeatures.empty(); }
+
+        size_t size() const { return apoFeatures.size(); }
+};",0,334 2000 123 2001 646 2002 60 2003 42 62 2004 59 439 58 2000 40 41 123 125 492 2005 40 2003 42 2006 41 59 2003 42 2007 40 41 341 123 450 2004 46 2007 40 41 59 125 492 2008 40 41 59 323 362 40 41 341 123 450 2004 46 362 40 41 59 125 2009 2010 40 41 341 123 450 2004 46 2010 40 41 59 125 125 59 
+99515,C++,"class OGRDXFBlocksWriterLayer final: public OGRLayer
+{
+    OGRFeatureDefn     *poFeatureDefn;
+
+  public:
+    explicit OGRDXFBlocksWriterLayer( OGRDXFWriterDS *poDS );
+    ~OGRDXFBlocksWriterLayer();
+
+    void                ResetReading() override {}
+    OGRFeature         *GetNextFeature() override { return nullptr; }
+
+    OGRFeatureDefn *    GetLayerDefn() override { return poFeatureDefn; }
+
+    int                 TestCapability( const char * ) override;
+    OGRErr              ICreateFeature( OGRFeature *poFeature ) override;
+    OGRErr              CreateField( OGRFieldDefn *poField,
+                                     int bApproxOK = TRUE ) override;
+
+    std::vector<OGRFeature*> apoBlocks;
+    OGRFeature          *FindBlock( const char * );
+};",0,334 2000 381 58 439 2001 123 2002 42 2003 59 439 58 376 2000 40 2004 42 2005 41 59 126 2000 40 41 59 492 2006 40 41 431 123 125 2007 42 2008 40 41 431 123 450 425 59 125 2002 42 2009 40 41 431 123 450 2003 59 125 404 2010 40 341 330 42 41 431 59 2011 2012 40 2007 42 2013 41 431 59 2011 2014 40 2015 42 2016 44 404 2017 61 2018 41 431 59 2019 646 2020 60 2007 42 62 2021 59 2007 42 2022 40 341 330 42 41 59 125 59 
+99595,C++,"class OGRDXFBlocksLayer final: public OGRLayer
+{
+    OGRDXFDataSource   *poDS;
+
+    OGRFeatureDefn     *poFeatureDefn;
+
+    GIntBig             iNextFID;
+
+    std::map<CPLString,DXFBlockDefinition>::iterator oIt;
+    CPLString           osBlockName;
+
+    OGRDXFFeatureQueue apoPendingFeatures;
+
+  public:
+    explicit OGRDXFBlocksLayer( OGRDXFDataSource *poDS );
+    ~OGRDXFBlocksLayer();
+
+    void                ResetReading() override;
+    OGRFeature *        GetNextFeature() override;
+
+    OGRFeatureDefn *    GetLayerDefn() override { return poFeatureDefn; }
+
+    int                 TestCapability( const char * ) override;
+
+    OGRDXFFeature *     GetNextUnfilteredFeature();
+};",0,334 2000 381 58 439 2001 123 2002 42 2003 59 2004 42 2005 59 2006 2007 59 2008 646 2009 60 2010 44 2011 62 646 2012 2013 59 2010 2014 59 2015 2016 59 439 58 376 2000 40 2002 42 2003 41 59 126 2000 40 41 59 492 2017 40 41 431 59 2018 42 2019 40 41 431 59 2004 42 2020 40 41 431 123 450 2005 59 125 404 2021 40 341 330 42 41 431 59 2022 42 2023 40 41 59 125 59 
+100309,C++,"class DXFBlockDefinition
+{
+public:
+    DXFBlockDefinition() {}
+    ~DXFBlockDefinition();
+
+    std::vector<OGRDXFFeature *> apoFeatures;
+};",0,334 2000 123 439 58 2000 40 41 123 125 126 2000 40 41 59 2001 646 2002 60 2003 42 62 2004 59 125 59 
+100310,C++,"class OGRDXFAffineTransform
+{
+public:
+    OGRDXFAffineTransform() :
+        adfData{1.0,0.0,0.0, 0.0,1.0,0.0, 0.0,0.0,1.0, 0.0,0.0,0.0} {}
+
+    double adfData[12]; // Column-major: adfMatrix[5] is column 2, row 3
+                        // Last 3 elements are translation
+
+    // Left composition (composes oOther o this), modifying this
+    void ComposeWith( const OGRDXFInsertTransformer& oCT )
+    {
+        double adfNew[12];
+
+        adfNew[0] = oCT.dfXScale * cos(oCT.dfAngle) * adfData[0] -
+            oCT.dfYScale * sin(oCT.dfAngle) * adfData[1];
+        adfNew[1] = oCT.dfXScale * sin(oCT.dfAngle) * adfData[0] +
+            oCT.dfYScale * cos(oCT.dfAngle) * adfData[1];
+        adfNew[2] = oCT.dfZScale * adfData[2];
+
+        adfNew[3] = oCT.dfXScale * cos(oCT.dfAngle) * adfData[3] -
+            oCT.dfYScale * sin(oCT.dfAngle) * adfData[4];
+        adfNew[4] = oCT.dfXScale * sin(oCT.dfAngle) * adfData[3] +
+            oCT.dfYScale * cos(oCT.dfAngle) * adfData[4];
+        adfNew[5] = oCT.dfZScale * adfData[5];
+
+        adfNew[6] = oCT.dfXScale * cos(oCT.dfAngle) * adfData[6] -
+            oCT.dfYScale * sin(oCT.dfAngle) * adfData[7];
+        adfNew[7] = oCT.dfXScale * sin(oCT.dfAngle) * adfData[6] +
+            oCT.dfYScale * cos(oCT.dfAngle) * adfData[7];
+        adfNew[8] = oCT.dfZScale * adfData[8];
+
+        adfNew[9] = oCT.dfXScale * cos(oCT.dfAngle) * adfData[9] -
+            oCT.dfYScale * sin(oCT.dfAngle) * adfData[10] +
+            oCT.dfXOffset;
+        adfNew[10] = oCT.dfXScale * sin(oCT.dfAngle) * adfData[9] +
+            oCT.dfYScale * cos(oCT.dfAngle) * adfData[10] +
+            oCT.dfYOffset;
+        adfNew[11] = oCT.dfZScale * adfData[11] + oCT.dfZOffset;
+
+        memcpy( adfData, adfNew, sizeof(adfNew) );
+    }
+
+    void SetField(OGRFeature* poFeature, const char* pszFieldName) const
+    {
+        poFeature->SetField(pszFieldName, 12, adfData);
+    }
+};",0,334 2000 123 439 58 2000 40 41 58 2001 123 1501 44 1500 44 1500 44 1500 44 1501 44 1500 44 1500 44 1500 44 1501 44 1500 44 1500 44 1500 125 123 125 356 2001 91 1503 93 59 621 621 621 492 2002 40 341 2003 38 2004 41 123 356 2005 91 1503 93 59 2005 91 1500 93 61 2004 46 2006 42 2007 40 2004 46 2008 41 42 2001 91 1500 93 45 2004 46 2009 42 2010 40 2004 46 2008 41 42 2001 91 1501 93 59 2005 91 1501 93 61 2004 46 2006 42 2010 40 2004 46 2008 41 42 2001 91 1500 93 43 2004 46 2009 42 2007 40 2004 46 2008 41 42 2001 91 1501 93 59 2005 91 1502 93 61 2004 46 2011 42 2001 91 1502 93 59 2005 91 1502 93 61 2004 46 2006 42 2007 40 2004 46 2008 41 42 2001 91 1502 93 45 2004 46 2009 42 2010 40 2004 46 2008 41 42 2001 91 1502 93 59 2005 91 1502 93 61 2004 46 2006 42 2010 40 2004 46 2008 41 42 2001 91 1502 93 43 2004 46 2009 42 2007 40 2004 46 2008 41 42 2001 91 1502 93 59 2005 91 1502 93 61 2004 46 2011 42 2001 91 1502 93 59 2005 91 1502 93 61 2004 46 2006 42 2007 40 2004 46 2008 41 42 2001 91 1502 93 45 2004 46 2009 42 2010 40 2004 46 2008 41 42 2001 91 1502 93 59 2005 91 1502 93 61 2004 46 2006 42 2010 40 2004 46 2008 41 42 2001 91 1502 93 43 2004 46 2009 42 2007 40 2004 46 2008 41 42 2001 91 1502 93 59 2005 91 1502 93 61 2004 46 2011 42 2001 91 1502 93 59 2005 91 1502 93 61 2004 46 2006 42 2007 40 2004 46 2008 41 42 2001 91 1502 93 45 2004 46 2009 42 2010 40 2004 46 2008 41 42 2001 91 1502 93 43 2004 46 2012 59 2005 91 1502 93 61 2004 46 2006 42 2010 40 2004 46 2008 41 42 2001 91 1502 93 43 2004 46 2009 42 2007 40 2004 46 2008 41 42 2001 91 1502 93 43 2004 46 2013 59 2005 91 1503 93 61 2004 46 2011 42 2001 91 1503 93 43 2004 46 2014 59 2015 40 2001 44 2005 44 455 40 2005 41 41 59 125 492 2016 40 2017 42 2018 44 341 330 42 2019 41 341 123 2018 624 2016 40 2019 44 1503 44 2001 41 59 125 125 59 
+99764,C++,"class ISIS3RawRasterBand final: public RawRasterBand
+{
+        friend class ISIS3Dataset;
+
+        bool      m_bHasOffset;
+        bool      m_bHasScale;
+        double    m_dfOffset;
+        double    m_dfScale;
+        double    m_dfNoData;
+
+    public:
+                 ISIS3RawRasterBand( GDALDataset *l_poDS, int l_nBand,
+                                     VSILFILE * l_fpRaw,
+                                     vsi_l_offset l_nImgOffset,
+                                     int l_nPixelOffset,
+                                     int l_nLineOffset,
+                                     GDALDataType l_eDataType,
+                                     int l_bNativeOrder );
+        virtual ~ISIS3RawRasterBand() {}
+
+        virtual CPLErr          IReadBlock( int, int, void * ) override;
+        virtual CPLErr          IWriteBlock( int, int, void * ) override;
+
+        virtual CPLErr  IRasterIO( GDALRWFlag, int, int, int, int,
+                                void *, int, int, GDALDataType,
+                                GSpacing nPixelSpace, GSpacing nLineSpace,
+                                GDALRasterIOExtraArg* psExtraArg ) override;
+
+        virtual double GetOffset( int *pbSuccess = nullptr ) override;
+        virtual double GetScale( int *pbSuccess = nullptr ) override;
+        virtual CPLErr SetOffset( double dfNewOffset ) override;
+        virtual CPLErr SetScale( double dfNewScale ) override;
+        virtual double GetNoDataValue( int *pbSuccess = nullptr ) override;
+        virtual CPLErr SetNoDataValue( double dfNewNoData ) override;
+
+        void    SetMaskBand(GDALRasterBand* poMaskBand);
+};",0,334 2000 381 58 439 2001 123 387 334 2002 59 323 2003 59 323 2004 59 356 2005 59 356 2006 59 356 2007 59 439 58 2000 40 2008 42 2009 44 404 2010 44 2011 42 2012 44 2013 2014 44 404 2015 44 404 2016 44 2017 2018 44 404 2019 41 59 491 126 2000 40 41 123 125 491 2020 2021 40 404 44 404 44 492 42 41 431 59 491 2020 2022 40 404 44 404 44 492 42 41 431 59 491 2020 2023 40 2024 44 404 44 404 44 404 44 404 44 492 42 44 404 44 404 44 2017 44 2025 2026 44 2025 2027 44 2028 42 2029 41 431 59 491 356 2030 40 404 42 2031 61 425 41 431 59 491 356 2032 40 404 42 2031 61 425 41 431 59 491 2020 2033 40 356 2034 41 431 59 491 2020 2035 40 356 2036 41 431 59 491 356 2037 40 404 42 2031 61 425 41 431 59 491 2020 2038 40 356 2039 41 431 59 492 2040 40 2041 42 2042 41 59 125 59 
+99415,C++,"class TABMAPObjFontPoint: public TABMAPObjPoint
+{
+  public:
+    GByte       m_nPointSize;
+    GInt16      m_nFontStyle;
+    GByte       m_nR;
+    GByte       m_nG;
+    GByte       m_nB;
+    GInt16      m_nAngle;  /* In tenths of degree */
+    GByte       m_nFontId;
+
+    TABMAPObjFontPoint():
+        m_nPointSize(0),
+        m_nFontStyle(0),
+        m_nR(0),
+        m_nG(0),
+        m_nB(0),
+        m_nAngle(0),
+        m_nFontId(0)
+        {}
+    virtual ~TABMAPObjFontPoint() {}
+
+    virtual int WriteObj(TABMAPObjectBlock *) override;
+
+//  protected:
+    virtual int ReadObj(TABMAPObjectBlock *) override;
+};",0,334 2000 58 439 2001 123 439 58 2002 2003 59 2004 2005 59 2002 2006 59 2002 2007 59 2002 2008 59 2004 2009 59 604 2002 2010 59 2000 40 41 58 2003 40 1500 41 44 2005 40 1500 41 44 2006 40 1500 41 44 2007 40 1500 41 44 2008 40 1500 41 44 2009 40 1500 41 44 2010 40 1500 41 123 125 491 126 2000 40 41 123 125 491 404 2011 40 2012 42 41 431 59 621 491 404 2013 40 2012 42 41 431 59 125 59 
+99658,C++,"class TABCustomPoint final : public TABPoint,
+                      public ITABFeatureFont
+{
+  protected:
+    GByte       m_nCustomStyle;         // Show BG/Apply Color
+
+  public:
+    GByte       m_nUnknown_;
+
+  public:
+    explicit TABCustomPoint(OGRFeatureDefn *poDefnIn);
+    virtual ~TABCustomPoint();
+
+    virtual TABFeatureClass GetFeatureClass() override { return TABFCCustomPoint; }
+
+    virtual TABFeature *CloneTABFeature(OGRFeatureDefn *poNewDefn = nullptr ) override;
+
+    virtual int ReadGeometryFromMAPFile(TABMAPFile *poMapFile, TABMAPObjHdr *,
+                                        GBool bCoordDataOnly=FALSE,
+                                        TABMAPCoordBlock **ppoCoordBlock=nullptr) override;
+    virtual int WriteGeometryToMAPFile(TABMAPFile *poMapFile, TABMAPObjHdr *,
+                                       GBool bCoordDataOnly=FALSE,
+                                       TABMAPCoordBlock **ppoCoordBlock=nullptr) override;
+
+    virtual int ReadGeometryFromMIFFile(MIDDATAFile *fp) override;
+    virtual int WriteGeometryToMIFFile(MIDDATAFile *fp) override;
+
+    virtual const char *GetSymbolStyleString(double dfAngle = 0.0) const override;
+    virtual const char *GetStyleString() const override;
+    virtual void SetSymbolFromStyle(OGRStyleSymbol* poSymbolStyle) override;
+
+    const char *GetSymbolNameRef() const { return GetFontNameRef(); }
+    void        SetSymbolName(const char *pszName) {SetFontName(pszName);}
+
+    GByte       GetCustomSymbolStyle()              {return m_nCustomStyle;}
+    void        SetCustomSymbolStyle(GByte nStyle)  {m_nCustomStyle = nStyle;}
+};",0,334 2000 381 58 439 2001 44 439 2002 123 438 58 2003 2004 59 621 439 58 2003 2005 59 439 58 376 2000 40 2006 42 2007 41 59 491 126 2000 40 41 59 491 2008 2009 40 41 431 123 450 2010 59 125 491 2011 42 2012 40 2006 42 2013 61 425 41 431 59 491 404 2014 40 2015 42 2016 44 2017 42 44 2018 2019 61 2020 44 2021 42 42 2022 61 425 41 431 59 491 404 2023 40 2015 42 2016 44 2017 42 44 2018 2019 61 2020 44 2021 42 42 2022 61 425 41 431 59 491 404 2024 40 2025 42 2026 41 431 59 491 404 2027 40 2025 42 2026 41 431 59 491 341 330 42 2028 40 356 2029 61 1500 41 341 431 59 491 341 330 42 2030 40 41 341 431 59 491 492 2031 40 2032 42 2033 41 431 59 341 330 42 2034 40 41 341 123 450 2035 40 41 59 125 492 2036 40 341 330 42 2037 41 123 2038 40 2037 41 59 125 2003 2039 40 41 123 450 2004 59 125 492 2040 40 2003 2041 41 123 2004 61 2041 59 125 125 59 
+99098,C++,"class OGRCSVEditableLayer final: public OGREditableLayer
+{
+    std::set<CPLString> m_oSetFields;
+
+  public:
+    OGRCSVEditableLayer(OGRCSVLayer *poCSVLayer, char **papszOpenOptions);
+
+    virtual OGRErr      CreateField( OGRFieldDefn *poField,
+                                     int bApproxOK = TRUE ) override;
+    virtual OGRErr      DeleteField( int iField ) override;
+    virtual OGRErr      AlterFieldDefn( int iField, OGRFieldDefn* poNewFieldDefn, int nFlagsIn ) override;
+    virtual GIntBig     GetFeatureCount( int bForce = TRUE ) override;
+};",0,334 2000 381 58 439 2001 123 2002 646 2003 60 2004 62 2005 59 439 58 2000 40 2006 42 2007 44 330 42 42 2008 41 59 491 2009 2010 40 2011 42 2012 44 404 2013 61 2014 41 431 59 491 2009 2015 40 404 2016 41 431 59 491 2009 2017 40 404 2016 44 2011 42 2018 44 404 2019 41 431 59 491 2020 2021 40 404 2022 61 2014 41 431 59 125 59 
+99560,C++,"class OGRCompoundCurvePointIterator final: public OGRPointIterator
+{
+        CPL_DISALLOW_COPY_ASSIGN(OGRCompoundCurvePointIterator)
+
+        const OGRCompoundCurve *poCC = nullptr;
+        int                     iCurCurve = 0;
+        OGRPointIterator       *poCurveIter = nullptr;
+
+    public:
+        explicit OGRCompoundCurvePointIterator( const OGRCompoundCurve* poCCIn ) :
+            poCC(poCCIn) {}
+        ~OGRCompoundCurvePointIterator() override { delete poCurveIter; }
+
+        OGRBoolean getNextPoint( OGRPoint* p ) override;
+};",0,334 2000 381 58 439 2001 123 2002 40 2000 41 341 2003 42 2004 61 425 59 404 2005 61 1500 59 2001 42 2006 61 425 59 439 58 376 2000 40 341 2003 42 2007 41 58 2004 40 2007 41 123 125 126 2000 40 41 431 123 353 2006 59 125 2008 2009 40 2010 42 2011 41 431 59 125 59 
+116897,C++,"class DistributedPlugin : public Plugin {
+ public:
+  /**
+   * @brief Get the queries to be executed
+   *
+   * Consider the following example JSON which represents the expected format
+   *
+   * @code{.json}
+   *   {
+   *     ""queries"": {
+   *       ""id1"": ""select * from osquery_info"",
+   *       ""id2"": ""select * from osquery_schedule""
+   *     }
+   *   }
+   * @endcode
+   *
+   * @param json is the string to populate the queries data structure with
+   * @return a Status indicating the success or failure of the operation
+   */
+  virtual Status getQueries(std::string& json) = 0;
+
+  /**
+   * @brief Write the results that were executed
+   *
+   * Consider the following JSON which represents the format that will be used:
+   *
+   * @code{.json}
+   *   {
+   *     ""queries"": {
+   *       ""id1"": [
+   *         {
+   *           ""col1"": ""val1"",
+   *           ""col2"": ""val2""
+   *         },
+   *         {
+   *           ""col1"": ""val1"",
+   *           ""col2"": ""val2""
+   *         }
+   *       ],
+   *       ""id2"": [
+   *         {
+   *           ""col1"": ""val1"",
+   *           ""col2"": ""val2""
+   *         }
+   *       ]
+   *     }
+   *   }
+   * @endcode
+   *
+   * @param json is the results data to write
+   * @return a Status indicating the success or failure of the operation
+   */
+  virtual Status writeResults(const std::string& json) = 0;
+
+  /// Main entrypoint for distributed plugin requests
+  Status call(const PluginRequest& request, PluginResponse& response) override;
+};",0,334 2000 58 439 2001 123 439 58 618 491 2002 2003 40 2004 646 461 38 2005 41 61 1500 59 618 491 2002 2006 40 341 2004 646 461 38 2005 41 61 1500 59 621 2002 2007 40 341 2008 38 2009 44 2010 38 2011 41 431 59 125 59 
+121539,C++,"class FilteredCommandLineArguments {
+public:
+	FilteredCommandLineArguments(int argc, char **argv);
+
+	int &count();
+	char **values();
+
+private:
+	static constexpr auto kForwardArgumentCount = 1;
+
+	int _count = 0;
+	std::vector<QByteArray> _owned;
+	std::vector<char*> _arguments;
+
+	void pushArgument(const char *text);
+
+};",0,334 2000 123 439 58 2000 40 404 2001 44 330 42 42 2002 41 59 404 38 2003 40 41 59 330 42 42 2004 40 41 59 437 58 457 343 318 2005 61 1501 59 404 2006 61 1500 59 2007 646 2008 60 2009 62 2010 59 2007 646 2008 60 330 42 62 2011 59 492 2012 40 341 330 42 2013 41 59 125 59 
+102154,C++,"    class ReportSortProxyModel : public QSortFilterProxyModel
+    {
+    public:
+        ReportSortProxyModel(QObject* parent)
+            : QSortFilterProxyModel(parent){};
+        ~ReportSortProxyModel() override = default;
+
+    protected:
+        bool lessThan(const QModelIndex& left, const QModelIndex& right) const override
+        {
+            // Sort count column by user data
+            if (left.column() == 2) {
+                return sourceModel()->data(left, Qt::UserRole).toInt()
+                       < sourceModel()->data(right, Qt::UserRole).toInt();
+            }
+            // Otherwise use default sorting
+            return QSortFilterProxyModel::lessThan(left, right);
+        }
+    };",0,334 2000 58 439 2001 123 439 58 2000 40 2002 42 2003 41 58 2001 40 2003 41 123 125 59 126 2000 40 41 431 61 349 59 438 58 323 2004 40 341 2005 38 2006 44 341 2005 38 2007 41 341 431 123 621 392 40 2006 46 2008 40 41 614 1502 41 123 450 2009 40 41 624 2010 40 2006 44 2011 646 2012 41 46 2013 40 41 60 2009 40 41 624 2010 40 2007 44 2011 646 2012 41 46 2013 40 41 59 125 621 450 2001 646 2004 40 2006 44 2007 41 59 125 125 59 
+102169,C++,"class WelcomeWidget : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit WelcomeWidget(QWidget* parent = nullptr);
+    ~WelcomeWidget();
+    void refreshLastDatabases();
+
+signals:
+    void newDatabase();
+    void openDatabase();
+    void openDatabaseFile(QString);
+    void importKeePass1Database();
+    void importOpVaultDatabase();
+    void importCsv();
+
+protected:
+    void keyPressEvent(QKeyEvent* event) override;
+    void showEvent(QShowEvent* event) override;
+
+private slots:
+    void openDatabaseFromFile(QListWidgetItem* item);
+
+private:
+    const QScopedPointer<Ui::WelcomeWidget> m_ui;
+    void removeFromLastDatabases(QListWidgetItem* item);
+};",0,334 2000 58 439 2001 123 2002 439 58 376 2000 40 2001 42 2003 61 425 41 59 126 2000 40 41 59 492 2004 40 41 59 2005 58 492 2006 40 41 59 492 2007 40 41 59 492 2008 40 2009 41 59 492 2010 40 41 59 492 2011 40 41 59 492 2012 40 41 59 438 58 492 2013 40 2014 42 373 41 431 59 492 2015 40 2016 42 373 41 431 59 437 2017 58 492 2018 40 2019 42 2020 41 59 437 58 341 2021 60 2022 646 2000 62 2023 59 492 2024 40 2019 42 2020 41 59 125 59 
+102139,C++,"class FakeClient : public DBusClient
+{
+public:
+    explicit FakeClient(DBusMgr* dbus)
+        : DBusClient(
+            dbus,
+            {QStringLiteral(""local""), 0, true, {ProcInfo{0, 0, QStringLiteral(""fake-client""), QString{}, QString{}}}})
+    {
+    }
+};",0,334 2000 58 439 2001 123 439 58 376 2000 40 2002 42 2003 41 58 2001 40 2003 44 123 2004 40 648 41 44 1500 44 473 44 123 2005 123 1500 44 1500 44 2004 40 648 41 44 2006 123 125 44 2006 123 125 125 125 125 41 123 125 125 59 
+102193,C++,"    class ManageDatabase : public QToolBar
+    {
+        Q_OBJECT
+
+        Q_PROPERTY(DatabaseWidget* dbWidget READ dbWidget WRITE setDbWidget USER true)
+
+    public:
+        explicit ManageDatabase(FdoSecretsPlugin* plugin, QWidget* parent = nullptr)
+            : QToolBar(parent)
+            , m_plugin(plugin)
+        {
+            setFloatable(false);
+            setMovable(false);
+
+            // use a dummy widget to center the buttons
+            auto spacer = new QWidget(this);
+            spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            spacer->setVisible(true);
+            addWidget(spacer);
+
+            // db settings
+            m_dbSettingsAct = new QAction(tr(""Database settings""), this);
+            m_dbSettingsAct->setIcon(icons()->icon(QStringLiteral(""document-edit"")));
+            m_dbSettingsAct->setToolTip(tr(""Edit database settings""));
+            m_dbSettingsAct->setEnabled(false);
+            connect(m_dbSettingsAct, &QAction::triggered, this, [this]() {
+                if (!m_dbWidget) {
+                    return;
+                }
+                auto db = m_dbWidget;
+                m_plugin->serviceInstance()->doSwitchToDatabaseSettings(m_dbWidget);
+            });
+            addAction(m_dbSettingsAct);
+
+            // unlock/lock
+            m_lockAct = new QAction(tr(""Unlock database""), this);
+            m_lockAct->setIcon(icons()->icon(QStringLiteral(""object-locked"")));
+            m_lockAct->setToolTip(tr(""Unlock database to show more information""));
+            connect(m_lockAct, &QAction::triggered, this, [this]() {
+                if (!m_dbWidget) {
+                    return;
+                }
+                if (m_dbWidget->isLocked()) {
+                    m_plugin->serviceInstance()->doUnlockDatabaseInDialog(m_dbWidget);
+                } else {
+                    m_dbWidget->lock();
+                }
+            });
+
+            addAction(m_lockAct);
+
+            // use a dummy widget to center the buttons
+            spacer = new QWidget(this);
+            spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            spacer->setVisible(true);
+            addWidget(spacer);
+        }
+
+        DatabaseWidget* dbWidget() const
+        {
+            return m_dbWidget;
+        }
+
+        void setDbWidget(DatabaseWidget* dbWidget)
+        {
+            if (m_dbWidget == dbWidget) {
+                return;
+            }
+
+            if (m_dbWidget) {
+                disconnect();
+            }
+
+            m_dbWidget = dbWidget;
+
+            reconnect();
+        }
+
+    private:
+        void disconnect()
+        {
+            if (!m_dbWidget) {
+                return;
+            }
+            m_dbWidget->disconnect(this);
+        }
+
+        void reconnect()
+        {
+            if (!m_dbWidget) {
+                return;
+            }
+            connect(m_dbWidget, &DatabaseWidget::databaseLocked, this, [this]() {
+                m_lockAct->setText(tr(""Unlock database""));
+                m_lockAct->setIcon(icons()->icon(QStringLiteral(""object-locked"")));
+                m_lockAct->setToolTip(tr(""Unlock database to show more information""));
+                m_dbSettingsAct->setEnabled(false);
+            });
+            connect(m_dbWidget, &DatabaseWidget::databaseUnlocked, this, [this]() {
+                m_lockAct->setText(tr(""Lock database""));
+                m_lockAct->setIcon(icons()->icon(QStringLiteral(""object-unlocked"")));
+                m_lockAct->setToolTip(tr(""Lock database""));
+                m_dbSettingsAct->setEnabled(true);
+            });
+        }
+
+    private:
+        FdoSecretsPlugin* m_plugin = nullptr;
+        QPointer<DatabaseWidget> m_dbWidget = nullptr;
+        QAction* m_dbSettingsAct = nullptr;
+        QAction* m_lockAct = nullptr;
+    };",0,334 2000 58 439 2001 123 2002 2003 40 2004 42 2005 2006 2005 2007 2008 2009 473 41 439 58 376 2000 40 2010 42 2011 44 2012 42 2013 61 425 41 58 2001 40 2013 41 44 2014 40 2011 41 123 2015 40 380 41 59 2016 40 380 41 59 621 318 2017 61 418 2012 40 467 41 59 2017 624 2018 40 2019 646 2020 44 2019 646 2021 41 59 2017 624 2022 40 473 41 59 2023 40 2017 41 59 621 2024 61 418 2025 40 2026 40 648 41 44 467 41 59 2024 624 2027 40 2028 40 41 624 2029 40 2030 40 648 41 41 41 59 2024 624 2031 40 2026 40 648 41 41 59 2024 624 2032 40 380 41 59 2033 40 2024 44 38 2025 646 2034 44 467 44 91 467 93 40 41 123 392 40 33 2035 41 123 450 59 125 318 2036 61 2035 59 2014 624 2037 40 41 624 2038 40 2035 41 59 125 41 59 2039 40 2024 41 59 621 2040 61 418 2025 40 2026 40 648 41 44 467 41 59 2040 624 2027 40 2028 40 41 624 2029 40 2030 40 648 41 41 41 59 2040 624 2031 40 2026 40 648 41 41 59 2033 40 2040 44 38 2025 646 2034 44 467 44 91 467 93 40 41 123 392 40 33 2041 41 123 450 59 125 392 40 2041 624 2042 40 41 41 123 2014 624 2043 40 41 624 2044 40 2041 41 59 125 360 123 2041 624 412 40 41 59 125 125 41 59 2039 40 2040 41 59 621 2017 61 418 2012 40 467 41 59 2017 624 2018 40 2019 646 2020 44 2019 646 2021 41 59 2017 624 2022 40 473 41 59 2023 40 2017 41 59 125 2004 42 2005 40 41 341 123 450 2045 59 125 492 2008 40 2004 42 2005 41 123 392 40 2046 614 2005 41 123 450 59 125 392 40 2046 41 123 2047 40 41 59 125 2046 61 2005 59 2048 40 41 59 125 437 58 492 2049 40 41 123 392 40 33 2050 41 123 450 59 125 2050 624 2049 40 467 41 59 125 492 2051 40 41 123 392 40 33 2052 41 123 450 59 125 2053 40 2052 44 38 2004 646 2054 44 467 44 91 467 93 40 41 123 2055 624 2056 40 2057 40 648 41 41 59 2055 624 2058 40 2059 40 41 624 2060 40 2061 40 648 41 41 41 59 2055 624 2062 40 2057 40 648 41 41 59 2063 624 2064 40 380 41 59 125 41 59 2053 40 2052 44 38 2004 646 2065 44 467 44 91 467 93 40 41 123 2066 624 2067 40 2068 40 648 41 41 59 2066 624 2069 40 2070 40 41 624 2071 40 2072 40 648 41 41 41 59 2066 624 2073 40 2068 40 648 41 41 59 2074 624 2075 40 473 41 59 125 41 59 125 437 58 2010 42 2014 61 425 59 2076 60 2004 62 2077 61 425 59 2078 42 2079 61 425 59 2078 42 2080 61 425 59 125 59 
+102194,C++,"    class ManageSession : public QToolBar
+    {
+        Q_OBJECT
+
+        Q_PROPERTY(const DBusClientPtr& client READ client WRITE setClient USER true)
+
+    public:
+        explicit ManageSession(QWidget* parent = nullptr)
+            : QToolBar(parent)
+        {
+            setFloatable(false);
+            setMovable(false);
+
+            // use a dummy widget to center the buttons
+            auto spacer = new QWidget(this);
+            spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            spacer->setVisible(true);
+            addWidget(spacer);
+
+            auto disconnectAct = new QAction(tr(""Disconnect""), this);
+            disconnectAct->setIcon(icons()->icon(QStringLiteral(""dialog-close"")));
+            disconnectAct->setToolTip(tr(""Disconnect this application""));
+            connect(disconnectAct, &QAction::triggered, this, [this]() {
+                if (m_client) {
+                    m_client->disconnectDBus();
+                }
+            });
+            addAction(disconnectAct);
+
+            // use a dummy widget to center the buttons
+            spacer = new QWidget(this);
+            spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            spacer->setVisible(true);
+            addWidget(spacer);
+        }
+
+        const DBusClientPtr& client() const
+        {
+            return m_client;
+        }
+
+        void setClient(DBusClientPtr client)
+        {
+            m_client = std::move(client);
+        }
+
+    private:
+        DBusClientPtr m_client{};
+    };",0,334 2000 58 439 2001 123 2002 2003 40 341 2004 38 2005 2006 2005 2007 2008 2009 473 41 439 58 376 2000 40 2010 42 2011 61 425 41 58 2001 40 2011 41 123 2012 40 380 41 59 2013 40 380 41 59 621 318 2014 61 418 2010 40 467 41 59 2014 624 2015 40 2016 646 2017 44 2016 646 2018 41 59 2014 624 2019 40 473 41 59 2020 40 2014 41 59 318 2021 61 418 2022 40 2023 40 648 41 44 467 41 59 2021 624 2024 40 2025 40 41 624 2026 40 2027 40 648 41 41 41 59 2021 624 2028 40 2023 40 648 41 41 59 2029 40 2021 44 38 2022 646 2030 44 467 44 91 467 93 40 41 123 392 40 2031 41 123 2031 624 2032 40 41 59 125 125 41 59 2033 40 2021 41 59 621 2014 61 418 2010 40 467 41 59 2014 624 2015 40 2016 646 2017 44 2016 646 2018 41 59 2014 624 2019 40 473 41 59 2020 40 2014 41 59 125 341 2004 38 2005 40 41 341 123 450 2034 59 125 492 2008 40 2004 2005 41 123 2035 61 2036 646 2037 40 2005 41 59 125 437 58 2004 2038 123 125 59 125 59 
+102022,C++,"class NativeMessagingProxy : public QObject
+{
+    Q_OBJECT
+public:
+    NativeMessagingProxy();
+    ~NativeMessagingProxy() override = default;
+
+signals:
+    void stdinMessage(QString msg);
+
+public slots:
+    void transferSocketMessage();
+    void transferStdinMessage(const QString& msg);
+    void socketDisconnected();
+
+private:
+    void setupStandardInput();
+    void setupLocalSocket();
+
+private:
+    QScopedPointer<QLocalSocket> m_localSocket;
+
+    Q_DISABLE_COPY(NativeMessagingProxy)
+};",0,334 2000 58 439 2001 123 2002 439 58 2000 40 41 59 126 2000 40 41 431 61 349 59 2003 58 492 2004 40 2005 2006 41 59 439 2007 58 492 2008 40 41 59 492 2009 40 341 2005 38 2006 41 59 492 2010 40 41 59 437 58 492 2011 40 41 59 492 2012 40 41 59 437 58 2013 60 2014 62 2015 59 2016 40 2000 41 125 59 
+101981,C++,"class BrowserSettingsPage : public ISettingsPage
+{
+public:
+    explicit BrowserSettingsPage() = default;
+    ~BrowserSettingsPage() override = default;
+
+    QString name() override;
+    QIcon icon() override;
+    QWidget* createWidget() override;
+    void loadSettings(QWidget* widget) override;
+    void saveSettings(QWidget* widget) override;
+};",0,334 2000 58 439 2001 123 439 58 376 2000 40 41 61 349 59 126 2000 40 41 431 61 349 59 2002 2003 40 41 431 59 2004 2005 40 41 431 59 2006 42 2007 40 41 431 59 492 2008 40 2006 42 2009 41 431 59 492 2010 40 2006 42 2009 41 431 59 125 59 
